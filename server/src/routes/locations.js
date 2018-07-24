@@ -1,48 +1,60 @@
 import { Router } from 'express';
 import Table from '../table';
+import { insertLocation } from '../utils/locations';
 
 let router = Router();
-let classTable = new Table('Classes');
+let locationTable = new Table('Locations');
 
+/**
+ * get all locations
+ */
 router.get('/', async (req, res) => {
     console.log(req.user);
     try {
-        let classes = await classTable.getAll()
-        res.json(classes);
+        let locations = await locationTable.getAll()
+        res.json(locations);
     } catch (err) {
         console.log(err);
         res.sendStatus(500);
     }
 });
 
+/**
+ * post a location
+ * is expecting:
+ * { addressLineOne, addressLineTwo, city, state, zip, name }
+ * in the request's body
+ */
 router.post('/', async (req, res) => {
     try {
-        // idObj will look like { id: 7 }
-        let idObj = await classTable.insert({
-            name: req.body.name,
-            description: req.body.description
-        });
-        res.status(201).json(idObj);
+        let id = await insertLocation(req.body.addressLineOne, req.body.addressLineTwo, req.body.city, req.body.state, req.body.zip, req.body.name);
+        res.status(201).json({id});
     } catch (err) {
         console.log(err);
         res.sendStatus(500);
     }
 });
 
+/**
+ * get one location
+ */
 router.get('/:id', async (req, res) => {
     try {
-        let foundClass = await classTable.getOne(req.params.id);
-        res.json(foundClass);
+        let foundlocation = await locationTable.getOne(req.params.id);
+        res.json(foundlocation);
     } catch (err) {
         console.log(err);
         res.sendStatus(500);
     }
 });
 
+/**
+ * update one location
+ */
 router.put('/:id', async (req, res) => {
     try {
         // not concerned about getting a value back, just waiting on update to finish
-        await classTable.update(req.params.id, req.body);
+        await locationTable.update(req.params.id, req.body);
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
@@ -50,10 +62,14 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+/**
+ * hard deleting a location
+ * need to think about soft deleting
+ */
 router.delete('/:id', async (req, res) => {
     try {
         // not concerned about getting a value back, just waiting on delete to finish
-        await classTable.delete(req.params.id);
+        await locationTable.delete(req.params.id);
         res.sendStatus(200);
     } catch (err) {
         console.log(err);
