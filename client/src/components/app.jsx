@@ -1,12 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-import HelloWorld from './hello';
-import GoodbyeWorld from './goodbye';
-import Donate from './donate';
-
 import PrivateRoute from './auth/privateRoute';
-import Login from './auth/login';
 import Logout from './auth/logout';
 import AuthButton from './auth/authButton';
 
@@ -24,11 +19,11 @@ import RegisterScreen from './screens/Register';
 
 class Navigation extends Component {
 
+    //having home page be the event listings screen
     render() {
         return (
             <Router>
                 <Fragment>
-                    <Link to="/goodbye">Goodbye</Link>
                     <AuthButton />
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
@@ -36,15 +31,13 @@ class Navigation extends Component {
                         <Route path="/events/:id" component={EventDetailScreen} />
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
                         <PrivateRoute path="/groups/create" component={GroupCreateScreen} />
-                        <PrivateRoute path="/event/create" component={EventCreateScreen} />
+                        <PrivateRoute path="/events/create" component={EventCreateScreen} />
                         <Route path="/groups/:id" component={GroupDetailScreen} />
                         <Route path="/groups" component={GroupListingScreen} />
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
-                        <PrivateRoute path="/user/profile" component={ProfileScreen} />
-                        <Route path="/user/register" component={RegisterScreen} />
+                        <PrivateRoute path="/users/profile" component={ProfileScreen} />
+                        <Route path="/users/register" component={RegisterScreen} />
                         <Route path="/logout" component={Logout} />
-                        <Route path="/donate" component={Donate} />
-                        <PrivateRoute path="/goodbye" component={GoodbyeWorld} />
                     </Switch>
                 </Fragment>
             </Router>
