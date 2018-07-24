@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
  * 
  * for tags, I'm expecting: 
  * {id, name}
- * for each new tag, don't pass in an id
+ * for each new tag, don't pass in an id; for each existing tag, don't need to pass in a name
  */
 router.post('/', async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import Table from "../table";
 import { insertLocation, getLocationId } from "../utils/locations";
-import { insertEvent } from "../utils/events";
+import { handleTags } from "../utils/tags";
 
 let router = Router();
 let groupTable = new Table("Groups");
@@ -68,8 +68,10 @@ router.post("/", async (req, res) => {
     }
     res.status(201).json(idObj);
   } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+    //duplicate entry
+    if ((err.errno = 1062)) {
+      res.send(400, "Group name has already been taken");
+    } else res.statusMessage(400, err);
   }
 });
 

@@ -12,7 +12,7 @@ let insertLocation = async function(address_line_one, address_line_two, city, st
 
 let getLocationId = async function(name) {
     try {
-        return (await locationTable.find({name})).id;
+        return (await locationTable.find({name}))[0]["id"];
     } catch (err) {
         console.log(err);
     }
