@@ -37,8 +37,8 @@ let handleTags = async function(whichTableName, id, tags) {
 
     //duplicate tags 
     if ((err.errno = 1062)) {
-      throw "You tried to attach duplicate tags; have attached just one and returning";
-    } else throw err;
+      console.log("You tried to attach duplicate tags; have attached just one and returning");
+    } else console.log(err);
   }
 };
 
