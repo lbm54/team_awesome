@@ -27,74 +27,17 @@ CREATE TABLE `comments` (
   `comment` text NOT NULL,
   `user_id` int(11) NOT NULL,
   `_created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `group_id` int(11) DEFAULT NULL,
+  `event_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_comments_user_id_idx` (`user_id`),
-  CONSTRAINT `fk_comment_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `fk_comments_group_id_idx` (`group_id`),
+  KEY `fk_comments_event_id_idx` (`event_id`),
+  CONSTRAINT `fk_comments_event_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_comments_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_comments_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `comments`
---
-
-LOCK TABLES `comments` WRITE;
-/*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `comments_events`
---
-
-DROP TABLE IF EXISTS `comments_events`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `comments_events` (
-  `comment_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `_created` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`comment_id`,`event_id`),
-  KEY `fk_comments_events_event_id_idx` (`event_id`),
-  CONSTRAINT `fk_comments_events_comment_id` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_comments_events_event_id` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `comments_events`
---
-
-LOCK TABLES `comments_events` WRITE;
-/*!40000 ALTER TABLE `comments_events` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comments_events` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `comments_groups`
---
-
-DROP TABLE IF EXISTS `comments_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `comments_groups` (
-  `group_id` int(11) NOT NULL,
-  `comment_id` int(11) NOT NULL,
-  `_created` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`group_id`,`comment_id`),
-  KEY `fk_comments_groups_comment_id_idx` (`comment_id`),
-  CONSTRAINT `fk_comments_groups_comment_id` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_comments_groups_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `comments_groups`
---
-
-LOCK TABLES `comments_groups` WRITE;
-/*!40000 ALTER TABLE `comments_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `comments_groups` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `events`
@@ -105,10 +48,8 @@ DROP TABLE IF EXISTS `events`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `start_time` time NOT NULL,
-  `end_time` time NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
   `location_id` int(11) NOT NULL,
   `name` varchar(45) NOT NULL,
   `thumbnail_image_link` varchar(45) DEFAULT NULL,
@@ -117,17 +58,8 @@ CREATE TABLE `events` (
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_events_location_id_idx` (`location_id`),
   CONSTRAINT `fk_events_location_id` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `events`
---
-
-LOCK TABLES `events` WRITE;
-/*!40000 ALTER TABLE `events` DISABLE KEYS */;
-/*!40000 ALTER TABLE `events` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `events_tags`
@@ -148,15 +80,6 @@ CREATE TABLE `events_tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `events_tags`
---
-
-LOCK TABLES `events_tags` WRITE;
-/*!40000 ALTER TABLE `events_tags` DISABLE KEYS */;
-/*!40000 ALTER TABLE `events_tags` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `groups`
 --
 
@@ -167,31 +90,22 @@ CREATE TABLE `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `location_id` int(11) DEFAULT NULL,
-  `default_event_id` int(11) DEFAULT NULL,
   `host_user_id` int(11) DEFAULT NULL,
   `blurb` varchar(500) DEFAULT NULL,
   `thumbnail_image_link` varchar(45) DEFAULT NULL,
   `_created` datetime DEFAULT CURRENT_TIMESTAMP,
   `details` text,
+  `regular_event_start_time` varchar(45) DEFAULT NULL,
+  `regular_event_end_time` varchar(45) DEFAULT NULL,
+  `regular_event_day_of_week` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_groups_location_id_idx` (`location_id`),
-  KEY `fk_groups_event_id_idx` (`default_event_id`),
   KEY `fk_groups_user_id_idx` (`host_user_id`),
-  CONSTRAINT `fk_groups_event_id` FOREIGN KEY (`default_event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_groups_location_id` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_groups_user_id` FOREIGN KEY (`host_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `groups`
---
-
-LOCK TABLES `groups` WRITE;
-/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `groups_tags`
@@ -212,15 +126,6 @@ CREATE TABLE `groups_tags` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `groups_tags`
---
-
-LOCK TABLES `groups_tags` WRITE;
-/*!40000 ALTER TABLE `groups_tags` DISABLE KEYS */;
-/*!40000 ALTER TABLE `groups_tags` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `groups_users`
 --
 
@@ -239,15 +144,6 @@ CREATE TABLE `groups_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `groups_users`
---
-
-LOCK TABLES `groups_users` WRITE;
-/*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `locations`
 --
 
@@ -262,18 +158,11 @@ CREATE TABLE `locations` (
   `state` varchar(45) DEFAULT NULL,
   `zip` varchar(45) DEFAULT NULL,
   `_created` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `locations`
---
-
-LOCK TABLES `locations` WRITE;
-/*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `locations` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tags`
@@ -286,18 +175,10 @@ CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `_created` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tags`
---
-
-LOCK TABLES `tags` WRITE;
-/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -309,7 +190,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(45) NOT NULL,
-  `password` varchar(55) NOT NULL,
+  `hash` varchar(60) NOT NULL,
   `_created` datetime DEFAULT CURRENT_TIMESTAMP,
   `address_location_id` int(11) DEFAULT NULL,
   `bio` text,
@@ -318,21 +199,13 @@ CREATE TABLE `users` (
   `last_name` varchar(45) DEFAULT NULL,
   `profile_picture_link` varchar(45) DEFAULT NULL,
   `telephone` varchar(45) DEFAULT NULL,
+  `username` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   KEY `fk_users_location_id_idx` (`address_location_id`),
   CONSTRAINT `fk_users_location_id` FOREIGN KEY (`address_location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -343,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-23 16:30:18
+-- Dump completed on 2018-07-25 14:08:07

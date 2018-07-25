@@ -27,34 +27,35 @@ router.get("/", async (req, res) => {
 /**
  * register a user
  * is expecting:
- * { email, password, locationName, addressLineOne, addressLineTwo, city, state, zip, bio, firstName, lastName, middleInitial, profilePictureLink, telephone, username }
+ * { email, password, location_name, address_line_one, address_line_two, city, state, zip, new_location_name, bio, first_name, last_name, middle_initial, profile_picture_link, telephone, username }
  * in the request's body
  */
 router.post("/", async (req, res) => {
   try {
     let address_location_id;
-    if (req.body.locationName) {
-      address_location_id = await getLocationId(req.body.locationName);
+    if (req.body.location_name) {
+      address_location_id = await getLocationId(req.body.location_name);
     } else {
       address_location_id = await insertLocation(
-        req.body.addressLineOne,
-        req.body.addressLineTwo,
+        req.body.address_line_one,
+        req.body.address_line_two,
         req.body.city,
         req.body.state,
-        req.body.zip
+        req.body.zip,
+        req.body.new_location_name
       );
     }
-    console.log(address_location_id);
+
     let hash = await generateHash(req.body.password);
     let insertObject = {
       email: req.body.email,
       hash,
       address_location_id,
       bio: req.body.bio,
-      first_name: req.body.firstName,
-      middle_initial: req.body.middleInitial,
-      last_name: req.body.lastName,
-      profile_picture_link: req.body.profilePictureLink,
+      first_name: req.body.first_name,
+      middle_initial: req.body.middle_initial,
+      last_name: req.body.last_name,
+      profile_picture_link: req.body.profile_picture_link,
       telephone: req.body.telephone,
       username: req.body.username
     };
@@ -62,7 +63,9 @@ router.post("/", async (req, res) => {
     res.status(201).json(idObj);
   } catch (err) {
     console.log(err);
-    res.sendStatus(500);
+    if (err.errno === 1062) {
+      res.status(500).send("Emails have to be unique!");
+    } else res.status(500).send(err);
   }
 });
 

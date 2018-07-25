@@ -8,7 +8,6 @@ let commentTable = new Table('Comments');
  * get all comments
  */
 router.get('/', async (req, res) => {
-    console.log(req.user);
     try {
         let comments = await commentTable.getAll()
         res.json(comments);
@@ -21,20 +20,12 @@ router.get('/', async (req, res) => {
 /**
  * post a comment
  * is expecting:
- * { userid, comment, eventid, groupid }
+ * { user_id, comment, event_id, group_id }
  * in the request's body
  */
 router.post('/', async (req, res) => {
     try {
-        let insertObject = {
-            comment: req.body.comment,
-            user_id: req.body.userid,
-            event_id: req.body.eventid,
-            group_id: req.body.groupid
-        }
-        if (req.body.eventid) insertObject["event_id"] = req.body.eventid;
-        if (req.body.groupid) insertObject["group_id"] = req.body.groupid;
-        let idObj = await commentTable.insert(insertObject);
+        let idObj = await commentTable.insert(req.body);
         res.status(201).json(idObj);
     } catch (err) {
         console.log(err);

@@ -19,6 +19,10 @@ class Table {
         return executeQuery(sql);
     }
 
+    callProcedure(procName, param) {
+        return executeQuery(`call ${procName}(?)`, param);
+    }
+
     find(query) {
         let columns = Object.keys(query);
         let values = Object.values(query);
@@ -50,6 +54,11 @@ class Table {
 
     delete(id) {
         let sql = `DELETE FROM ${this.tableName} WHERE id = ${id}`;
+        return executeQuery(sql);
+    }
+
+    deleteAll(key, id) {
+        let sql = `DELETE FROM ${this.tableName} WHERE ${key} = ${id}`;
         return executeQuery(sql);
     }
 }

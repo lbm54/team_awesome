@@ -1,7 +1,8 @@
 import { Router } from "express";
 import Table from "../table";
 import { insertLocation, getLocationId } from "../utils/locations";
-import { handleTags } from "../utils/tags";
+import { insertTags, getTags, updateTags } from "../utils/tags";
+import { getComments } from '../utils/comments';
 
 let router = Router();
 let groupTable = new Table("Groups");
@@ -10,9 +11,15 @@ let groupTable = new Table("Groups");
  * get all groups
  */
 router.get("/", async (req, res) => {
-  console.log(req.user);
   try {
     let groups = await groupTable.getAll();
+
+    for (var i = 0; i < groups.length; i++) {
+      let tags = await getTags("groups", groups[i].id);
+      groups[i]["tags"] = tags;
+      let comments = await getComments("group_id", groups[i].id);
+      groups[i]["comments"] = comments;
+    }
     res.json(groups);
   } catch (err) {
     console.log(err);
@@ -23,25 +30,27 @@ router.get("/", async (req, res) => {
 /**
  * post a group
  * is expecting:
- * { name, locationName, addressLineOne, addressLineTwo, city, state, zip,
- * regularEventStartTime, regularEventEndTime, regularEventDayOfWeek,
- * hostUserId, blurb, thumbnailImageLink, details, tags  }
+ * { name, location_name, address_line_one, address_line_two, city, state, zip,
+ * regular_event_start_time, regular_event_end_time, regular_event_day_of_week,
+ * host_user_id, blurb, thumbnail_image_link, details, tags  }
  * in the request's body
  *
  * for tags, I'm expecting:
  * {id, name}
  * for each new tag, don't pass in an id
+ * if you pass in an id, I'm asusming it's an existing tag
+ * however, you may want to have the user edit the tag right then, 
+ * so if you pass in a tag name along with a tag id, I'll go ahead and update the name
  */
 router.post("/", async (req, res) => {
   try {
     //for the group's location
     let location_id;
-    if (req.body.locationName) {
-      location_id = await getLocationId(req.body.locationName);
-    } else {
+    if (req.body.locationName) location_id = await getLocationId(req.body.location_name);
+    else {
       location_id = await insertLocation(
-        req.body.addressLineOne,
-        req.body.addressLineTwo,
+        req.body.address_line_one,
+        req.body.address_line_two,
         req.body.city,
         req.body.state,
         req.body.zip
@@ -52,19 +61,19 @@ router.post("/", async (req, res) => {
     let insertObject = {
       name: req.body.name,
       location_id,
-      regular_event_start_time: req.body.regularEventStartTime,
-      regular_event_end_time: req.body.regularEventEndTime,
-      regular_event_day_of_week: req.body.regularEventDayOfWeek,
-      host_user_id: req.body.hostUserId,
+      regular_event_start_time: req.body.regular_event_start_time,
+      regular_event_end_time: req.body.regular_event_end_time,
+      regular_event_day_of_week: req.body.regular_event_day_of_week,
+      host_user_id: req.body.host_user_id,
       blurb: req.body.blurb,
-      thumbnail_image_link: req.body.thumbnailImageLink,
+      thumbnail_image_link: req.body.thumbnail_image_link,
       details: req.body.details
     };
     let idObj = await groupTable.insert(insertObject);
 
     //if there are tags, inserting them and attaching them to the group
     if (req.body.tags) {
-      await handleTags("groups", idObj.id, req.body.tags);
+      await insertTags("groups", idObj.id, req.body.tags);
     }
     res.status(201).json(idObj);
   } catch (err) {
@@ -81,6 +90,10 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     let foundgroup = await groupTable.getOne(req.params.id);
+    let tags = await getTags("groups", foundgroup.id);
+    let comments = await getComments("group_id", foundgroup.id);
+    foundgroup["tags"] = tags;
+    foundgroup["comments"] = comments;
     res.json(foundgroup);
   } catch (err) {
     console.log(err);
@@ -93,8 +106,19 @@ router.get("/:id", async (req, res) => {
  */
 router.put("/:id", async (req, res) => {
   try {
+    
+    //if you pass in tags here, I will drop all tags on the events_tags junction table and just
+    //add the ones passed in rather than figure out what's changed
+    //if you don't want me to do that, then just don't pass in tags[] to this put method
+    if (req.body.tags) {
+      let tags = req.body.tags;
+      await updateTags("groups", tags, req.params.id);
+      delete req.body.tags;
+    }
+
     // not concerned about getting a value back, just waiting on update to finish
     await groupTable.update(req.params.id, req.body);
+
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
