@@ -7,11 +7,7 @@ let getComments = async function(key, id) {
   let object = {};
   object[key] = id;
   let commentsResultSet = await commentsTable.find(object);
-  let comments = [];
-  commentsResultSet.forEach((comment) => {
-    comments.push(comment);
-  })
-  return comments;
+  return commentsResultSet;
 }
 
 export { getComments };

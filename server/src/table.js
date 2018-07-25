@@ -57,6 +57,11 @@ class Table {
         return executeQuery(sql);
     }
 
+    deleteCompoundPrimaryKey(key1, key2, id1, id2) {
+        let sql = `DELETE FROM ${this.tableName} WHERE ${key1} = ${id1} AND ${key2} = ${id2}`;
+        return executeQuery(sql);
+    }
+
     deleteAll(key, id) {
         let sql = `DELETE FROM ${this.tableName} WHERE ${key} = ${id}`;
         return executeQuery(sql);

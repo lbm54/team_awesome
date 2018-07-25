@@ -32,11 +32,7 @@ let getTags = async function(whichTableName, id) {
   if (whichTableName === "groups") whichProcedure = "spGetGroupsTags";
 
   let tagResultSet = await tagTable.callProcedure(whichProcedure, id);
-  let tags = [];
-  tagResultSet[0].forEach((tag) => {
-    tags.push(tag);
-  })
-  return tags;
+  return tagResultSet[0];
 }
 
 let deleteJunctionTags = async function(whichTableName, id) {

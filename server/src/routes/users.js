@@ -17,6 +17,14 @@ router.get("/me", tokenMiddleware, isLoggedIn, (req, res) => {
 router.get("/", async (req, res) => {
   try {
     let users = await userTable.getAll();
+    let groupsUsersTable = new Table("groups_users");
+    let eventsUsersTable = new Table("events_users");
+    for (var i = 0; i < users.length; i++) {
+      let groupsUsers = await groupsUsersTable.find({user_id: users[i].id});
+      users[i]["groups"] = groupsUsers;
+      let eventsUsers = await eventsUsersTable.find({user_id: users[i].id});
+      users[i]["events"] = eventsUsers;
+    }
     res.json(users);
   } catch (err) {
     console.log(err);
@@ -65,6 +73,66 @@ router.post("/", async (req, res) => {
     console.log(err);
     if (err.errno === 1062) {
       res.status(500).send("Emails have to be unique!");
+    } else res.status(500).send(err);
+  }
+});
+
+//adding a user to a group
+//expecting {user_id, group_id}
+router.post("/addToGroup", async (req, res) => {
+  try {
+    let groupsUsersTable = new Table("groups_users");
+    let idObj = await groupsUsersTable.insert(req.body);
+    res.status(201).json(idObj);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this group");
+    } else res.status(500).send(err);
+  }
+});
+
+//adding a user to an event
+//expecting {user_id, event_id}
+router.post("/addToEvent", async (req, res) => {
+  try {
+    let eventsUsersTable = new Table("events_users");
+    let idObj = await eventsUsersTable.insert(req.body);
+    res.status(201).json(idObj);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this event");
+    } else res.status(500).send(err);
+  }
+});
+
+//remove a user from a group
+//expecting {user_id, group_id}
+router.post("/removeFromGroup", async (req, res) => {
+  try {
+    let groupsUsersTable = new Table("groups_users");
+    await groupsUsersTable.deleteCompoundPrimaryKey("group_id", "user_id", req.body.group_id, req.body.user_id);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this group");
+    } else res.status(500).send(err);
+  }
+});
+
+//remove a user from an event
+//expecting {user_id, event_id}
+router.post("/removeFromEvent", async (req, res) => {
+  try {
+    let eventsUsersTable = new Table("events_users");
+    await eventsUsersTable.deleteCompoundPrimaryKey("event_id", "user_id", req.body.event_id, req.body.user_id);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this event");
     } else res.status(500).send(err);
   }
 });
