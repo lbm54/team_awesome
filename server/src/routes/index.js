@@ -6,6 +6,7 @@ import authRouter from './auth';
 import usersRouter from './users';
 import locationsRouter from './locations';
 import tagsRouter from './tags';
+import uploadRouter from './upload';
 import { isLoggedIn, tokenMiddleware } from '../middleware/auth.mw';
 
 let router = Router();
@@ -23,5 +24,6 @@ router.use('/events', eventsRouter);
 router.use('/users', usersRouter);
 router.use('/locations', locationsRouter);
 router.use('/tags', tagsRouter);
+router.use('/upload', uploadRouter);
 
 export default router;

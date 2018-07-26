@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import routes from './routes';
 import stateRouting from './middleware/routing.mw';
 import configurePassport from './config/passport';
+import fileUpload from 'express-fileupload';
 
 const CLIENT_PATH = join(__dirname, '../../client');
 
@@ -13,6 +14,7 @@ let app = express();
 app.use(morgan('dev'));
 app.use(express.static(CLIENT_PATH));
 app.use(express.json());
+app.use(fileUpload());
 
 configurePassport(app);
 

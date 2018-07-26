@@ -76,3 +76,8 @@ body {
   .StripeElement.PaymentRequestButton {
     padding: 0;
   }
+
+  .thumbnailImage {
+    width: 50px;
+    height: 50px;
+  }
