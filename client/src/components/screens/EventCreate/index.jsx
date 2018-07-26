@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import Datepicker from "../../datepicker";
+import DateTimePicker from "../../datetimepicker";
+import TagList from "../../taglist";
+import AutoComplete from "../../autocomplete";
 
 class EventCreateScreen extends Component {
   constructor(props) {
@@ -16,15 +18,26 @@ class EventCreateScreen extends Component {
       zip: "",
       name: "",
       thumbnail_image_link: "",
-      tags: []
+      tags: [],
+      locations: [],
+      selectedTags: []
     };
 
     this.handleStartTime = this.handleStartTime.bind(this);
+    this.handleEndTime = this.handleEndTime.bind(this);
+    this.handleLocationName = this.handleLocationName.bind(this);
+    this.handleAddressOne = this.handleAddressOne.bind(this);
+    this.handleAddressTwo = this.handleAddressTwo.bind(this);
+    this.handleCity = this.handleCity.bind(this);
+    this.handleState = this.handleState.bind(this);
+    this.handleZip = this.handleZip.bind(this);
+    this.handleName = this.handleName.bind(this);
+    this.handleThumbnailImageLink = this.handleThumbnailImageLink.bind(this);
+    this.handleTags = this.handleTags.bind(this);
   }
 
   handleStartTime(value) {
     this.setState({ start_time: value });
-    console.log(value);
   }
 
   handleEndTime(value) {
@@ -33,6 +46,7 @@ class EventCreateScreen extends Component {
 
   handleLocationName(value) {
     this.setState({ location_name: value });
+    console.log(value);
   }
 
   handleAddressOne(value) {
@@ -64,7 +78,7 @@ class EventCreateScreen extends Component {
   }
 
   handleTags(value) {
-    this.setState({ tags: value });
+    this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
   }
 
   handleSubmit(value) {
@@ -75,82 +89,127 @@ class EventCreateScreen extends Component {
     });
   }
 
+  componentDidMount() {
+    try {
+      fetch("/api/locations")
+        .then(response => response.json())
+        .then(locations => {
+          this.setState({ locations });
+        });
+        fetch("/api/tags")
+        .then(response => response.json())
+        .then(tags => {
+          this.setState({ tags });
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div className="container">
         <form>
+          <h1>Create an Event</h1>
+          <div className="form-group">
+            <label htmlFor="startTime">Start Time: </label>
+            <DateTimePicker
+              className="form-control"
+              onChange={this.handleStartTime}
+              name="startTime"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="endTime">End Time: </label>
+            <DateTimePicker
+              className="form-control"
+              onChange={this.handleEndTime}
+              name="endTime"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="locationName">Choose a location:</label>
+            <AutoComplete
+              onChange={this.handleLocationName}
+              name="locationName"
+              className="form-control"
+              source={this.state.locations}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="addressLineOne">Address Line One:</label>
+            <input
+              value={this.state.address_line_one}
+              onChange={event => this.handleAddressOne(event.target.value)}
+              className="form-control"
+              name="addressLineOne"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="addressLineTwo">Address Line Two:</label>
+            <input
+              value={this.state.address_line_two}
+              onChange={event => this.handleAddressTwo(event.target.value)}
+              className="form-control"
+              name="addressLineTwo"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input
+              value={this.state.city}
+              onChange={event => this.handleCity(event.target.value)}
+              className="form-control"
+              name="city"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state">State:</label>
+            <input
+              value={this.state.state}
+              onChange={event => this.handleState(event.target.value)}
+              className="form-control"
+              name="state"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="zip">Zip:</label>
+            <input
+              value={this.state.zip}
+              onChange={event => this.handleZip(event.target.value)}
+              className="form-control"
+              name="zip"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">Name:</label>
+            <input
+              value={this.state.name}
+              onChange={event => this.handleName(event.target.value)}
+              className="form-control"
+              name="name"
+            />
+          </div>
           {/* <input
-                    value={this.state.start_time}
-                    type="text"
-                    id="datepickerStartTime"
-                    onChange={(event) => this.handleStartTime(event.target.value)}
-                    placeholder="Start Time" /> */}
-
-          <Datepicker text="Start Time" onChange={this.handleStartTime} />
-
-          <input
-            value={this.state.end_time}
-            type="text"
-            id="datepickerEndTime"
-            onChange={event => this.handleEndTime(event.target.value)}
-            placeholder="End Time"
-          />
-
-          <input
-            value={this.state.location_name}
-            onChange={event => this.handleLocationName(event.target.value)}
-            placeholder="Location Name"
-          />
-
-          <input
-            value={this.state.address_line_one}
-            onChange={event => this.handleAddressOne(event.target.value)}
-            placeholder="Address Line One"
-          />
-
-          <input
-            value={this.state.address_line_two}
-            onChange={event => this.handleAddressTwo(event.target.value)}
-            placeholder="Address Line Two"
-          />
-
-          <input
-            value={this.state.city}
-            onChange={event => this.handleCity(event.target.value)}
-            placeholder="City"
-          />
-
-          <input
-            value={this.state.state}
-            onChange={event => this.handleState(event.target.value)}
-            placeholder="State"
-          />
-
-          <input
-            value={this.state.zip}
-            onChange={event => this.handleZip(event.target.value)}
-            placeholder="Zip Code"
-          />
-
-          <input
-            value={this.state.name}
-            onChange={event => this.handleName(event.target.value)}
-            placeholder="Start Date"
-          />
-
-          <input
             value={this.state.thumbnail_image_link}
             onChange={event =>
               this.handleThumbnailImageLink(event.target.value)
             }
-            placeholder="Start Date"
-          />
+          /> */}
 
-          <input
-            value={this.state.tags}
-            onChange={event => this.handleTags(event.target.value)}
-            placeholder="Tags"
-          />
+          <div className="form-group">
+            <label htmlFor="tags">Choose your tags:</label>
+            <AutoComplete
+              onChange={this.handleTags}
+              name="tags"
+              className="form-control"
+              source={this.state.tags}
+            />
+            <TagList selectedTags={this.state.selectedTags} />
+          </div>
 
           <button onClick={event => this.handleSubmit(this.state)}>
             Submit

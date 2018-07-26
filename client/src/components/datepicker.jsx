@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 
-class datepicker extends Component {
+class DatePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,11 +16,9 @@ class datepicker extends Component {
 
   render() {
     return (
-      <p>
-        {this.props.text}: <input ref={this.makeDatePicker} type="text" />
-      </p>
+        <input ref={this.makeDatePicker} className={this.props.className} type="text" name={this.props.name} />
     );
   }
 }
 
-export default datepicker;
+export default DatePicker;
