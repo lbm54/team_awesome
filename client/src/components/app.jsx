@@ -28,14 +28,14 @@ class Navigation extends Component {
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
                         <Route path="/login" component={LoginScreen} />
-                        <Route path="/events/:id" component={EventDetailScreen} />
+                        <Route path="/events/list/:id" component={EventDetailScreen} />
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
-                        <PrivateRoute path="/groups/create" component={GroupCreateScreen} />
-                        <PrivateRoute path="/events/create" component={EventCreateScreen} />
+                        <Route path="/groups/create" component={GroupCreateScreen} />
+                        <Route path="/events/create" component={EventCreateScreen} />
                         <Route path="/groups/:id" component={GroupDetailScreen} />
                         <Route path="/groups" component={GroupListingScreen} />
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
-                        <PrivateRoute path="/users/profile" component={ProfileScreen} />
+                        <Route path="/users/profile" component={ProfileScreen} />
                         <Route path="/users/register" component={RegisterScreen} />
                         <Route path="/logout" component={Logout} />
                     </Switch>
