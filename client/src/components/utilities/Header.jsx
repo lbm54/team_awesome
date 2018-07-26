@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { isLoggedIn } from '../../services/user';
 
 export default class Header extends Component {
     constructor(props) {
@@ -6,9 +7,22 @@ export default class Header extends Component {
 
         this.state = {};
     }
-
+    let 
+    
+    // }
     render() {
-        <Fragment> 
+        const isLoggedIn = this.state.isLoggedIn
+        return (
+                <Fragment> 
+            <div>
+              {isLoggedIn ? (
+                <LogoutButton onClick={this.handleLogoutClick} />
+              ) : (
+                <LoginButton onClick={this.handleLoginClick} />
+              )}
+            </div>
+          );
+        }
             <nav className="navbar navbar-expand-lg">
             {/* Search Bar */}
                 <form className="form-inline my-2 my-lg-0">
@@ -21,6 +35,7 @@ export default class Header extends Component {
             {/* Display picture is anchor to user profile page */}
             </nav>
         </Fragment>
+        )
     }
 
 }
