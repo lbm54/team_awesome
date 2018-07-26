@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DateTimePicker from "../../datetimepicker";
 import TagList from "../../taglist";
 import AutoComplete from "../../autocomplete";
-
+import FileUpload from '../../fileupload';
 class EventCreateScreen extends Component {
   constructor(props) {
     super(props);
@@ -199,6 +199,9 @@ class EventCreateScreen extends Component {
               this.handleThumbnailImageLink(event.target.value)
             }
           /> */}
+
+          <h5>Upload profile image</h5>
+          <FileUpload label="Upload Event Thumbnail" />
 
           <div className="form-group">
             <label htmlFor="tags">Choose your tags:</label>
