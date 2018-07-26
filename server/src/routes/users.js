@@ -17,6 +17,14 @@ router.get("/me", tokenMiddleware, isLoggedIn, (req, res) => {
 router.get("/", async (req, res) => {
   try {
     let users = await userTable.getAll();
+    let groupsUsersTable = new Table("groups_users");
+    let eventsUsersTable = new Table("events_users");
+    for (var i = 0; i < users.length; i++) {
+      let groupsUsers = await groupsUsersTable.find({user_id: users[i].id});
+      users[i]["groups"] = groupsUsers;
+      let eventsUsers = await eventsUsersTable.find({user_id: users[i].id});
+      users[i]["events"] = eventsUsers;
+    }
     res.json(users);
   } catch (err) {
     console.log(err);
@@ -27,34 +35,35 @@ router.get("/", async (req, res) => {
 /**
  * register a user
  * is expecting:
- * { email, password, locationName, addressLineOne, addressLineTwo, city, state, zip, bio, firstName, lastName, middleInitial, profilePictureLink, telephone, username }
+ * { email, password, location_name, address_line_one, address_line_two, city, state, zip, new_location_name, bio, first_name, last_name, middle_initial, profile_picture_link, telephone, username }
  * in the request's body
  */
 router.post("/", async (req, res) => {
   try {
     let address_location_id;
-    if (req.body.locationName) {
-      address_location_id = await getLocationId(req.body.locationName);
+    if (req.body.location_name) {
+      address_location_id = await getLocationId(req.body.location_name);
     } else {
       address_location_id = await insertLocation(
-        req.body.addressLineOne,
-        req.body.addressLineTwo,
+        req.body.address_line_one,
+        req.body.address_line_two,
         req.body.city,
         req.body.state,
-        req.body.zip
+        req.body.zip,
+        req.body.new_location_name
       );
     }
-    console.log(address_location_id);
+
     let hash = await generateHash(req.body.password);
     let insertObject = {
       email: req.body.email,
       hash,
       address_location_id,
       bio: req.body.bio,
-      first_name: req.body.firstName,
-      middle_initial: req.body.middleInitial,
-      last_name: req.body.lastName,
-      profile_picture_link: req.body.profilePictureLink,
+      first_name: req.body.first_name,
+      middle_initial: req.body.middle_initial,
+      last_name: req.body.last_name,
+      profile_picture_link: req.body.profile_picture_link,
       telephone: req.body.telephone,
       username: req.body.username
     };
@@ -62,7 +71,69 @@ router.post("/", async (req, res) => {
     res.status(201).json(idObj);
   } catch (err) {
     console.log(err);
-    res.sendStatus(500);
+    if (err.errno === 1062) {
+      res.status(500).send("Emails have to be unique!");
+    } else res.status(500).send(err);
+  }
+});
+
+//adding a user to a group
+//expecting {user_id, group_id}
+router.post("/addToGroup", async (req, res) => {
+  try {
+    let groupsUsersTable = new Table("groups_users");
+    let idObj = await groupsUsersTable.insert(req.body);
+    res.status(201).json(idObj);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this group");
+    } else res.status(500).send(err);
+  }
+});
+
+//adding a user to an event
+//expecting {user_id, event_id}
+router.post("/addToEvent", async (req, res) => {
+  try {
+    let eventsUsersTable = new Table("events_users");
+    let idObj = await eventsUsersTable.insert(req.body);
+    res.status(201).json(idObj);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this event");
+    } else res.status(500).send(err);
+  }
+});
+
+//remove a user from a group
+//expecting {user_id, group_id}
+router.post("/removeFromGroup", async (req, res) => {
+  try {
+    let groupsUsersTable = new Table("groups_users");
+    await groupsUsersTable.deleteCompoundPrimaryKey("group_id", "user_id", req.body.group_id, req.body.user_id);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this group");
+    } else res.status(500).send(err);
+  }
+});
+
+//remove a user from an event
+//expecting {user_id, event_id}
+router.post("/removeFromEvent", async (req, res) => {
+  try {
+    let eventsUsersTable = new Table("events_users");
+    await eventsUsersTable.deleteCompoundPrimaryKey("event_id", "user_id", req.body.event_id, req.body.user_id);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    if (err.errno === 1062) {
+      res.status(500).send("This user has already been assigned to this event");
+    } else res.status(500).send(err);
   }
 });
 
