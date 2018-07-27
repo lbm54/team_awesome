@@ -44,7 +44,7 @@ export default class Header extends Component {
                     {/* end search bar */}
 
                     {/* Display "Create new Group" button if signed in. Else, Display sign in button */}
-                    <button type="button" class="btn btn-success">New Group</button>
+                    <button type="button" class="btn btn-success newGroupBtn">New Group</button>
                 </nav>
                 {/* Display user picture if signed in, else display none */}
                 {/* Display picture is anchor to user profile page */}

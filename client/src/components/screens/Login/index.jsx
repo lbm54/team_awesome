@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Header from '../utilities/Header';
+import Footer from '../utilities/Footer';
 
 class EventCreateScreen extends Component {
     constructor(props) {

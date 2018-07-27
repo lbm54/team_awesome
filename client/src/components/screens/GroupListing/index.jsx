@@ -11,6 +11,9 @@ class GroupListingScreen extends Component {
 
     render() {
         // return ()
+        // TODO: 
+        // Add in card components
+        // The card components display props for the groups
     }
 }
 
