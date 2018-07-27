@@ -7,12 +7,16 @@ const AutoComplete = props => {
       $(element)
         .select2({
           width: "40%",
-          minimumInputLength: 1
+          allowClear: true,
+          multiple: true,
+          minimumInputLength: 1,
         })
         .on("select2:select", e => {
-          if (!e.target.value) return;
+          if (!(e.target.value)) return;
           props.callback(e.target.value);
         });
+        $(element).val(null);
+        $('.select2-selection__rendered').html('');
     }
     counter++;
   };
@@ -28,8 +32,11 @@ const AutoComplete = props => {
   });
   if (options.length > 0) {
     return (
-      <select className={props.className} ref={makeAutoComplete}>
-      <option></option>
+      <select
+        className={props.className}
+        ref={makeAutoComplete}
+        multiple
+      >
         {options}
       </select>
     );

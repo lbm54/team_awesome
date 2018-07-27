@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DateTimePicker from "../../datetimepicker";
-import TagList from "../../taglist";
 import AutoComplete from "../../autocomplete";
+import AutoCompleteMultiple from "../../autocompleteMultiple";
 import FileUpload from '../../fileupload';
 class EventCreateScreen extends Component {
   constructor(props) {
@@ -130,11 +130,10 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="locationName">Choose a location:</label>
+            <label htmlFor="locationName" className="mr-2">Choose a location: </label>
             <AutoComplete
-              onChange={this.handleLocationName}
+              callback={this.handleLocationName}
               name="locationName"
-              className="form-control"
               source={this.state.locations}
             />
           </div>
@@ -200,18 +199,17 @@ class EventCreateScreen extends Component {
             }
           /> */}
 
-          <h5>Upload profile image</h5>
+          <h5>Upload event image</h5>
           <FileUpload label="Upload Event Thumbnail" />
 
           <div className="form-group">
-            <label htmlFor="tags">Choose your tags:</label>
-            <AutoComplete
-              onChange={this.handleTags}
+            <label htmlFor="tags" className="mr-2">Choose your tags:</label>
+            <AutoCompleteMultiple
+              callback={this.handleTags}
               name="tags"
               className="form-control"
               source={this.state.tags}
             />
-            <TagList selectedTags={this.state.selectedTags} />
           </div>
 
           <button onClick={event => this.handleSubmit(this.state)}>
