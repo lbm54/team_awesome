@@ -12,11 +12,10 @@ const AutoComplete = props => {
           minimumInputLength: 1,
         })
         .on("select2:select", e => {
-          if (!(e.target.value)) return;
           props.callback(e.target.value);
         });
-        $(element).val(null);
-        $('.select2-selection__rendered').html('');
+        // $(element).val(null);
+        // $('.select2-selection__rendered').html('');
     }
     counter++;
   };
@@ -37,6 +36,7 @@ const AutoComplete = props => {
         ref={makeAutoComplete}
         multiple
       >
+      <option />
         {options}
       </select>
     );

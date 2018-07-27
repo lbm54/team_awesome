@@ -5,6 +5,9 @@ import PrivateRoute from './auth/privateRoute';
 import Logout from './auth/logout';
 import AuthButton from './auth/authButton';
 
+import Header from './utilities/Header';
+import Footer from './utilities/Footer';
+
 //importing the screens
 import EventCreateScreen from './screens/EventCreate';
 import EventDetailScreen from './screens/EventDetail';
@@ -24,6 +27,7 @@ class Navigation extends Component {
         return (
             <Router>
                 <Fragment>
+                    {/* <Header /> */}
                     <AuthButton />
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
@@ -39,6 +43,7 @@ class Navigation extends Component {
                         <Route path="/users/register" component={RegisterScreen} />
                         <Route path="/logout" component={Logout} />
                     </Switch>
+                    {/* <Footer /> */}
                 </Fragment>
             </Router>
         )

@@ -1,3 +1,6 @@
+/* font-family: 'Roboto', sans-serif;
+font-family: 'PT Sans Narrow', sans-serif; */
+/* commented out the font, ready to be used. */
 body {
   /* text-align: center; */
   padding: 2em;
@@ -11,6 +14,13 @@ body {
     box-sizing: border-box;
     padding: 0 5px;
   }
+  
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
 
   label {
     /* color: #6b7c93; */
@@ -80,4 +90,9 @@ body {
   .thumbnailImage {
     width: 50px;
     height: 50px;
+  }
+
+  .card-img-top {
+    max-width: 200px;
+    max-height: 200px
   }
