@@ -12,12 +12,8 @@ export default class Header extends Component {
         this.state = {};
     }
 
-    // TODO:
-    //  make functions for log in
-    // log in event listener set logged in state true
-    //  make function for log out
-    // log out event listener set logged in state false
-    // }
+    // TODO: 
+    // change avatar to have user img
 
     render() {
         const isLoggedIn = this.state.isLoggedIn
@@ -47,7 +43,6 @@ export default class Header extends Component {
 
                 {/* Display user picture if signed in, else display none */}
                     {/* TODO: Set the Avatar img to pull props from the user's uploaded image */}
-                    {/* TODO: style the avatar in css */}
                     {isLoggedIn ? (
                         <Link to="/users/profile">
                             <img src="avatar.png" alt="Avatar" class="avatar" />

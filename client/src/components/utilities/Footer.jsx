@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+
 
 // The footer code was found here: https://mdbootstrap.com/components/bootstrap-footer/
 
@@ -8,6 +9,7 @@ export default class Footer extends Component {
     }
 
     render() {
+        return(
         <Fragment>
             {/* START FOOTER */}
             <footer className="page-footer font-small mdb-color pt-4 FooterContainer">
@@ -39,11 +41,13 @@ export default class Footer extends Component {
                         <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3 usefulLinks">
                             <h6 className="text-uppercase mb-4 font-weight-bold">Useful links</h6>
                             <p>
-                                {/* TODO: Link these */}
-                                <a href="#!">Your Account</a>
+                                <a href="./screens/Register">Sign Up</a>
                             </p>
                             <p>
-                                <a href="#!">Start a new Group</a>
+                                <a href="./screens/Profile">Your Account</a>
+                            </p>
+                            <p>
+                                <a href="./screens/EventCreate">Start a new Event</a>
                             </p>
                         </div>
 
@@ -124,5 +128,6 @@ export default class Footer extends Component {
             </footer>
             {/* <!-- Footer --> */}
         </Fragment>
+         )
     }
-}
+};
