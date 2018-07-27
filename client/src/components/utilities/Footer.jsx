@@ -45,9 +45,6 @@ export default class Footer extends Component {
                             <p>
                                 <a href="#!">Start a new Group</a>
                             </p>
-                            <p>
-                                <a href="#!">Help</a>
-                            </p>
                         </div>
 
                         {/* <!-- Grid column --> */}

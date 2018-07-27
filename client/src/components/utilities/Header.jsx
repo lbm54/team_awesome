@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { isLoggedIn } from '../../services/user';
-import { Button } from 'reactstrap';
+import { Button } from 'react bootstrap';
+import AuthButton from '../auth/authButton';
 
 
 
@@ -16,7 +17,6 @@ export default class Header extends Component {
     // log in event listener set logged in state true
     //  make function for log out
     // log out event listener set logged in state false
-    //  write function for create new group button, button on event routes to create page
     // }
 
     render() {
@@ -24,18 +24,7 @@ export default class Header extends Component {
         return (
             <Fragment>
                 <nav className="navbar navbar-expand-lg headerNavBar">
-                    <div>
-                        {isLoggedIn ? (
-                            <LogoutButton onClick={this.handleLogoutClick} />
-                        ) : (
-                                <LoginButton onClick={this.handleLoginClick} />
-                            )}
-                    </div>
-                    );
-                  }
-          
-        {/* end signin/out buttons */}
-
+                    
                     {/* Search Bar */}
                     <form className="form-inline my-2 my-lg-0 headerSearchBar">
                         <input className="form-control mr-sm-2 searchBar" type="search" placeholder="Search" aria-label="Search" />
@@ -43,11 +32,30 @@ export default class Header extends Component {
                     </form>
                     {/* end search bar */}
 
-                    {/* Display "Create new Group" button if signed in. Else, Display sign in button */}
-                    <button type="button" class="btn btn-success newGroupBtn">New Group</button>
-                </nav>
+                    {/* start Login/LogOut Btns */}
+                    <AuthButton />
+                    {/* end login/out buttons */}
+
+
+                    {/* Display "Create new Group" button if signed in. Else, Display NONE */}
+
+                    {isLoggedIn ? (
+                        <Link to="/events/create">
+                            <button type="button" class="btn btn-success newGroupBtn">New Event</button>
+                        </Link>
+                    ) : ('none')};
+
                 {/* Display user picture if signed in, else display none */}
+                    {/* TODO: Set the Avatar img to pull props from the user's uploaded image */}
+                    {/* TODO: style the avatar in css */}
+                    {isLoggedIn ? (
+                        <Link to="/users/profile">
+                            <img src="avatar.png" alt="Avatar" class="avatar" />
+                        </Link>
+                    ) : ('none')};
+
                 {/* Display picture is anchor to user profile page */}
+                </nav>
             </Fragment>
         )
     }
