@@ -42,7 +42,6 @@ export default class Header extends Component {
                     ) : ('none')};
 
                 {/* Display user picture if signed in, else display none */}
-                    {/* TODO: Set the Avatar img to pull props from the user's uploaded image */}
                     {isLoggedIn ? (
                         <Link to="/users/profile">
                             <img src="avatar.png" alt="Avatar" class="avatar" />

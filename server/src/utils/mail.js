@@ -1,6 +1,8 @@
 import mailgunLoader from 'mailgun-js';
+import { config } from '../config/index.js'
+
 let mailgun = mailgunLoader({
-    apiKey: process.env.MAILGUN_API_KEY,
+    apiKey: config.MAILGUN_API_KEY,
     domain: 'sandbox5906cbd631dd4ba4b5ab3a368e4086c2.mailgun.org'
 });
 

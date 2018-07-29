@@ -17,4 +17,4 @@ router.post('/', (req, res, next) => {
     });
 });
 
-export default RSVPSetup;
+export default router;
