@@ -18,6 +18,7 @@ import ProfileScreen from './screens/Profile';
 import RegisterScreen from './screens/Register';
 import Header from './utilities/Header';
 import Footer from './utilities/Footer';
+import stripeCharge from './utilities/StripeCharge';
 
 
 class Navigation extends Component {
@@ -40,6 +41,7 @@ class Navigation extends Component {
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
                         <Route path="/users/profile" component={ProfileScreen} />
                         <Route path="/users/register" component={RegisterScreen} />
+                        <Route path="/cardservices" component={stripeCharge} />
                         <Route path="/logout" component={Logout} />
                     </Switch>
                     {/* <Footer /> */}
