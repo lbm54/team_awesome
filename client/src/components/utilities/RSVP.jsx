@@ -16,7 +16,8 @@ export default class RSVP extends Component {
                     <div class="alert alert-info" role="alert">
                         Great! We've let your host know!  
                     </div>
-                )
+                ) 
+                // Here is where I will incl the stripe intg for cover charges
             }).catch((err) => {
                 console.log(err);
             });
@@ -25,7 +26,7 @@ export default class RSVP extends Component {
     render() {
         return (
             <Fragment>
-                <button className="btn btn-primary" onClick={this.handleSubmit(e)}> RSVP </button>
+                <button className="btn btn-primary" onClick={this.handleSubmit(e)}> RSVP to this event! </button>
             </Fragment>
         );
     }

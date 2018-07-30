@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { isLoggedIn } from '../../services/user';
+import { Button } from 'react-bootstrap';
 import AuthButton from '../auth/authButton';
 
 
@@ -16,6 +17,8 @@ export default class Header extends Component {
 
     render() {
         const isLoggedIn = this.state.isLoggedIn
+        console.log('attempting to render the header')
+        
         return (
             <Fragment>
                 <nav className="navbar navbar-expand-lg headerNavBar">
@@ -26,7 +29,7 @@ export default class Header extends Component {
                         <button className="btn btn-outline-success my-2 my-sm-0 searchBarButton" type="submit">Search</button>
                     </form>
                     {/* end search bar */}
-
+                
                     {/* start Login/LogOut Btns */}
                     <AuthButton />
                     {/* end login/out buttons */}
@@ -35,18 +38,17 @@ export default class Header extends Component {
                     {/* Display "Create new Group" button if signed in. Else, Display NONE */}
 
                     {isLoggedIn ? (
+                        <Fragment>
                         <Link to="/events/create">
                             <button type="button" class="btn btn-success newGroupBtn">New Event</button>
                         </Link>
-                    ) : ('none')};
-
-                {/* Display user picture if signed in, else display none */}
-                    {/* TODO: Set the Avatar img to pull props from the user's uploaded image */}
-                    {isLoggedIn ? (
                         <Link to="/users/profile">
                             <img src="avatar.png" alt="Avatar" class="avatar" />
                         </Link>
-                    ) : ('none')};
+                        </Fragment>
+                    ) : (null)}
+
+
 
                 {/* Display picture is anchor to user profile page */}
                 </nav>

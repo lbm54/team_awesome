@@ -19,6 +19,8 @@ import GroupListingScreen from './screens/GroupListing';
 import LoginScreen from './screens/Login';
 import ProfileScreen from './screens/Profile';
 import RegisterScreen from './screens/Register';
+import Header from './utilities/Header';
+import Footer from './utilities/Footer';
 
 
 class Navigation extends Component {
@@ -28,8 +30,7 @@ class Navigation extends Component {
         return (
             <Router>
                 <Fragment>
-                    {/* <Header /> */}
-                    <AuthButton />
+                 {/* <Header /> */}
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
                         <Route path="/login" component={LoginScreen} />
