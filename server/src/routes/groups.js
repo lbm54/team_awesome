@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
   try {
     //for the group's location
     let location_id;
-    if (req.body.locationName) location_id = await getLocationId(req.body.location_name);
+    if (req.body.locationId) location_id = await req.body.locationId;
     else {
       location_id = await insertLocation(
         req.body.address_line_one,

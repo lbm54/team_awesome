@@ -20,6 +20,7 @@ import LoginScreen from './screens/Login';
 import ProfileScreen from './screens/Profile';
 import RegisterScreen from './screens/Register';
 
+
 class Navigation extends Component {
 
     //having home page be the event listings screen
