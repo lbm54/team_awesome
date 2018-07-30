@@ -3,6 +3,9 @@ import DateTimePicker from "../../datetimepicker";
 import AutoComplete from "../../autocomplete";
 import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
+import states from '../../../services/states';
+import SelectMenu from '../../selectmenu';
+
 class GroupCreateScreen extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +15,6 @@ class GroupCreateScreen extends Component {
       regular_event_day_of_week: "",
       name: "",
       host_user_id: "",
-      regular_event_day_of_week: "",
       location_id: "",
       address_line_one: "",
       address_line_two: "",
@@ -32,7 +34,7 @@ class GroupCreateScreen extends Component {
     };
 
     this.handleRegularEventStartTime = this.handleRegularEventStartTime.bind(this);
-    this.handleRegularEventEndTime = this.handleREgularEventEndTime.bind(this);
+    this.handleRegularEventEndTime = this.handleRegularEventEndTime.bind(this);
     this.handleRegularEventDayOfWeek = this.handleRegularEventDayOfWeek.bind(this);
     this.handleLocationId = this.handleLocationId.bind(this);
     this.handleAddressOne = this.handleAddressOne.bind(this);
@@ -104,18 +106,20 @@ class GroupCreateScreen extends Component {
     this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
   }
 
-  handleSubmit(Group) {
-    Group.prGroupDefault();
+  handleSubmit(event) {
+    event.preventDefault();
     let object = {
-      start_time: this.state.start_time,
-      end_time: this.state.end_time,
+      regular_event_start_time: this.state.reular_event_start_time,
+      regular_event_end_time: this.state.regular_event_end_time,
+      regular_event_day_of_week: this.state.regular_event_day_of_week,
       name: this.state.name,
       details: this.state.details,
       blurb: this.state.blurb,
-      tags: this.state.selectedTags
+      tags: this.state.selectedTags,
+      thumbnail_image_link: this.state.thumbnail_image_link
     };
-    if (this.state.location_name) {
-      object["location_name"] = this.state.location_name;
+    if (this.state.location_id) {
+      object["location_id"] = this.state.location_id;
     } else {
       object["address_line_one"] = this.state.address_line_one;
       object["address_line_two"] = this.state.address_line_two;
@@ -150,12 +154,13 @@ class GroupCreateScreen extends Component {
     return (
       <div className="container">
         <form>
-          <h1>Create an Group</h1>
+          <h1>Create a Group</h1>
           <div className="form-group">
             <label htmlFor="name">Name:</label>
             <input
               value={this.state.name}
-              onChange={Group => this.handleName(Group.target.value)}
+              type="text"
+              onChange={event => this.handleName(event.target.value)}
               className="form-control"
               name="name"
             />
@@ -165,7 +170,8 @@ class GroupCreateScreen extends Component {
             <label htmlFor="name">Blurb:</label>
             <input
               value={this.state.blurb}
-              onChange={Group => this.handleBlurb(Group.target.value)}
+              type="text"
+              onChange={event => this.handleBlurb(event.target.value)}
               className="form-control"
               name="blurb"
             />
@@ -177,29 +183,40 @@ class GroupCreateScreen extends Component {
               value={this.state.details}
               cols="30"
               rows="10"
-              onChange={Group => this.handleDetails(Group.target.value)}
+              onChange={event => this.handleDetails(event.target.value)}
               className="form-control"
               name="details"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="startTime">Start Time: </label>
+            <label htmlFor="startTime">Regular Event Start Time: </label>
             <DateTimePicker
               className="form-control"
-              onChange={this.handleStartTime}
+              onChange={this.handleRegularEventStartTime}
               name="startTime"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="endTime">End Time: </label>
+            <label htmlFor="endTime">Regular Event End Time: </label>
             <DateTimePicker
               className="form-control"
-              onChange={this.handleEndTime}
+              onChange={this.handleRegularEventEndTime}
               name="endTime"
             />
           </div>
+
+          <div className="form-group">
+              <label htmlFor="state" className="mr-2">Regular Event Day of Week:</label>
+              <SelectMenu
+                value={this.state.regular_event_day_of_week}
+                source={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
+                callback={event => this.handleRegularEventDayOfWeek(event.target.value)}
+                className="form-control"
+                id="state"
+              />
+            </div>
 
           <div className="row">
             <div className="col">
@@ -218,7 +235,7 @@ class GroupCreateScreen extends Component {
               <button
                 className="btn btn-primary"
                 onClick={e => {
-                  e.prGroupDefault();
+                  e.preventDefault();
                   this.setState({ showNewDiv: "block" });
                 }}
               >
@@ -233,7 +250,8 @@ class GroupCreateScreen extends Component {
               <label htmlFor="addressLineOne">Address Line One:</label>
               <input
                 value={this.state.address_line_one}
-                onChange={Group => this.handleAddressOne(Group.target.value)}
+                type="text"
+                onChange={event => this.handleAddressOne(event.target.value)}
                 className="form-control"
                 name="addressLineOne"
               />
@@ -242,7 +260,8 @@ class GroupCreateScreen extends Component {
               <label htmlFor="addressLineTwo">Address Line Two:</label>
               <input
                 value={this.state.address_line_two}
-                onChange={Group => this.handleAddressTwo(Group.target.value)}
+                type="text"
+                onChange={event => this.handleAddressTwo(event.target.value)}
                 className="form-control"
                 name="addressLineTwo"
               />
@@ -251,25 +270,28 @@ class GroupCreateScreen extends Component {
               <label htmlFor="city">City:</label>
               <input
                 value={this.state.city}
-                onChange={Group => this.handleCity(Group.target.value)}
+                type="text"
+                onChange={event => this.handleCity(event.target.value)}
                 className="form-control"
                 name="city"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="state">State:</label>
-              <input
+              <label htmlFor="state" className="mr-2">State:</label>
+              <SelectMenu
                 value={this.state.state}
-                onChange={Group => this.handleState(Group.target.value)}
+                source={states.getStates()}
+                callback={event => this.handleState(event.target.value)}
                 className="form-control"
-                name="state"
+                id="state"
               />
             </div>
             <div className="form-group">
               <label htmlFor="zip">Zip:</label>
               <input
                 value={this.state.zip}
-                onChange={Group => this.handleZip(Group.target.value)}
+                type="number"
+                onChange={event => this.handleZip(event.target.value)}
                 className="form-control"
                 name="zip"
               />
@@ -292,7 +314,7 @@ class GroupCreateScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button onClick={Group => this.handleSubmit(Group)}>
+          <button onClick={event => this.handleSubmit(event)}>
             Submit
           </button>
         </form>

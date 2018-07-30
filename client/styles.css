@@ -6,6 +6,10 @@ body {
   padding: 2em;
 }
 
+ul.ui-menu {
+  max-height: 120px;
+}
+
 .Checkout {
     display: flex;
     align-items: center;

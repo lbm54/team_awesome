@@ -3,32 +3,27 @@ import React, { Component, Fragment } from "react";
 class SelectMenu extends Component {
   constructor(props) {
     super(props);
+    this.props = props;
     this.state = {
       options: []
     };
 
-    this.makeSelect = element => {
-      $(element).selectmenu({
-        onSelect: option => {
-          console.log(option);
-          // this.props.onChange(option);
+    this.componentDidMount = (prevProps, prevState) => {
+      $(`#${this.props.id}`).selectmenu({
+        select: option => {
+          this.props.callback(option);
         }
-      });
+          
+      })
     };
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
+    let options = this.props.source.map((option, index) => <option key={index}>{option}</option>);
     return (
-      <select ref={this.makeSelect} className={this.props.className} name={this.props.name}>
-        <option>Slower</option>
-        <option>Slow</option>
-        <option selected="selected">Medium</option>
-        <option>Fast</option>
-        <option>Faster</option>
+      <select className={this.props.className} id={this.props.id}>
+      <option />
+        {options}
       </select>
     );
   }

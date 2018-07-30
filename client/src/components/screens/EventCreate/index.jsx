@@ -3,6 +3,8 @@ import DateTimePicker from "../../datetimepicker";
 import AutoComplete from "../../autocomplete";
 import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
+import states from '../../../services/states';
+import SelectMenu from '../../selectmenu';
 class EventCreateScreen extends Component {
   constructor(props) {
     super(props);
@@ -102,10 +104,11 @@ class EventCreateScreen extends Component {
       name: this.state.name,
       details: this.state.details,
       blurb: this.state.blurb,
-      tags: this.state.selectedTags
+      tags: this.state.selectedTags,
+      thumbnail_image_link: this.state.thumbnail_image_link
     };
-    if (this.state.location_name) {
-      object["location_name"] = this.state.location_name;
+    if (this.state.location_id) {
+      object["location_id"] = this.state.location_id;
     } else {
       object["address_line_one"] = this.state.address_line_one;
       object["address_line_two"] = this.state.address_line_two;
@@ -247,12 +250,13 @@ class EventCreateScreen extends Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="state">State:</label>
-              <input
+              <label htmlFor="state" className="mr-2">State:</label>
+              <SelectMenu
                 value={this.state.state}
-                onChange={event => this.handleState(event.target.value)}
+                source={states.getStates()}
+                callback={event => this.handleState(event.target.value)}
                 className="form-control"
-                name="state"
+                id="state"
               />
             </div>
             <div className="form-group">

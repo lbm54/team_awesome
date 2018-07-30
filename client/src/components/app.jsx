@@ -5,9 +5,6 @@ import PrivateRoute from './auth/privateRoute';
 import Logout from './auth/logout';
 import AuthButton from './auth/authButton';
 
-import Header from './utilities/Header';
-import Footer from './utilities/Footer';
-
 //importing the screens
 import EventCreateScreen from './screens/EventCreate';
 import EventDetailScreen from './screens/EventDetail';
@@ -34,7 +31,7 @@ class Navigation extends Component {
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
                         <Route path="/login" component={LoginScreen} />
-                        <Route path="/events/list/:id" component={EventDetailScreen} />
+                        <Route path="/events/:id" component={EventDetailScreen} />
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
                         <Route path="/groups/create" component={GroupCreateScreen} />
                         <Route path="/events/create" component={EventCreateScreen} />
