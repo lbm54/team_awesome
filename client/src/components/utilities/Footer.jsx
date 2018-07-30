@@ -38,16 +38,16 @@ export default class Footer extends Component {
                         <hr className="w-100 clearfix d-md-none" />
 
                         {/* <!-- Grid column --> */}
-                        <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3 usefulLinks">
+                        <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
                             <h6 className="text-uppercase mb-4 font-weight-bold">Useful links</h6>
                             <p>
-                                <a href="./screens/Register">Sign Up</a>
+                                <a href="/users/register">Sign Up</a>
                             </p>
                             <p>
-                                <a href="./screens/Profile">Your Account</a>
+                                <a href="/users/profile">Your Account</a>
                             </p>
                             <p>
-                                <a href="./screens/EventCreate">Start a new Event</a>
+                                <a href="events/create">Start a new Event</a>
                             </p>
                         </div>
 
