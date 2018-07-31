@@ -20,6 +20,7 @@ export default class RSVP extends Component {
                 // Start Strip int.
                 // show button that routes to card page if coverchage = yes 
                 // I need to write the covercharge func but honestly i'm not sure how to do that
+                
                 // .then(() => {
                 //     {hasCoverCharge === 1 ? (
                 //        <Fragment>
