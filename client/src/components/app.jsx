@@ -28,7 +28,7 @@ class Navigation extends Component {
         return (
             <Router>
                 <Fragment>
-                 {/* <Header /> */}
+                 <Header />
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
                         <Route path="/login" component={LoginScreen} />
@@ -44,7 +44,7 @@ class Navigation extends Component {
                         <Route path="/cardservices" component={stripeCharge} />
                         <Route path="/logout" component={Logout} />
                     </Switch>
-                    {/* <Footer /> */}
+                    <Footer />
                 </Fragment>
             </Router>
         )
