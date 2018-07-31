@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 
 class DateTimePicker extends Component {
   constructor(props) {
@@ -9,7 +9,9 @@ class DateTimePicker extends Component {
       $(element).datetimepicker({
         onSelect: dateText => {
           this.props.onChange(dateText);
-        }
+        },
+        timeFormat: "HH:mm:ss",
+        dateFormat: "yy-mm-dd"
       });
     };
   }

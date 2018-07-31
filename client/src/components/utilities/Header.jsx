@@ -1,63 +1,86 @@
-import React, { Component } from 'react';
-import { isLoggedIn } from '../../services/user';
-import { Button } from 'react bootstrap';
-import AuthButton from '../auth/authButton';
-
-
+import React, { Component, Fragment } from "react";
+import { isLoggedIn } from "../../services/user";
+import { Button } from "react-bootstrap";
+import AuthButton from "../auth/authButton";
+import { Link } from "react-router-dom";
 
 export default class Header extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {};
-    }
+    this.state = {};
+  }
 
-    // TODO:
-    //  make functions for log in
-    // log in event listener set logged in state true
-    //  make function for log out
-    // log out event listener set logged in state false
-    // }
+  // TODO:
+  // change avatar to have user img
 
-    render() {
-        const isLoggedIn = this.state.isLoggedIn
-        return (
-            <Fragment>
-                <nav className="navbar navbar-expand-lg headerNavBar">
-                    
-                    {/* Search Bar */}
-                    <form className="form-inline my-2 my-lg-0 headerSearchBar">
-                        <input className="form-control mr-sm-2 searchBar" type="search" placeholder="Search" aria-label="Search" />
-                        <button className="btn btn-outline-success my-2 my-sm-0 searchBarButton" type="submit">Search</button>
-                    </form>
-                    {/* end search bar */}
+  render() {
+    const isLoggedIn = this.state.isLoggedIn;
 
-                    {/* start Login/LogOut Btns */}
-                    <AuthButton />
-                    {/* end login/out buttons */}
+    return (
+      <Fragment>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a className="navbar-brand" href="#">
+            Groupr
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
 
-
-                    {/* Display "Create new Group" button if signed in. Else, Display NONE */}
-
-                    {isLoggedIn ? (
-                        <Link to="/events/create">
-                            <button type="button" class="btn btn-success newGroupBtn">New Event</button>
-                        </Link>
-                    ) : ('none')};
-
-                {/* Display user picture if signed in, else display none */}
-                    {/* TODO: Set the Avatar img to pull props from the user's uploaded image */}
-                    {/* TODO: style the avatar in css */}
-                    {isLoggedIn ? (
-                        <Link to="/users/profile">
-                            <img src="avatar.png" alt="Avatar" class="avatar" />
-                        </Link>
-                    ) : ('none')};
-
-                {/* Display picture is anchor to user profile page */}
-                </nav>
-            </Fragment>
-        )
-    }
-
+          <div
+            className="collapse navbar-collapse py-0"
+            id="navbarSupportedContent"
+          >
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item active">
+                <Link className="nav-link" to="/">
+                  Home <span className="sr-only">(current)</span>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                  Events
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="groups/list">
+                  Groups
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="users/profile">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="#">
+                  Admin
+                </Link>
+              </li>
+            </ul>
+            <AuthButton />
+            <form className="form-inline my-2 my-lg-0">
+              <input
+                className="form-control mr-sm-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button className="btn btn-light my-2 my-sm-0" type="submit">
+                Search
+              </button>
+            </form>
+          </div>
+        </nav>
+      </Fragment>
+    );
+  }
 }

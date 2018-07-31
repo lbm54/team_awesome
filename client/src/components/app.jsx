@@ -16,6 +16,10 @@ import GroupListingScreen from './screens/GroupListing';
 import LoginScreen from './screens/Login';
 import ProfileScreen from './screens/Profile';
 import RegisterScreen from './screens/Register';
+import Header from './utilities/Header';
+import Footer from './utilities/Footer';
+import stripeCharge from './utilities/StripeCharge';
+
 
 class Navigation extends Component {
 
@@ -24,11 +28,11 @@ class Navigation extends Component {
         return (
             <Router>
                 <Fragment>
-                    <AuthButton />
+                 <Header />
                     <Switch>
                         <Route exact path="/" component={EventListingScreen} />
                         <Route path="/login" component={LoginScreen} />
-                        <Route path="/events/list/:id" component={EventDetailScreen} />
+                        <Route path="/events/:id" component={EventDetailScreen} />
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
                         <Route path="/groups/create" component={GroupCreateScreen} />
                         <Route path="/events/create" component={EventCreateScreen} />
@@ -37,8 +41,10 @@ class Navigation extends Component {
                         <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
                         <Route path="/users/profile" component={ProfileScreen} />
                         <Route path="/users/register" component={RegisterScreen} />
+                        <Route path="/cardservices" component={stripeCharge} />
                         <Route path="/logout" component={Logout} />
                     </Switch>
+                    <Footer />
                 </Fragment>
             </Router>
         )

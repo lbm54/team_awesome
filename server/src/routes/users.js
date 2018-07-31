@@ -35,13 +35,13 @@ router.get("/", async (req, res) => {
 /**
  * register a user
  * is expecting:
- * { email, password, location_name, address_line_one, address_line_two, city, state, zip, new_location_name, bio, first_name, last_name, middle_initial, profile_picture_link, telephone, username }
+ * { email, password, address_line_one, address_line_two, city, state, zip, bio, first_name, last_name, middle_initial, profile_picture_link, telephone, username }
  * in the request's body
  */
 router.post("/", async (req, res) => {
   try {
     let address_location_id;
-    if (req.body.location_name) {
+    if (req.body.location_id) {
       address_location_id = await getLocationId(req.body.location_name);
     } else {
       address_location_id = await insertLocation(

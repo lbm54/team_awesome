@@ -8,7 +8,8 @@ import locationsRouter from './locations';
 import tagsRouter from './tags';
 import uploadRouter from './upload';
 import { isLoggedIn, tokenMiddleware } from '../middleware/auth.mw';
-
+// import stripeCharge from '../../../client/src/components/utilities/StripeCharge';
+// import rsvpRouter from '../routes/mailguncontact';
 let router = Router();
 
 router.use('/auth', authRouter);
@@ -25,5 +26,7 @@ router.use('/users', usersRouter);
 router.use('/locations', locationsRouter);
 router.use('/tags', tagsRouter);
 router.use('/upload', uploadRouter);
+// router.use('/rsvp', rsvpRouter);
+// router.use('/donate', stripeCharge);
 
 export default router;

@@ -23,6 +23,7 @@ class FileUpload extends Component {
           successMessage: "File uploaded successfully!",
           imageSrc: `/images/${response.name}`
         });
+        this.props.callback(response.name);
       } catch (err) {
         this.setState({ errorMessage: "Error uploading file" });
       }

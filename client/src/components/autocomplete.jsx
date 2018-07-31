@@ -1,29 +1,39 @@
-// import React, { Component, Fragment } from "react";
-import React from "react";
+import React, { Component } from "react";
 
-const AutoComplete = props => {
-  let source = [];
-  let placeholder;
-  if (props.source.length === 0) placeholder = "loading...";
-  let makeAutoComplete = element =>
-    $(element).autocomplete({
-      source: source,
-      change: (event) => props.onChange(event.target.value)
-    });
+class AutoComplete extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
 
-  for (var i = 0; i < props.source.length; i++) {
-    if (props.source[i].name) source.push(props.source[i].name);
+    this.componentDidUpdate = (prevProps, prevState) => {
+      if (prevProps.source !== this.props.source) {
+        let formatted = this.props.source.map(item => {
+          if (item.name && item.id) return { text: item.name, id: item.id };
+        });
+        $(`#${this.props.id}`)
+          .select2({
+            width: "40%",
+            minimumInputLength: 1,
+            data: formatted,
+            formatResult: item => item.name
+          })
+          .on("select2:select", e => {
+            this.props.callback({
+              id: e.target.value,
+              name: $(`#${this.props.id} option:selected`).text()
+            });
+          });
+      }
+    };
   }
 
-  return (
-    <input
-      ref={makeAutoComplete}
-      className={props.className}
-      type="text"
-      placeholder={placeholder}
-      name={props.name}
-    />
-  );
-};
+  render() {
+    return (
+      <select className={this.props.className} id={this.props.id}>
+        <option />
+      </select>
+    );
+  }
+}
 
 export default AutoComplete;
