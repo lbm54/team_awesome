@@ -13,11 +13,12 @@ class UserDetail extends Component {
 
     async componentDidMount() {
         try {
-            let response = await fetch(`/api/groups/${this.userId}`);
+            let response = await fetch(`/api/users/${this.userId}`);
             let user = await response.json();
 
-            if (!group.thumbnail_image_link)
-                group.thumbnail_image_link = `/images/default_group_image.jpg`;
+            if (!user.profile_picture_link)
+                user.profile_picture_link = `/images/default_group_image.jpg`; 
+                // ^^^ need to link up to profile img
             this.setState({ group });
         } catch (e) {
             console.log(e);
@@ -29,15 +30,15 @@ class UserDetail extends Component {
             <Fragment>
                 {/* //username display */}
                 <div className="">
-                    <h2> {username} </h2>
+                    <h2> {this.state.userID} </h2>
                 </div>
                 {/* //user bio display */}
                 <div className="">
-                    <h3> {userbio} </h3>
+                    <h3> {this.state.userbio} </h3>
                 </div>
                 {/* //user avatar display */}
                 <div className="">
-                    <img />
+                    <img src={this.state.user.profile_picture_link}/>
                 </div>
                 {/* //RSVP'd to these meetups display */}
                 {/* //meetups displayed as cards */}
