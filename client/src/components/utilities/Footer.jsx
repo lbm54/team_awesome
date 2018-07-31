@@ -40,20 +40,20 @@ export default class Footer extends Component {
                 <h6 className="text-uppercase mb-4 font-weight-bold">
                   Useful links
                 </h6>
-                <p className="mb-0 pb-0">
-                  <Link to="users/register">
-                    <a href="#" className="text-white">Sign Up</a>
+                <p className="mb-0 pb-0 text-white">
+                  <Link to="users/register" className="text-white">
+                    {" "}
+                    Sign Up
                   </Link>
                 </p>
-                <p className="mb-0 pb-0">
-                  <Link to="users/profile">
-                    <a href="#" className="text-white">Your Account</a>
+                <p className="mb-0 pb-0 text-white">
+                  <Link to="users/profile" className="text-white">
+                    Your Account
                   </Link>
                 </p>
-
-                <p className="mb-0 pb-0">
-                  <Link to="events/create">
-                    <a href="#" className="text-white">Start a new Event</a>
+                <p className="mb-0 pb-0 text-white">
+                  <Link to="events/create" className="text-white">
+                    Start a new Event
                   </Link>
                 </p>
               </div>

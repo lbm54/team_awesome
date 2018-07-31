@@ -1,55 +1,99 @@
-import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import React, { Component, Fragment } from "react";
+import * as userService from "../../../services/user";
+import { Redirect } from "react-router-dom";
+import IndeterminateProgress from "../../utilities/indeterminateProgress";
 
-// code from https://serverless-stack.com/chapters/create-a-login-page.html
+class Login extends Component {
+  constructor(props) {
+    super(props);
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props);
+    this.state = {
+      redirectToReferrer: false,
+      email: "",
+      password: "",
+      feedbackMessage: "",
+      checkingLogin: true
+    };
+  }
 
-        this.state = {
-            email: "",
-            password: ""
-        };
+  componentDidMount() {
+    //checking the token to see if it's ok
+    userService.checkLogin().then(loggedIn => {
+      if (loggedIn) {
+        this.setState({ redirectToReferrer: true, checkingLogin: false });
+      } else {
+        this.setState({ checkingLogin: false });
+      }
+    });
+  }
+
+  login(e) {
+    e.preventDefault(); //default is for the page to refresh (won't end up loggin in)
+    userService
+      .login(this.state.email, this.state.password)
+      .then(() => {
+        this.setState({ redirectToReferrer: true }); //causes render function to run again
+      })
+      .catch(err => {
+        if (err.message) {
+          this.setState({ feedbackMessage: err.message }); //triggers render again and shows error message
+        }
+      });
+  }
+
+  handleEmailChange(value) {
+    this.setState({ email: value });
+  }
+
+  handlePasswordChange(value) {
+    this.setState({ password: value });
+  }
+
+  render() {
+    //from is either / or this.props.location.state (the page from which you were redirected)
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { redirectToReferrer, checkingLogin } = this.state;
+
+    if (checkingLogin) {
+      //indeterminate progress bar
+      return <IndeterminateProgress message="checking login status..." />;
+    }
+    if (redirectToReferrer) {
+      return <Redirect to={from} />;
     }
 
-    handleChange(event) {
-        this.setState({
-            [event.target.id]: event.target.value
-        });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-    }
-
-    render() {
-        return (
-            <div className="Login">
-                <form onSubmit={this.handleSubmit}>
-                    <FormGroup controlId="email" bsSize="large">
-                        <ControlLabel>Email</ControlLabel>
-                        <FormControl
-                            autoFocus
-                            type="email"
-                            value={this.state.email}
-                            onChange={this.handleChange} />
-                    </FormGroup>
-                    <FormGroup controlId="password" bsSize="large">
-                        <ControlLabel>Password</ControlLabel>
-                        <FormControl
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            type="password" />
-                    </FormGroup>
-                    <Button
-                        block
-                        bsSize="large"
-                        type="submit" >
-                        Login
-                    </Button>
-                </form>
-            </div>
-        );
-    }
+    return (
+      <div className="container">
+      <h2>Login</h2>
+        <form onSubmit={e => this.login(e)}>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              className="form-control"
+              type="email"
+              onChange={e => this.handleEmailChange(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              className="form-control"
+              type="password"
+              onChange={e => this.handlePasswordChange(e.target.value)}
+              required
+            />
+          </div>
+          {this.state.feedbackMessage ? (
+            <p>{this.state.feedbackMessage}</p>
+          ) : null}
+          <input type="submit" value="Login" className="btn btn-primary" />
+        </form>
+      </div>
+    );
+  }
 }
+
+export default Login;

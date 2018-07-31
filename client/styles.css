@@ -54,6 +54,10 @@ button {
   margin-top: 10px;
 }
 
+.btn-lg {
+  padding-bottom: 2.2rem;
+}
+
 form {
   margin: 2em 1em;
   padding: 2em;
@@ -69,7 +73,7 @@ form {
 
 .navbar {
   padding: 0.5rem 0rem 0.5rem 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .footer {

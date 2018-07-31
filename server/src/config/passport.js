@@ -1,56 +1,62 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as BearerStrategy } from 'passport-http-bearer';
-import Table from '../table';
-import { encode, decode } from '../utils/tokens';
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import Table from "../table";
+import { encode, decode } from "../utils/tokens";
+import { Strategy as BearerStrategy } from "passport-http-bearer";
+let usersTable = new Table("users");
+let tokensTable = new Table("Tokens");
+import { checkPassword } from "../utils/security";
 
-let usersTable = new Table('Users');
-let tokensTable = new Table('Tokens');
-
-function configurePassport(app) {
-    passport.use(new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'password',
-        session: false,
-    }, async (email, password, done) => {
-        try {
-            // array destructuring. find() will return an array of results.
-            // destructuring the first (and hopefully only) result into the user variable
-            let [user] = await usersTable.find({ email });
-            if (user && user.password && user.password === password) {
-                let idObj = await tokensTable.insert({
-                    userid: user.id
-                });
-                let token = encode(idObj.id);
-                return done(null, { token });
-            } else {
-                return done(null, false, { message: 'Invalid credentials' });
-            }
-        } catch (err) {
-            return done(err);
+async function configurePassport(app) {
+  let configurationObject = {
+    usernameField: "email",
+    passwordField: "password",
+    sessions: false
+  };
+  passport.use(
+    new LocalStrategy(configurationObject, async (email, password, done) => {
+      try {
+        let user = (await usersTable.find({ email }))[0];
+        if (user && user.hash) {
+          let matches = await checkPassword(password, user.hash);
+          if (matches) {
+            return done(null, {
+              token: encode((await tokensTable.insert({ userid: user.id })).id)
+            });
+          } else return done(null, false, { message: "Invalid login" });
         }
-    }));
+      } catch (err) {
+        throw err;
+      }
+    })
+  );
 
-    passport.use(new BearerStrategy(async (token, done) => {
-        let tokenId = decode(token);
-        if (!tokenId) {
-            return done(null, false, { message: 'Invalid token' });
-        }
-        try {
-            let tokenRecord = await tokensTable.getOne(tokenId);
-            let user = await usersTable.getOne(tokenRecord.userid);
-            if (user) {
-                delete user.password;
-                return done(null, user);
-            } else {
-                return done(null, false, { message: 'Invalid token' });
-            }
-        } catch (err) {
-            return done(err);
-        }
-    }));
+  passport.use(
+    new BearerStrategy((token, done) => {
+      let tokenId = decode(token); //will give you 1, 2, 3, etc.
+      if (!tokenId) {
+        return done(null, false, { message: "Invalid token" });
+      }
+      tokensTable
+        .getOne(tokenId)
+        .then(tokenRecord => {
+          return usersTable.getOne(tokenRecord.userid);
+        })
+        .then(user => {
+          if (user) {
+            delete user.password;
+            return done(null, user); //after this, req.user is SET
+          } else {
+            return done(null, false, { message: "Invalid token" });
+          }
+        })
+        .catch(err => {
+          return done(err);
+        });
+    })
+  );
 
-    app.use(passport.initialize());
+  app.use(passport.initialize()); //pass in the express application; turn on passport and use it
 }
 
 export default configurePassport;

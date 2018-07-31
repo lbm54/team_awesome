@@ -19,8 +19,7 @@ export default class Header extends Component {
 
     return (
       <Fragment>
-        <nav
-          className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <a className="navbar-brand" href="#">
             Groupr
           </a>
@@ -42,37 +41,29 @@ export default class Header extends Component {
           >
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
-                <Link to="/">
-                  <a className="nav-link" href="#">
-                    Home <span className="sr-only">(current)</span>
-                  </a>
+                <Link className="nav-link" to="/">
+                  Home <span className="sr-only">(current)</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/">
-                  <a className="nav-link" href="#">
-                    Events
-                  </a>
+                <Link className="nav-link" to="/">
+                  Events
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="groups/list">
-                  <a className="nav-link" href="#">
-                    Groups
-                  </a>
+                <Link className="nav-link" to="groups/list">
+                  Groups
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="users/profile">
-                  <a className="nav-link" href="#">
-                    Profile
-                  </a>
+                <Link className="nav-link" to="users/profile">
+                  Profile
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="#">
                   Admin
-                </a>
+                </Link>
               </li>
             </ul>
             <AuthButton />
@@ -89,38 +80,6 @@ export default class Header extends Component {
             </form>
           </div>
         </nav>
-
-        {/* <nav classNameName="navbar navbar-expand-lg headerNavBar">
-                    
-                    Search Bar
-                    <form classNameName="form-inline my-2 my-lg-0 headerSearchBar">
-                        <input classNameName="form-control mr-sm-2 searchBar" type="search" placeholder="Search" aria-label="Search" />
-                        <button classNameName="btn btn-outline-success my-2 my-sm-0 searchBarButton" type="submit">Search</button>
-                    </form>
-                    end search bar
-                
-                    start Login/LogOut Btns
-                    <AuthButton />
-                    end login/out buttons
-
-
-                    Display "Create new Group" button if signed in. Else, Display NONE
-
-                    {isLoggedIn ? (
-                        <Fragment>
-                        <Link to="/events/create">
-                            <button type="button" className="btn btn-success newGroupBtn">New Event</button>
-                        </Link>
-                        <Link to="/users/profile">
-                            <img src="avatar.png" alt="Avatar" className="avatar" />
-                        </Link>
-                        </Fragment>
-                    ) : (null)}
-
-
-
-                Display picture is anchor to user profile page
-                </nav> */}
       </Fragment>
     );
   }
