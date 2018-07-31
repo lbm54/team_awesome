@@ -10,11 +10,11 @@ export default class Footer extends Component {
     return (
       <Fragment>
         {/* START FOOTER */}
-        <footer className="footer py-2 bg-dark text-white">
+        <div className="navbar navbar-fixed-bottom text-white bg-dark pb-0 mb-0">
           {/* <!-- Footer Links --> */}
           <div className="container text-center text-md-left">
             {/* <!-- Footer links --> */}
-            <div className="row text-center text-md-left pb-3">
+            <div className="row text-center text-md-left">
               {/* <!-- Grid column --> */}
               <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h6 className="text-uppercase mb-4 font-weight-bold">Groupr</h6>
@@ -76,23 +76,15 @@ export default class Footer extends Component {
 
             {/* <!-- Grid row --> */}
             <div className="row mt-0 d-flex align-items-center">
-              {/* <!-- Grid column --> */}
-              <div className="col-md-7 col-lg-8">
-                {/* <!--Copyright--> */}
-                <p className="text-center text-md-left">
-                  © 2018 Copyright:
-                  <a href="https://mdbootstrap.com/bootstrap-tutorial/">
-                    <strong> Team Awesome</strong>
-                  </a>
-                </p>
-              </div>
-
-              {/* <!-- Grid column --> */}
+              {/* <!--Copyright--> */}
+              <p className="text-center text-md-left">
+                © 2018 Copyright: Team Awesome
+              </p>
             </div>
             {/* <!-- Grid row --> */}
           </div>
           {/* <!-- Footer Links --> */}
-        </footer>
+        </div>
         {/* <!-- Footer --> */}
       </Fragment>
     );

@@ -3,7 +3,13 @@ font-family: 'PT Sans Narrow', sans-serif; */
 /* commented out the font, ready to be used. */
 body {
   /* text-align: center; */
-  /* padding: 2em; */
+  padding: 0em;
+  margin: 0;
+  /* padding-bottom: 5rem;  */
+}
+
+.fullScreen {
+  min-height: 100vh;
 }
 
 ul.ui-menu {

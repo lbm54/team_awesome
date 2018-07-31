@@ -58,6 +58,7 @@ class GroupCreateScreen extends Component {
   }
 
   handleRegularEventDayOfWeek(value) {
+    console.log(value);
     this.setState({ regular_event_day_of_week: value });
   }
 
@@ -78,7 +79,9 @@ class GroupCreateScreen extends Component {
   }
 
   handleState(value) {
+    console.log('called?');
     this.setState({ state: value });
+    console.log(value);
   }
 
   handleZip(value) {
@@ -109,7 +112,7 @@ class GroupCreateScreen extends Component {
   handleSubmit(event) {
     event.preventDefault();
     let object = {
-      regular_event_start_time: this.state.reular_event_start_time,
+      regular_event_start_time: this.state.regular_event_start_time,
       regular_event_end_time: this.state.regular_event_end_time,
       regular_event_day_of_week: this.state.regular_event_day_of_week,
       name: this.state.name,
@@ -191,18 +194,24 @@ class GroupCreateScreen extends Component {
 
           <div className="form-group">
             <label htmlFor="startTime">Regular Event Start Time: </label>
-            <DateTimePicker
+            <input
+              value={this.state.regular_event_start_time}
+              type="text"
+              placeholder="e.g., 7:00"
+              onChange={event => this.handleRegularEventStartTime(event.target.value)}
               className="form-control"
-              onChange={this.handleRegularEventStartTime}
               name="startTime"
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="endTime">Regular Event End Time: </label>
-            <DateTimePicker
+            <input
+              value={this.state.regular_event_end_time}
+              type="text"
+              placeholder="e.g., 8:00"
+              onChange={event => this.handleRegularEventEndTime(event.target.value)}
               className="form-control"
-              onChange={this.handleRegularEventEndTime}
               name="endTime"
             />
           </div>
@@ -212,7 +221,7 @@ class GroupCreateScreen extends Component {
               <SelectMenu
                 value={this.state.regular_event_day_of_week}
                 source={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-                callback={event => this.handleRegularEventDayOfWeek(event.target.value)}
+                callback={this.handleRegularEventDayOfWeek}
                 className="form-control"
                 id="state"
               />
@@ -281,7 +290,7 @@ class GroupCreateScreen extends Component {
               <SelectMenu
                 value={this.state.state}
                 source={states.getStates()}
-                callback={event => this.handleState(event.target.value)}
+                callback={this.handleState}
                 className="form-control"
                 id="state"
               />

@@ -51,7 +51,7 @@ export default class Header extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="groups/list">
+                <Link className="nav-link" to="groups">
                   Groups
                 </Link>
               </li>

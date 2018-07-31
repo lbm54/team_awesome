@@ -8,10 +8,10 @@ class SelectMenu extends Component {
       options: []
     };
 
-    this.componentDidMount = (prevProps, prevState) => {
+    this.componentDidMount = () => {
       $(`#${this.props.id}`).selectmenu({
         select: option => {
-          this.props.callback(option);
+          props.callback(option.target.value);
         }
           
       })
