@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import eventDisplay from '../../eventDisplayCard';
 
 class UserDetail extends Component {
     constructor(props) {
