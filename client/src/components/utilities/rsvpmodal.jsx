@@ -23,27 +23,19 @@ export default class RSVPModal extends React.Component {
 
     render() {
         return (
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <p>We let your host know to expect you. </p>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" />
-            </div>
-        ).then(() => {
-            {
-                hasCoverCharge === 1 ? (
-                    <Modal show={this.state.show} onHide={this.handleClose}>
-                        <Modal.Body>
-                            <h4>Looks like this event has a cover charge.</h4>
-                            <p>
-                                Would you like to go ahead and pay now?
-                            </p>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Link to="/cardservices">
-                                <Button bsStyle="info">Pay</Button>
-                            </Link>
-                            <Button onClick={this.handleClose}>Close</Button>
-                        </Modal.Footer>
-                </Modal> ) : ( null); }
-        }
-        )}
+            <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal.Body>
+                    <h4>Looks like this event has a cover charge.</h4>
+                    <p>
+                        Would you like to go ahead and pay now?
+                    </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Link to="/cardservices">
+                        <Button bsStyle="info">Pay</Button>
+                    </Link>
+                    <Button onClick={this.handleClose}>Close</Button>
+                </Modal.Footer>
+            </Modal>)
+    }
 };
