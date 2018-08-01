@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Table from "../table";
-import { insertLocation, getLocationId } from "../utils/locations";
+import { insertLocation, getLocationId, getLocation } from "../utils/locations";
 import { insertTags, getTags, updateTags } from "../utils/tags";
 import { getComments } from '../utils/comments';
 
@@ -17,6 +17,7 @@ router.get("/", async (req, res) => {
     for (var i = 0; i < groups.length; i++) {
       let tags = await getTags("groups", groups[i].id);
       groups[i]["tags"] = tags;
+      groups[i]["location"] = await getLocation(groups[i].location_id);
       let comments = await getComments("group_id", groups[i].id);
       groups[i]["comments"] = comments;
     }
@@ -90,6 +91,7 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     let foundgroup = await groupTable.getOne(req.params.id);
+    foundgroup.location = await getLocation(foundgroup.location_id);
     let tags = await getTags("groups", foundgroup.id);
     let comments = await getComments("group_id", foundgroup.id);
     foundgroup["tags"] = tags;

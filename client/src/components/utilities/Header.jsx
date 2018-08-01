@@ -21,7 +21,7 @@ export default class Header extends Component {
       <Fragment>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <a className="navbar-brand" href="#">
-            Groupr
+            <img src="/images/grouprLogoNoText.png" className="headerImg" />
           </a>
           <button
             className="navbar-toggler"
@@ -63,6 +63,11 @@ export default class Header extends Component {
               <li className="nav-item">
                 <Link className="nav-link" to="#">
                   Admin
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/googleMapsView">
+                  Map View
                 </Link>
               </li>
             </ul>

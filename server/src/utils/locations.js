@@ -19,4 +19,14 @@ let getLocationId = async function(name) {
     }
 }
 
-export { insertLocation, getLocationId };
+let getLocation = async function(id) {
+    try {
+        let result = await locationTable.getOne(id);
+        console.log(result);
+        return result;
+    } catch (err) {
+        throw "This location doesn't exist in the db";
+    }
+}
+
+export { insertLocation, getLocationId, getLocation };

@@ -12,6 +12,16 @@ body {
   min-height: 100vh;
 }
 
+.headerImg {
+  width: 75px;
+  height: 75px;
+}
+
+.googleMap {
+  width: 1000px;
+  height: 1000px
+}
+
 ul.ui-menu {
   max-height: 120px;
 }
