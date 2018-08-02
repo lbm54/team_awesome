@@ -9,7 +9,23 @@ body {
 }
 
 .fullScreen {
-  min-height: 100vh;
+  min-height: 71.2vh;
+}
+
+.featuredImage {
+  width: 100%;
+  height: 500px;
+}
+
+.eventCard {
+  min-width: 30rem;
+  width: 30rem;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
 }
 
 .headerImg {
@@ -19,7 +35,7 @@ body {
 
 .googleMap {
   width: 1000px;
-  height: 1000px
+  height: 1000px;
 }
 
 ul.ui-menu {
@@ -138,7 +154,15 @@ button:hover {
   height: 50px;
 }
 
-.card-img-top {
+.thinnerInput {
+  max-width: 20rem;
+}
+
+.inline {
+  display: inline;
+}
+
+/* .card-img-top {
   max-width: 200px;
   max-height: 200px;
-}
+} */

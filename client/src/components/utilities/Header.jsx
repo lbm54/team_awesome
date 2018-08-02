@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { isLoggedIn } from "../../services/user";
 import { Button } from "react-bootstrap";
 import AuthButton from "../auth/authButton";
 import { Link } from "react-router-dom";
@@ -7,16 +6,15 @@ import { Link } from "react-router-dom";
 export default class Header extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {};
+    this.props = props;
+    this.state = {
+    };
   }
 
   // TODO:
   // change avatar to have user img
 
   render() {
-    const isLoggedIn = this.state.isLoggedIn;
-
     return (
       <Fragment>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -41,17 +39,17 @@ export default class Header extends Component {
           >
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link" to="/events">
                   Home <span className="sr-only">(current)</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link className="nav-link" to="/events">
                   Events
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="groups">
+                <Link className="nav-link" to="/groups">
                   Groups
                 </Link>
               </li>

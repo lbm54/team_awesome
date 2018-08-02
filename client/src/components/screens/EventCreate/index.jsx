@@ -3,12 +3,12 @@ import DateTimePicker from "../../datetimepicker";
 import AutoComplete from "../../autocomplete";
 import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
-import states from '../../../services/states';
-import SelectMenu from '../../selectmenu';
+import states from "../../../services/states";
+import SelectMenu from "../../selectmenu";
 class EventCreateScreen extends Component {
   constructor(props) {
     super(props);
-
+    this.props = props;
     this.state = {
       start_time: "",
       showNewDiv: "none",
@@ -25,7 +25,8 @@ class EventCreateScreen extends Component {
       locations: [],
       selectedTags: [],
       blurb: "",
-      details: ""
+      details: "",
+      has_cover_charge: 0
     };
 
     this.handleStartTime = this.handleStartTime.bind(this);
@@ -41,6 +42,7 @@ class EventCreateScreen extends Component {
     this.handleTags = this.handleTags.bind(this);
     this.handleBlurb = this.handleBlurb.bind(this);
     this.handleDetails = this.handleDetails.bind(this);
+    this.handleHasCoverCharge = this.handleHasCoverCharge.bind(this);
   }
 
   handleStartTime(value) {
@@ -89,11 +91,15 @@ class EventCreateScreen extends Component {
 
   handleThumbnailImageLink(value) {
     this.setState({ thumbnail_image_link: value });
-    console.log(value);
   }
 
   handleTags(value) {
     this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
+  }
+
+  handleHasCoverCharge(value) {
+    let val = this.state.has_cover_charge;
+    this.setState({ has_cover_charge: !(val || val) });
   }
 
   handleSubmit(event) {
@@ -105,7 +111,8 @@ class EventCreateScreen extends Component {
       details: this.state.details,
       blurb: this.state.blurb,
       tags: this.state.selectedTags,
-      thumbnail_image_link: this.state.thumbnail_image_link
+      thumbnail_image_link: this.state.thumbnail_image_link,
+      has_cover_charge: this.state.has_cover_charge
     };
     if (this.state.location_id) {
       object["location_id"] = this.state.location_id;
@@ -115,11 +122,16 @@ class EventCreateScreen extends Component {
       object["city"] = this.state.city;
       object["zip"] = this.state.zip;
     }
-    fetch("/api/events", {
-      method: "POST",
-      body: JSON.stringify(object),
-      headers: new Headers({ "Content-Type": "application/json" })
-    });
+    try {
+      fetch("/api/events", {
+        method: "POST",
+        body: JSON.stringify(object),
+        headers: new Headers({ "Content-Type": "application/json" })
+      });
+      this.props.history.push('/events');
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   componentDidMount() {
@@ -194,6 +206,19 @@ class EventCreateScreen extends Component {
             />
           </div>
 
+          <div className="form-group">
+            <label className="form-check-label mr-5" htmlFor="coverChargeCheck">
+              Cover Charge?:{" "}
+            </label>
+            <input
+              value={this.state.hasCoverCharge}
+              onChange={event => this.handleHasCoverCharge(event.target.value)}
+              className="form-check-input"
+              name="coverChargeCheck"
+              type="checkbox"
+            />
+          </div>
+
           <div className="row">
             <div className="col">
               <div className="form-group">
@@ -250,7 +275,9 @@ class EventCreateScreen extends Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="state" className="mr-2">State:</label>
+              <label htmlFor="state" className="mr-2">
+                State:
+              </label>
               <SelectMenu
                 value={this.state.state}
                 source={states.getStates()}
@@ -272,7 +299,10 @@ class EventCreateScreen extends Component {
 
           {/************** file upload ***************/}
           <h5>Upload event image</h5>
-          <FileUpload label="Upload Event Thumbnail" callback={this.handleThumbnailImageLink} />
+          <FileUpload
+            label="Upload Event Thumbnail"
+            callback={this.handleThumbnailImageLink}
+          />
 
           {/************** autocomplete tags ***************/}
           <div className="form-group">
@@ -286,9 +316,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button onClick={event => this.handleSubmit(event)}>
-            Submit
-          </button>
+          <button onClick={event => this.handleSubmit(event)}>Submit</button>
         </form>
       </div>
     );

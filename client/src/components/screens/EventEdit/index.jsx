@@ -3,12 +3,12 @@ import DateTimePicker from "../../datetimepicker";
 import AutoComplete from "../../autocomplete";
 import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
-import states from '../../../services/states';
-import SelectMenu from '../../selectmenu';
+import states from "../../../services/states";
+import SelectMenu from "../../selectmenu";
 class EditEventScreen extends Component {
   constructor(props) {
     super(props);
-
+    this.props = props;
     this.state = {
       start_time: "",
       showNewDiv: "none",
@@ -115,14 +115,14 @@ class EditEventScreen extends Component {
       object["city"] = this.state.city;
       object["zip"] = this.state.zip;
     }
-    fetch('/api/events/' + this.props.match.params.id, {
+    fetch("/api/events/" + this.props.match.params.id, {
       method: "PUT",
       body: JSON.stringify(object),
       headers: new Headers({ "Content-Type": "application/json" })
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     try {
       fetch("/api/locations")
         .then(response => response.json())
@@ -134,6 +134,17 @@ class EditEventScreen extends Component {
         .then(tags => {
           this.setState({ tags });
         });
+      let eventId = this.props.match.params.id;
+      let response = await fetch(`/api/events/${eventId}`);
+      let event = await response.json();
+
+      //this won't really work but good for now
+      Object.keys(event).forEach(key => {
+        if (event[key]) {
+          this.setState({ [key]: event[key] });
+        }
+      });
+      console.log(this.state);
     } catch (err) {
       console.log(err);
     }
@@ -250,7 +261,9 @@ class EditEventScreen extends Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="state" className="mr-2">State:</label>
+              <label htmlFor="state" className="mr-2">
+                State:
+              </label>
               <SelectMenu
                 value={this.state.state}
                 source={states.getStates()}
@@ -272,7 +285,10 @@ class EditEventScreen extends Component {
 
           {/************** file upload ***************/}
           <h5>Upload event image</h5>
-          <FileUpload label="Upload Event Thumbnail" callback={this.handleThumbnailImageLink} />
+          <FileUpload
+            label="Upload Event Thumbnail"
+            callback={this.handleThumbnailImageLink}
+          />
 
           {/************** autocomplete tags ***************/}
           <div className="form-group">
@@ -286,9 +302,7 @@ class EditEventScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button onClick={event => this.handleSubmit(event)}>
-            Submit
-          </button>
+          <button onClick={event => this.handleSubmit(event)}>Submit</button>
         </form>
       </div>
     );

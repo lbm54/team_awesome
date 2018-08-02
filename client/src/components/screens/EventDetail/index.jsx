@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-
+import RSVP from '../../utilities/RSVP';
 class EventDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.eventId = props.match.params.id;
-
 
     this.state = {
       event: []
@@ -30,18 +29,20 @@ class EventDetailScreen extends Component {
 
   render() {
     return (
-      <div className="jumbotron jumbotron-fluid p-5">
+      <div className="container p-5">
         <h1 className="display-4">{this.state.event.name}</h1>
-        <img className="display-4 pb-2" style={{"width": "50%", "height": "500px"}} src={this.state.event.thumbnail_image_link} />
+        <img
+          className="display-4 pb-2 featuredImage"
+          src={this.state.event.thumbnail_image_link}
+        />
         <p className="lead">Start Time: {this.state.event.start_time}</p>
         <p className="lead">End Time: {this.state.event.end_time}</p>
         <hr className="my-4" />
         <p>{this.state.event.details}</p>
-        <p className="lead">
-          <a className="btn btn-primary btn-lg" href="#" role="button">
-            Go back
-          </a>
-        </p>
+        {/* <p className="lead"> */}
+        <RSVP />
+        <button className="btn btn-primary btn-lg">Go back</button>
+        {/* </p> */}
       </div>
     );
   }

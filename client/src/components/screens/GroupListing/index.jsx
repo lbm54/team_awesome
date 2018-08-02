@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
-class GroupListingScreen extends Component {
+class EventListingScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -26,36 +25,37 @@ class GroupListingScreen extends Component {
 
   render() {
     let groupslist = this.state.groups.map((group, index) => {
-      let link = `/groups/${group.id}`;
+      let link = `/groups/detail/${group.id}`;
       return (
-        <div
-          className="card p-3 m-5 col-md-4"
-          key={index}
-          style={{ width: "30rem" }}
-        >
-          <img className="card-img-top" src={group.thumbnail_image_link} />
+        <div className="col card p-3 m-3 eventCard" key={index}>
+          <div className="card-header bg-white">
+            <img
+              className="card-img-top"
+              src={group.thumbnail_image_link}
+              alt="Card image cap"
+            />
+          </div>
           <div className="card-body">
             <h4 className="card-title">{group.name}</h4>
             <h5 className="card-subtitle mb-2 text-muted">
-              Meets on: {group.regular_event_day_of_week}
+              Regular Meeting Start Time: {group.regular_event_start_time}
             </h5>
             <h5 className="card-subtitle mb-2 text-muted">
-              Starting at: {group.regular_event_start_time}
-            </h5>
-            <h5 className="card-subtitle mb-2 text-muted">
-              Ending at: {group.regular_event_end_time}
+              Regular Meeting End Time: {group.regular_event_end_time}
             </h5>
             <p className="card-text">{group.blurb}</p>
-            <Link to={link} className="btn btn-primary">
-              Details
-            </Link>
+            <div className="card-footer bg-white">
+              <Link to={link} className="btn btn-primary">
+                Details
+              </Link>
+            </div>
           </div>
         </div>
       );
     });
 
     return (
-      <div className="container fullScreen">
+      <div className="container-fluid fullScreen">
         <h2>Groups</h2>
         <div className="row">{groupslist}</div>
       </div>
@@ -63,4 +63,4 @@ class GroupListingScreen extends Component {
   }
 }
 
-export default GroupListingScreen;
+export default EventListingScreen;
