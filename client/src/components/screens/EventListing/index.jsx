@@ -13,16 +13,27 @@ class EventListingScreen extends Component {
     };
 
     this.handleSearchTypeCallback = searchType => {
-      this.setState({ searchType });
+      let type = "name";
+      if (searchType !== "Event Name") type = "city";
+      this.setState({ searchType: type });
     };
 
     this.handleSearch = (search) => {
       this.setState({searchInput: search})
     }
 
-    // this.handleSearchSubmit = (event) => {
-    //   let response = await fetch("/api/")
-    // }
+    this.handleSearchSubmit = async (event) => {
+      let object = {
+        searchInput: this.state.searchInput
+      }
+      let response = await fetch(`/api/events/search/${this.state.searchType}`, {
+        method: "POST",
+        body: JSON.stringify(object),
+        headers: new Headers({ "Content-Type": "application/json" })
+      });
+      let events = response.json();
+      console.log(events);
+    }
   }
 
   async componentDidMount() {
@@ -87,7 +98,7 @@ class EventListingScreen extends Component {
             onChange={e => this.handleSearch(e.target.value)}
           />
           <SelectMenu
-            source={["By Name", "By Location"]}
+            source={["Event Name", "Location (City)"]}
             className="form-control thinnerInput"
             id="searchType"
             callback={this.handleSearchTypeCallback}

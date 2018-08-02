@@ -93,6 +93,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/search/name", async (req, res) => {
+  try {
+    let searchInput = req.body.searchInput;
+    let query = {[searchType]: searchInput};
+    let events = await eventTable.find(query);
+    for (var i = 0; i < events.length; i++) {
+      let tags = await getTags("events", events[i].id);
+      let comments = await getComments("event_id", events[i].id);
+      events[i]["location"] = await getLocation(events[i].location_id);
+      events[i]["tags"] = tags;
+      events[i]["comments"] = comments;
+    }
+    res.json(events);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
 /**
  * update one event
  */

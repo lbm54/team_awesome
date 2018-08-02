@@ -138,13 +138,14 @@ class EditEventScreen extends Component {
       let response = await fetch(`/api/events/${eventId}`);
       let event = await response.json();
 
-      //this won't really work but good for now
-      Object.keys(event).forEach(key => {
-        if (event[key]) {
-          this.setState({ [key]: event[key] });
-        }
-      });
-      console.log(this.state);
+      // this.setState({start_time: event.start_time});
+      // this.setState({end_time: event.end_time});
+      // this.setState({tags: event.tags});
+      this.setState({name: event.name});
+      this.setState({blurb: event.blurb});
+      this.setState({details: event.details});
+      //etc etc
+
     } catch (err) {
       console.log(err);
     }
