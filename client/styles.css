@@ -1,4 +1,5 @@
-/* commented out the font, ready to be used. */
+/* generals */
+
 body {
   /* text-align: center; */
   font-family: 'Roboto', sans-serif;
@@ -12,25 +13,79 @@ body {
   min-height: 71.2vh;
 }
 
+/* Buttons */
 .clickable {
   background-color: #05386b;
   color: white; 
-}
-.userBioContainer{ 
-  position: relative;
-}
-
-.welcomeUser {
-  color: #05386b;
-  font-family: 'PT Sans Narrow', sans-serif;
-  position: absolute;
-
 }
 
 .hasBeenClicked {
   background-color: #5cdb95;
   color: white;
 }
+
+/* .button:hover {
+  cursor: pointer;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+} */
+
+.button {
+  font-family: 'PT Sans Narrow', sans-serif;
+  white-space: nowrap;
+  border: 0;
+  outline: 0;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 14px;
+  /* box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); */
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  /* text-decoration: none; */
+  /* -webkit-transition: all 150ms ease; */
+  /* transition: all 150ms ease; */
+  margin-top: 10px;
+}
+
+/* text headers */
+.eventListingHeader{ 
+  background-color: #379683;
+  color: white;
+  border-radius: 5px;
+  font-family: 'PT Sans Narrow', sans-serif;
+  
+}
+
+.subheading {
+  text-transform: uppercase;
+  color:darkgrey;
+  font-family: 'PT Sans Narrow', sans-serif;
+  margin-right: 50px;
+  /* width: 100px; */
+}
+
+.welcomeUser {
+  color: #05386b;
+  font-family: 'PT Sans Narrow', sans-serif;
+  position: absolute;
+  
+}
+
+/* containers */
+
+.userBioContainer{ 
+  position: relative;
+}
+
+.eventHeader {
+  font-family: 'PT Sans Narrow', sans-serif;
+  
+}
+
+/* Footer, Header */
 
 .footer {
   position: absolute;
@@ -40,7 +95,6 @@ body {
   width: 100%;
   overflow: hidden;
   color: white;
-  
 }
 
 .navbar {
@@ -48,19 +102,11 @@ body {
   padding: 0.5rem 0rem 0.5rem 1rem;
   margin-bottom: 2rem;
 }
-.eventsDisplayCard {
-  background-color: #05386b;
-  border: solid, black;
-
-}
-.eventHeader {
-  font-family: 'PT Sans Narrow', sans-serif;
-
+.nav-link {
+  font-size: 1.5rem;
+  color: white !important;
 }
 
-.btn {
-  font-family: 'PT Sans Narrow', sans-serif;
-}
 
 .header {
   font-family: 'PT Sans Narrow', sans-serif;
@@ -71,23 +117,11 @@ body {
   overflow: hidden;
 }
 
-.subheading {
-  text-transform: uppercase;
-  color: white;
-  font-family: 'PT Sans Narrow', sans-serif;
+/* Cards Display */
+.eventsDisplayCard {
+  background-color: #05386b;
+  border: solid, black;
 }
-
-.featuredImage {
-  width: 100%;
-  height: 500px;
-}
-
-.headerIndent {
-  margin-right: 50px;
-  width: 100px;
-  display: inline-block;
-}
-
 .eventCard {
   min-width: 40rem;
   max-width: 40rem;
@@ -97,6 +131,29 @@ body {
   width: 100%;
   height: 15vw;
   object-fit: cover;
+}
+
+/* images */
+
+.thumbnailImage {
+  width: 50px;
+  height: 50px;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.userImage {
+  /* styling */
+}
+
+.featuredImage {
+  width: 100%;
+  height: 500px;
 }
 
 .headerImg {
@@ -113,57 +170,13 @@ ul.ui-menu {
   max-height: 120px;
 }
 
-.Checkout {
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
-  max-width: 800px;
-  box-sizing: border-box;
-  padding: 0 5px;
-}
-
-.avatar {
-  vertical-align: middle;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-.userImage {
-  
-}
-
 label {
   /* color: #6b7c93; */
   font-weight: 300;
   letter-spacing: 0.025em;
 }
 
-button {
-  white-space: nowrap;
-  border: 0;
-  outline: 0;
-  display: inline-block;
-  height: 40px;
-  line-height: 40px;
-  padding: 0 14px;
-  /* box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); */
-  color: #fff;
-  border-radius: 4px;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-  background-color: #6772e5;
-  /* text-decoration: none; */
-  -webkit-transition: all 150ms ease;
-  transition: all 150ms ease;
-  margin-top: 10px;
-}
-
-.btn-lg {
-  padding-bottom: 2.2rem;
-}
+/* Forms */
 
 form {
   margin: 2em 1em;
@@ -171,22 +184,12 @@ form {
   border-radius: 4px;
 }
 
-.nav-link {
-  font-size: 1.5rem;
-  color: white !important;
-}
 
 .form-inline {
   padding: 1rem;
 }
 
-button:hover {
-  color: #fff;
-  cursor: pointer;
-  background-color: #7795f8;
-  transform: translateY(-1px);
-  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-}
+/* STRIPE */
 
 .StripeElement {
   align-content: center;
@@ -200,6 +203,15 @@ button:hover {
   background: white;
 }
 
+.Checkout {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 800px;
+  box-sizing: border-box;
+  padding: 0 5px;
+}
+
 .StripeElement--focus {
   box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px,
     rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
@@ -211,10 +223,6 @@ button:hover {
   padding: 0;
 }
 
-.thumbnailImage {
-  width: 50px;
-  height: 50px;
-}
 
 .thinnerInput {
   max-width: 20rem;

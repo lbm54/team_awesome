@@ -70,7 +70,7 @@ class EventListingScreen extends Component {
       let link = `/events/detail/${event.id}`;
       return (
         <div className="col card p-3 m-3 eventCard" key={index}>
-          <div className="card-header bg-light">
+          <div className="card-header">
             <img
               className="card-img-top"
               src={event.thumbnail_image_link}
@@ -104,7 +104,9 @@ class EventListingScreen extends Component {
 
     return (
       <div className="container center-block">
-        <h2>Upcoming Events</h2>
+        <div className="eventListingHeader">
+        <h2 className="ml-3">Upcoming Events</h2>
+        </div>
         <div className="row">
           <input
             className="form-control thinnerInput mx-3"
@@ -121,13 +123,13 @@ class EventListingScreen extends Component {
             callback={this.handleSearchTypeCallback}
           />
           <button
-            className="btn btn-dark ml-2 mt-0"
+            className="btn button btn-dark ml-2 mt-0"
             onClick={event => this.handleSearchSubmit(event)}
           >
             Search
           </button>
 
-          <Link to="/events/create" className="btn clickable ml-2 mt-0">
+          <Link to="/events/create" className="btn button clickable ml-2 mt-0">
             Create an Event
           </Link>
         </div>
