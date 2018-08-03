@@ -90,8 +90,8 @@ class Login extends Component {
           {this.state.feedbackMessage ? (
             <p>{this.state.feedbackMessage}</p>
           ) : null}
-          <input type="submit" value="Login" className="btn btn-primary" />
-          <Link to="/users/register" className="btn btn-info ml-3">Or Register</Link>
+          <input type="submit" value="Login" className="btn clickable" />
+          <Link to="/users/register" className="btn hasBeenClicked ml-3">Register</Link>
         </form>
       </div>
     );

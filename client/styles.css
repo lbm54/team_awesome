@@ -1,19 +1,15 @@
-/* font-family: 'PT Sans Narrow', sans-serif; */
 /* commented out the font, ready to be used. */
 body {
   /* text-align: center; */
   font-family: 'Roboto', sans-serif;
   padding: 0em;
   margin: 0;
+  background-color: #edf5e1;
   /* padding-bottom: 5rem;  */
 }
 
 .fullScreen {
   min-height: 71.2vh;
-}
-
-body {
-  background-color: #edf5e1;
 }
 
 .clickable {
@@ -33,10 +29,30 @@ body {
   height: 200px;
   width: 100%;
   overflow: hidden;
+  color: white;
 }
 
 .navbar {
   background-color: #379683;
+}
+
+.btn {
+  font-family: 'PT Sans Narrow', sans-serif;
+}
+
+.header {
+  font-family: 'PT Sans Narrow', sans-serif;
+  left: 0;
+  top: 0;
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.subheading {
+  text-transform: uppercase;
+  color: white;
+  font-family: 'PT Sans Narrow', sans-serif;
 }
 
 .featuredImage {

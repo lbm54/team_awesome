@@ -105,9 +105,11 @@ class GroupListingScreen extends Component {
     });
 
     return (
-      <div className="container-fluid fullScreen">
+      <div className="container center-block">
         <h2>Groups</h2>
+
         <div className="row">
+
           <input
             className="form-control thinnerInput mx-3"
             id="myInput"
@@ -115,25 +117,30 @@ class GroupListingScreen extends Component {
             placeholder="Search..."
             onChange={e => this.handleSearch(e.target.value)}
           />
+
           <SelectMenu
             source={["Group Name", "Location (City)", "Tags"]}
             className="form-control thinnerInput"
             id="searchType"
             callback={this.handleSearchTypeCallback}
           />
+
           <button
-            className="btn btn-primary ml-2 mt-0"
+            className="btn btn-dark ml-2 mt-0"
             onClick={event => this.handleSearchSubmit(event)}
           >
             Search
           </button>
-          <Link to="/groups/create" className="btn btn-info ml-2 mt-0">
+
+          <Link to="/groups/create" className="btn clickable ml-2 mt-0">
             Create a Group
           </Link>
         </div>
+
         <div className="row" id="groupsList">
           {groupslist}
         </div>
+        
       </div>
     );
   }

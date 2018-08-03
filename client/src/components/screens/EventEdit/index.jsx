@@ -224,7 +224,7 @@ class EditEventScreen extends Component {
             </div>
             <div className="col mt-0">
               <button
-                className="btn btn-primary"
+                className="btn clickable"
                 onClick={e => {
                   e.preventDefault();
                   this.setState({ showNewDiv: "block" });
@@ -246,6 +246,7 @@ class EditEventScreen extends Component {
                 name="addressLineOne"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="addressLineTwo">Address Line Two:</label>
               <input
@@ -255,6 +256,7 @@ class EditEventScreen extends Component {
                 name="addressLineTwo"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="city">City:</label>
               <input
@@ -264,6 +266,7 @@ class EditEventScreen extends Component {
                 name="city"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="state" className="mr-2">
                 State:
@@ -276,6 +279,7 @@ class EditEventScreen extends Component {
                 id="state"
               />
             </div>
+            
             <div className="form-group">
               <label htmlFor="zip">Zip:</label>
               <input

@@ -17,7 +17,7 @@ export default class Header extends Component {
   render() {
     return (
       <Fragment>
-        <nav className="navbar navbar-expand-lg">
+        <nav className="navbar header navbar-expand-lg">
           <a className="navbar-brand" href="#">
             <img src="/images/grouprLogoNoText.png" className="headerImg" />
           </a>
