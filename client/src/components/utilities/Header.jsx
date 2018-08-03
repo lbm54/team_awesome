@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import AuthButton from "../auth/authButton";
 import { Link } from "react-router-dom";
-import {getUserId} from "../../services/user";
+import {me} from "../../services/user";
 
 export default class Header extends Component {
   constructor(props) {
@@ -15,8 +15,6 @@ export default class Header extends Component {
   // change avatar to have user img
 
   render() {
-    let userId = getUserId();
-    let profileLink = `/users/profile/${userId}`;
     return (
       <Fragment>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -56,7 +54,7 @@ export default class Header extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to={profileLink}>
+                <Link className="nav-link" to="/users/profile">
                   Profile
                 </Link>
               </li>

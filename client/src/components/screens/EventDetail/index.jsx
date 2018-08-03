@@ -3,6 +3,7 @@ import RSVP from "../../utilities/RSVP";
 import * as eventsService from "../../../services/events";
 import TagList from "../../taglist";
 import Comment from "../../comments/Comment";
+import { Link } from "react-router-dom";
 
 class EventDetailScreen extends Component {
   constructor(props) {
@@ -61,10 +62,14 @@ class EventDetailScreen extends Component {
           <Comment
             comments={this.state.event.comments}
             show={this.state.showComments}
+            what="events"
+            whatId={this.state.event.id}
           />
           <div className="row mt-5">
             <RSVP event={this.state.event} />
-            <button className="btn btn-primary">Go back</button>
+            <Link to="/events">
+              <button className="btn btn-primary">Go back</button>
+            </Link>
           </div>
         </div>
       );

@@ -14,7 +14,7 @@ class Comment extends Component {
       return (
         <div>
           <CommentList comments={this.props.comments} />
-          <CommentCreate />
+          <CommentCreate what={this.props.what} whatId={this.props.whatId} />
         </div>
       );
     } else return null;

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import * as userService from "../../../services/user";
 import { Redirect } from "react-router-dom";
 import IndeterminateProgress from "../../utilities/indeterminateProgress";
+import {Link} from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
@@ -90,6 +91,7 @@ class Login extends Component {
             <p>{this.state.feedbackMessage}</p>
           ) : null}
           <input type="submit" value="Login" className="btn btn-primary" />
+          <Link to="/users/register" className="btn btn-info ml-3">Or Register</Link>
         </form>
       </div>
     );

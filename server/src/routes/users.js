@@ -20,9 +20,9 @@ router.get("/", async (req, res) => {
     let groupsUsersTable = new Table("groups_users");
     let eventsUsersTable = new Table("events_users");
     for (var i = 0; i < users.length; i++) {
-      let groupsUsers = await groupsUsersTable.find({user_id: users[i].id});
+      let groupsUsers = await groupsUsersTable.find({ user_id: users[i].id });
       users[i]["groups"] = groupsUsers;
-      let eventsUsers = await eventsUsersTable.find({user_id: users[i].id});
+      let eventsUsers = await eventsUsersTable.find({ user_id: users[i].id });
       users[i]["events"] = eventsUsers;
     }
     res.json(users);
@@ -112,7 +112,12 @@ router.post("/addToEvent", async (req, res) => {
 router.post("/removeFromGroup", async (req, res) => {
   try {
     let groupsUsersTable = new Table("groups_users");
-    await groupsUsersTable.deleteCompoundPrimaryKey("group_id", "user_id", req.body.group_id, req.body.user_id);
+    await groupsUsersTable.deleteCompoundPrimaryKey(
+      "group_id",
+      "user_id",
+      req.body.group_id,
+      req.body.user_id
+    );
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
@@ -127,7 +132,12 @@ router.post("/removeFromGroup", async (req, res) => {
 router.post("/removeFromEvent", async (req, res) => {
   try {
     let eventsUsersTable = new Table("events_users");
-    await eventsUsersTable.deleteCompoundPrimaryKey("event_id", "user_id", req.body.event_id, req.body.user_id);
+    await eventsUsersTable.deleteCompoundPrimaryKey(
+      "event_id",
+      "user_id",
+      req.body.event_id,
+      req.body.user_id
+    );
     res.sendStatus(200);
   } catch (err) {
     console.log(err);
@@ -143,6 +153,12 @@ router.post("/removeFromEvent", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     let founduser = await userTable.getOne(req.params.id);
+    let groupsUsersSql = `select g.* from groups g join groups_users gu on g.id = gu.group_id join users u on u.id = gu.user_id where u.id = ${founduser.id}`;
+    let groupsUsers = await userTable.select(groupsUsersSql);
+    founduser["groups"] = groupsUsers;
+    let eventsUsersSql = `select e.* from events e join events_users eu on e.id = eu.event_id join users u on u.id = eu.user_id where u.id = ${founduser.id}`;
+    let eventsUsers = await userTable.select(eventsUsersSql);
+    founduser["events"] = eventsUsers;
     res.json(founduser);
   } catch (err) {
     console.log(err);

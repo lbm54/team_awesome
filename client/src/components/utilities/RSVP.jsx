@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { sendRSVP } from "../../services/RSVP";
 import RSVPModal from "./rsvpmodal";
+import {me} from '../../services/user';
 
 export default class RSVP extends Component {
   constructor(props) {
@@ -12,15 +13,17 @@ export default class RSVP extends Component {
     };
   }
 
-  // This handle func should send the email and then alert the user
-
   async handleSubmit(e) {
     e.preventDefault();
     if (this.props.event.has_cover_charge) {
       this.setState({ showModal: true });
     } else {
       try {
-        this.setState({ rsvped: true });
+        let user = await me();
+        if (user) {
+          await sendRSVP(user.username, user.email, `${user.username} RSVPed to this event`);
+          this.setState({ rsvped: true });
+        }
       } catch (err) {
         console.log(err);
       }

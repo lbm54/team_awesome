@@ -37,16 +37,16 @@ class Navigation extends Component {
             <Route exact path="/events" component={EventListingScreen} />
             <Route path="/login" component={LoginScreen} />
             <Route path="/events/detail/:id" component={EventDetailScreen} />
-            <Route path="/events/edit/:id" component={EventEditScreen} />
+            <PrivateRoute path="/events/edit/:id" component={EventEditScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
-            <Route path="/groups/create" component={GroupCreateScreen} />
-            <Route path="/events/create" component={EventCreateScreen} />
-            <Route path="/groups/edit/:id" component={GroupEditScreen} />
+            <PrivateRoute path="/groups/create" component={GroupCreateScreen} />
+            <PrivateRoute path="/events/create" component={EventCreateScreen} />
+            <PrivateRoute path="/groups/edit/:id" component={GroupEditScreen} />
             <Route path="/groups/detail/:id" component={GroupDetailScreen} />
             <Route path="/groups" component={GroupListingScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
             {/* <Route path="/users/profile/edit/:id" component={UserEditScreen} /> */}
-            <Route path="/users/profile/:id" component={ProfileScreen} />
+            <PrivateRoute path="/users/profile" component={ProfileScreen} />
             <Route path="/users/register" component={RegisterScreen} />
             <Route path="/stripe" component={Stripe} />
             <Route path="/logout" component={Logout} />

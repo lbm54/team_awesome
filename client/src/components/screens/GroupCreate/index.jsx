@@ -3,8 +3,8 @@ import DateTimePicker from "../../datetimepicker";
 import AutoComplete from "../../autocomplete";
 import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
-import states from '../../../services/states';
-import SelectMenu from '../../selectmenu';
+import states from "../../../services/states";
+import SelectMenu from "../../selectmenu";
 
 class GroupCreateScreen extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class GroupCreateScreen extends Component {
       address_line_one: "",
       address_line_two: "",
       city: "",
-      state: "",
+      state: "AL",
       zip: "",
       name: "",
       thumbnail_image_link: "",
@@ -33,9 +33,13 @@ class GroupCreateScreen extends Component {
       tags: []
     };
 
-    this.handleRegularEventStartTime = this.handleRegularEventStartTime.bind(this);
+    this.handleRegularEventStartTime = this.handleRegularEventStartTime.bind(
+      this
+    );
     this.handleRegularEventEndTime = this.handleRegularEventEndTime.bind(this);
-    this.handleRegularEventDayOfWeek = this.handleRegularEventDayOfWeek.bind(this);
+    this.handleRegularEventDayOfWeek = this.handleRegularEventDayOfWeek.bind(
+      this
+    );
     this.handleLocationId = this.handleLocationId.bind(this);
     this.handleAddressOne = this.handleAddressOne.bind(this);
     this.handleAddressTwo = this.handleAddressTwo.bind(this);
@@ -79,9 +83,8 @@ class GroupCreateScreen extends Component {
   }
 
   handleState(value) {
-    console.log('called?');
-    this.setState({ state: value });
     console.log(value);
+    this.setState({ state: value });
   }
 
   handleZip(value) {
@@ -109,7 +112,7 @@ class GroupCreateScreen extends Component {
     this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
     let object = {
       regular_event_start_time: this.state.regular_event_start_time,
@@ -129,11 +132,16 @@ class GroupCreateScreen extends Component {
       object["city"] = this.state.city;
       object["zip"] = this.state.zip;
     }
-    fetch("/api/Groups", {
-      method: "POST",
-      body: JSON.stringify(object),
-      headers: new Headers({ "Content-Type": "application/json" })
-    });
+    try {
+      await fetch("/api/groups", {
+        method: "POST",
+        body: JSON.stringify(object),
+        headers: new Headers({ "Content-Type": "application/json" })
+      });
+      this.props.history.push("/groups");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   componentDidMount() {
@@ -198,7 +206,9 @@ class GroupCreateScreen extends Component {
               value={this.state.regular_event_start_time}
               type="text"
               placeholder="e.g., 7:00"
-              onChange={event => this.handleRegularEventStartTime(event.target.value)}
+              onChange={event =>
+                this.handleRegularEventStartTime(event.target.value)
+              }
               className="form-control"
               name="startTime"
             />
@@ -210,22 +220,34 @@ class GroupCreateScreen extends Component {
               value={this.state.regular_event_end_time}
               type="text"
               placeholder="e.g., 8:00"
-              onChange={event => this.handleRegularEventEndTime(event.target.value)}
+              onChange={event =>
+                this.handleRegularEventEndTime(event.target.value)
+              }
               className="form-control"
               name="endTime"
             />
           </div>
 
           <div className="form-group">
-              <label htmlFor="state" className="mr-2">Regular Event Day of Week:</label>
-              <SelectMenu
-                value={this.state.regular_event_day_of_week}
-                source={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-                callback={this.handleRegularEventDayOfWeek}
-                className="form-control"
-                id="state"
-              />
-            </div>
+            <label htmlFor="state" className="mr-2">
+              Regular Event Day of Week:
+            </label>
+            <SelectMenu
+              value={this.state.regular_event_day_of_week}
+              source={[
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ]}
+              callback={this.handleRegularEventDayOfWeek}
+              className="form-control"
+              id="state"
+            />
+          </div>
 
           <div className="row">
             <div className="col">
@@ -286,11 +308,13 @@ class GroupCreateScreen extends Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="state" className="mr-2">State:</label>
+              <label htmlFor="state" className="mr-2">
+                State:
+              </label>
               <SelectMenu
                 value={this.state.state}
                 source={states.getStates()}
-                callback={this.handleState}
+                callback={value => this.handleState(value)}
                 className="form-control"
                 id="state"
               />
@@ -309,7 +333,10 @@ class GroupCreateScreen extends Component {
 
           {/************** file upload ***************/}
           <h5>Upload Group image</h5>
-          <FileUpload label="Upload Group Thumbnail" callback={this.handleThumbnailImageLink} />
+          <FileUpload
+            label="Upload Group Thumbnail"
+            callback={this.handleThumbnailImageLink}
+          />
 
           {/************** autocomplete tags ***************/}
           <div className="form-group">
@@ -323,7 +350,10 @@ class GroupCreateScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button onClick={event => this.handleSubmit(event)}>
+          <button
+            className="btn btn-primary"
+            onClick={event => this.handleSubmit(event)}
+          >
             Submit
           </button>
         </form>

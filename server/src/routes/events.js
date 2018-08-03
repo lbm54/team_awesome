@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 /**
  * post a event
  * is expecting:
- * { start_time, end_time, location_name, address_line_one, address_line_two, city, state, zip, name, thumbnail_image_link, details, blurb, tags[], has_cover_charge  }
+ * { start_time, end_time, location_name, address_line_one, address_line_two, city, state, zip, name, thumbnail_image_link, details, blurb, tags[], has_cover_charge, cover_charge_amount  }
  * in the request's body
  *
  * for tags, I'm expecting an array of objects, where each object is of type:
@@ -61,7 +61,8 @@ router.post("/", async (req, res) => {
       blurb: req.body.blurb,
       details: req.body.details,
       has_cover_charge: req.body.has_cover_charge,
-      thumbnail_image_link: req.body.thumbnail_image_link
+      thumbnail_image_link: req.body.thumbnail_image_link,
+      cover_charge_amount: req.body.cover_charge_amount
     };
     let id = (await eventTable.insert(insertObject)).id;
 

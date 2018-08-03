@@ -127,6 +127,9 @@ class GroupListingScreen extends Component {
           >
             Search
           </button>
+          <Link to="/groups/create" className="btn btn-info ml-2 mt-0">
+            Create a Group
+          </Link>
         </div>
         <div className="row" id="groupsList">
           {groupslist}

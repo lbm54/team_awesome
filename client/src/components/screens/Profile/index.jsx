@@ -1,22 +1,44 @@
 import React, { Component, Fragment } from "react";
 import * as usersService from "../../../services/users";
 import { Link } from "react-router-dom";
+import {me} from '../../../services/user';
 
 class UserDetailScreen extends Component {
   constructor(props) {
     super(props);
-    this.userId = props.match.params.id;
 
     this.state = {
       user: []
     };
+
+    this.handleLeaveGroup = async (groupId) => {
+      let user = await me();
+      let user_id = user.id;
+      let object = {
+        user_id,
+        group_id: groupId
+      }
+      try {
+        fetch("/api/users/removeFromGroup", {
+          method: "POST",
+          body: JSON.stringify(object),
+          headers: new Headers({ "Content-Type": "application/json" })
+        });
+        this.props.history.push('/events');
+      } catch(err) {
+        console.log(err);
+      }
+    }
   }
 
   async componentDidMount() {
     try {
-      let user = await usersService.one(this.userId);
-      if (!user.profile_picture_image)
-        user.profile_picture_image = `/images/default_user_image.png`;
+      let userRaw = await me();
+      let userId = userRaw.id;
+      let user = await usersService.one(userId);
+      console.log(user);
+      if (!user.profile_picture_link)
+        user.profile_picture_link = `/images/default_user_img.png`;
       this.setState({ user });
     } catch (e) {
       console.log(e);
@@ -27,36 +49,72 @@ class UserDetailScreen extends Component {
     if (this.state.user) {
       let groups, events;
       if (this.state.user.groups) {
-        groups = this.state.user.groups.map(group => {
-          return <li>{group.name}</li>;
+        groups = this.state.user.groups.map((group, index) => {
+          let groupLink = `/groups/detail/${group.id}`;
+          return (
+            <div className="card eventCard" key={index}>
+              <div className="card-body">
+                <h5 className="card-title">{group.name}</h5>
+                <p className="card-text">{group.blurb}</p>
+                <Link to={groupLink} className="btn btn-info">
+                  More Details
+                </Link>
+                <button className="ml-3 mt-0 btn btn-success" onClick={(event) => this.handleLeaveGroup(group.id)}>
+                  Leave this Group
+                </button>
+              </div>
+            </div>
+          );
         });
-      } else groups = <li>None</li>;
+      } else groups = <li className="list-group-item">None</li>;
       if (this.state.user.events) {
-        events = this.state.user.events.map(event => {
-          return <li>{event.name}</li>;
+        events = this.state.user.events.map((event, index) => {
+          let eventLink = `/events/detail/${event.id}`;
+          return (
+            <div className="card eventCard" key={index}>
+              <div className="card-body">
+                <h5 className="card-title">{event.name}</h5>
+                <p className="card-text">{event.blurb}</p>
+                <Link to={eventLink} className="btn btn-info">
+                  More Details
+                </Link>
+              </div>
+            </div>
+          );
         });
-      } else events = <li>None</li>;
+      } else events = <li className="list-group-item">None</li>;
       return (
         <Fragment>
           <div className="container p-5">
             <h1>Your Profile:</h1>
-            <div className="card">
+            <div className="eventCard">
               <img
                 className="card-img-top"
-                src={this.state.user.profile_picture_image}
+                src={this.state.user.profile_picture_link}
                 alt="Card image cap"
               />
-              <div className="card-body">
-                <h5 className="card-title">{this.state.user.username}</h5>
-                <p className="card-text">{this.state.user.bio}</p>
-              </div>
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
+                  <h6 className="headerIndent">Username:</h6>
+                  {this.state.user.username}
+                </li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Bio:</h6>
+                  {this.state.user.bio}
+                </li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Name:</h6>
                   {this.state.user.first_name} {this.state.user.middle_initial}{" "}
                   {this.state.user.last_name}
                 </li>
-                <li className="list-group-item">{this.state.user.telephone}</li>
-                <li className="list-group-item">{this.state.user.email}</li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Telephone:</h6>
+                  {this.state.user.telephone}
+                </li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Email:</h6>
+                  {this.state.user.email}
+                </li>
               </ul>
               <div className="card-body">
                 <Link to="/users/edit" className="btn btn-primary">
@@ -66,13 +124,13 @@ class UserDetailScreen extends Component {
             </div>
 
             <h1>Your RSVPed Events:</h1>
-            <div className="card">
-              <ul className="list-group list-group-flush">{groups}</ul>
+            <div className="row">
+              {events}
             </div>
 
             <h1>Your Groups:</h1>
-            <div className="card">
-              <ul className="list-group list-group-flush">{events}</ul>
+            <div className="row">
+              {groups}
             </div>
           </div>
         </Fragment>

@@ -17,6 +17,12 @@ body {
   height: 500px;
 }
 
+.headerIndent {
+  margin-right: 50px;
+  width: 100px;
+  display: inline-block;
+}
+
 .eventCard {
   min-width: 40rem;
   max-width: 40rem;

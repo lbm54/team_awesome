@@ -125,6 +125,9 @@ class EventListingScreen extends Component {
           >
             Search
           </button>
+          <Link to="/events/create" className="btn btn-info ml-2 mt-0">
+            Create an Event
+          </Link>
         </div>
         <div className="row" id="eventsList">
           {eventslist}

@@ -23,7 +23,7 @@ class FileUpload extends Component {
           successMessage: "File uploaded successfully!",
           imageSrc: `/images/${response.name}`
         });
-        this.props.callback(response.name);
+        this.props.callback(this.state.imageSrc);
       } catch (err) {
         this.setState({ errorMessage: "Error uploading file" });
       }
@@ -35,7 +35,7 @@ class FileUpload extends Component {
       <div className="form-group" key="response">
         <input ref={ref => (this.fileInput = ref)} type="file" name="file" />
         <button
-          className="btn btn-primary"
+          className="btn btn-info"
           onClick={event => this.submitImage(event)}
         >
           Upload

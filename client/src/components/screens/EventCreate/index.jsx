@@ -26,7 +26,8 @@ class EventCreateScreen extends Component {
       selectedTags: [],
       blurb: "",
       details: "",
-      has_cover_charge: 0
+      has_cover_charge: 0,
+      cover_charge_amount: ""
     };
 
     this.handleStartTime = this.handleStartTime.bind(this);
@@ -43,10 +44,15 @@ class EventCreateScreen extends Component {
     this.handleBlurb = this.handleBlurb.bind(this);
     this.handleDetails = this.handleDetails.bind(this);
     this.handleHasCoverCharge = this.handleHasCoverCharge.bind(this);
+    this.handleCoverChargeAmount = this.handleCoverChargeAmount.bind(this);
   }
 
   handleStartTime(value) {
     this.setState({ start_time: value });
+  }
+
+  handleCoverChargeAmount(value) {
+    this.setState({cover_charge_amount: value})
   }
 
   handleEndTime(value) {
@@ -100,6 +106,7 @@ class EventCreateScreen extends Component {
   handleHasCoverCharge(value) {
     let val = this.state.has_cover_charge;
     this.setState({ has_cover_charge: !(val || val) });
+    $("#coverChargeAmountField").toggle();
   }
 
   handleSubmit(event) {
@@ -167,7 +174,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Blurb:</label>
+            <label htmlFor="blurb">Blurb:</label>
             <input
               value={this.state.blurb}
               onChange={event => this.handleBlurb(event.target.value)}
@@ -177,7 +184,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Details:</label>
+            <label htmlFor="details">Details:</label>
             <textarea
               value={this.state.details}
               cols="30"
@@ -216,6 +223,16 @@ class EventCreateScreen extends Component {
               className="form-check-input"
               name="coverChargeCheck"
               type="checkbox"
+            />
+          </div>
+
+          <div className="form-group" style={{"display" : "none"}} id="coverChargeAmountField">
+            <label htmlFor="cover_charge_amount">Cover Charge Amount:</label>
+            <input
+              value={this.state.cover_charge_amount}
+              onChange={event => this.handleCoverChargeAmount(event.target.value)}
+              className="form-control"
+              name="cover_charge_amount"
             />
           </div>
 
@@ -316,7 +333,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button onClick={event => this.handleSubmit(event)}>Submit</button>
+          <button className="btn btn-primary" onClick={event => this.handleSubmit(event)}>Submit</button>
         </form>
       </div>
     );
