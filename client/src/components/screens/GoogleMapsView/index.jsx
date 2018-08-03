@@ -25,11 +25,11 @@ class GoogleMapsView extends Component {
       let position = {};
       for (var i = 0; i < objects.length; i++) {
         let location = objects[i].location;
-        let name = (objects[i].name) ? objects[i].name : "Untitled";
-        let blurb = (objects[i].blurb) ? objects[i].blurb : "No description";
-        let contentString = `<div><h2>Name: ${name}</h2><h4>Description:</h4><p>${blurb}</p></div>`
+        let name = objects[i].name ? objects[i].name : "Untitled";
+        let blurb = objects[i].blurb ? objects[i].blurb : "No description";
+        let contentString = `<div><h2>Name: ${name}</h2><h4>Description:</h4><p>${blurb}</p></div>`;
         if (
-          location && 
+          location &&
           location.address_line_one &&
           location.city &&
           location.state &&
@@ -53,9 +53,12 @@ class GoogleMapsView extends Component {
             var marker = new google.maps.Marker({
               position,
               map: this.state.map,
-              icon: (what === "events") ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+              icon:
+                what === "events"
+                  ? "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                  : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
             });
-            marker.addListener('click', function() {
+            marker.addListener("click", function() {
               infowindow.open(map, marker);
             });
           });
