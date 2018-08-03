@@ -224,7 +224,7 @@ class EditEventScreen extends Component {
             </div>
             <div className="col mt-0">
               <button
-                className="btn btn-primary"
+                className="btn clickable"
                 onClick={e => {
                   e.preventDefault();
                   this.setState({ showNewDiv: "block" });
@@ -276,6 +276,7 @@ class EditEventScreen extends Component {
                 id="state"
               />
             </div>
+            
             <div className="form-group">
               <label htmlFor="zip">Zip:</label>
               <input

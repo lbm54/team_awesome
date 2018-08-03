@@ -10,14 +10,14 @@ export default class Footer extends Component {
     return (
       <Fragment>
         {/* START FOOTER */}
-        <div className="navbar navbar-fixed-bottom text-white bg-info pb-0 mb-0">
+        <div className="navbar footer navbar-fixed-bottom pb-0 mb-0">
           {/* <!-- Footer Links --> */}
           <div className="container text-center text-md-left">
             {/* <!-- Footer links --> */}
             <div className="row text-center text-md-left">
               {/* <!-- Grid column --> */}
               <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h6 className="text-uppercase mb-4 font-weight-bold">Groupr</h6>
+                <h6 className="subheading mb-4">Groupr</h6>
                 <p>
                   The final project of Team: Awesome Team. We hope you enjoyed
                   this demo. Signed: Lee, Kimani, and Warryn.
@@ -37,20 +37,20 @@ export default class Footer extends Component {
 
               {/* <!-- Grid column --> */}
               <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                <h6 className="text-uppercase mb-4 font-weight-bold">
+                <h6 className="subheading mb-4">
                   Useful links
                 </h6>
-                <p className="mb-0 pb-0 text-white">
+                <p className="mb-0 pb-0">
                   <Link to="users/register" className="text-white">
                     Sign Up
                   </Link>
                 </p>
-                <p className="mb-0 pb-0 text-white">
+                <p className="mb-0 pb-0">
                   <Link to="users/profile" className="text-white">
                     Your Account
                   </Link>
                 </p>
-                <p className="mb-0 pb-0 text-white">
+                <p className="mb-0 pb-0">
                   <Link to="events/create" className="text-white">
                     Start a new Event
                   </Link>
@@ -62,7 +62,7 @@ export default class Footer extends Component {
 
               {/* <!-- Grid column --> */}
               <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h6 className="text-uppercase mb-4 font-weight-bold">
+                <h6 className="subheading mb-4">
                   Contact
                 </h6>
                 <p className="mb-0 pb-0">Birmingham, Alabama 35216</p>
@@ -74,9 +74,9 @@ export default class Footer extends Component {
             {/* <!-- Footer links --> */}
 
             {/* <!-- Grid row --> */}
-            <div className="row mt-0 d-flex align-items-center">
+            <div className="row mt-0 d-flex">
               {/* <!--Copyright--> */}
-              <p className="text-center text-md-left font-weight-bold">
+              <p className="copyright subheading">
                 © 2018 Copyright: Team Awesome
               </p>
             </div>

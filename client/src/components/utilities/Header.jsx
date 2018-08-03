@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import AuthButton from "../auth/authButton";
 import { Link } from "react-router-dom";
-import {me} from "../../services/user";
+import { me } from "../../services/user";
 
 export default class Header extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ export default class Header extends Component {
   render() {
     return (
       <Fragment>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-info">
+        <nav className="navbar header navbar-expand-lg">
           <a className="navbar-brand" href="#">
             <img src="/images/grouprLogoNoText.png" className="headerImg" />
           </a>

@@ -43,7 +43,7 @@ export default class RSVP extends Component {
       return (
         <Fragment>
           <button
-            className="btn btn-info mx-2"
+            className="btn clickable mx-2"
             onClick={e => this.handleSubmit(e)}
           >
             RSVP to this event!
