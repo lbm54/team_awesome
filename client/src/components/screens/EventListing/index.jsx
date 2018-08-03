@@ -89,7 +89,7 @@ class EventListingScreen extends Component {
             </label>
             <h5>Description:</h5>
             <p className="card-text">{event.blurb}</p>
-            <div className="card-footer bg-white">
+            <div className="card-footer bg-light">
               <div className="row justify-content-between">
                 <Link to={link} className="btn btn-dark">
                   More Details
@@ -103,7 +103,7 @@ class EventListingScreen extends Component {
     });
 
     return (
-      <div className="container-fluid fullScreen">
+      <div className="container mr-5 center-block">
         <h2>Upcoming Events</h2>
         <div className="row">
           <input

@@ -33,7 +33,7 @@ class GroupDetailScreen extends Component {
 
   render() {
     return (
-      <div className="jumbotron jumbotron-fluid px-5 pt-5 pb-0 mb-0">
+      <div className="container mr-5 center-block">
         <h1 className="display-4">{this.state.group.name}</h1>
         <img className="display-4 pb-2" style={{ "width": "50%", "height": "500px" }} src={this.state.group.thumbnail_image_link} />
         <p className="lead">Regular Event Start Time: {this.state.group.regular_event_start_time}</p>

@@ -153,7 +153,7 @@ class EventCreateScreen extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container mr-5 center-block">
         <form>
           <h1>Create an Event</h1>
           <div className="form-group">
