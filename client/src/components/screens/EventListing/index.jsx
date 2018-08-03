@@ -70,7 +70,7 @@ class EventListingScreen extends Component {
       let link = `/events/detail/${event.id}`;
       return (
         <div className="col card p-3 m-3 eventCard" key={index}>
-          <div className="card-header bg-white">
+          <div className="card-header bg-light">
             <img
               className="card-img-top"
               src={event.thumbnail_image_link}
@@ -91,7 +91,7 @@ class EventListingScreen extends Component {
             <p className="card-text">{event.blurb}</p>
             <div className="card-footer bg-white">
               <div className="row justify-content-between">
-                <Link to={link} className="btn btn-primary">
+                <Link to={link} className="btn btn-dark">
                   More Details
                 </Link>
                 <TagList selectedTags={event.tags} />
@@ -120,7 +120,7 @@ class EventListingScreen extends Component {
             callback={this.handleSearchTypeCallback}
           />
           <button
-            className="btn btn-primary ml-2 mt-0"
+            className="btn btn-dark ml-2 mt-0"
             onClick={event => this.handleSearchSubmit(event)}
           >
             Search
