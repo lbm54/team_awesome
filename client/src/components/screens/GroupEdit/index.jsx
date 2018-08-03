@@ -135,7 +135,7 @@ class GroupCreateScreen extends Component {
         });
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         try {
             fetch("/api/locations")
                 .then(response => response.json())
