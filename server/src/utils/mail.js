@@ -1,21 +1,12 @@
 import mailgunLoader from 'mailgun-js';
-import { config } from '../config/index.js'
+import { config } from '../config';
+let domain = 'sandbox53a4c0c17578431ba0bde9979ed79c47.mailgun.org';
+let apiKey = config.MAILGUN_API_KEY;
+let mailgun = mailgunLoader({apiKey, domain});
 
-let mailgun = mailgunLoader({
-    apiKey: config.MAILGUN_API_KEY,
-    domain: 'sandbox5906cbd631dd4ba4b5ab3a368e4086c2.mailgun.org'
-});
-
-function sendEmail(to, from, subject, content){
-    let data = {
-        from,
-        to,
-        subject,
-        html: content
-    };
-
-    return mailgun.message().send(data);
-
+function sendEmail(to, from, subject, content) {
+    let data = {from, to, subject, html: content};
+    return mailgun.messages().send(data); //returns a promise
 }
 
-export { sendEmail };
+export {sendEmail};

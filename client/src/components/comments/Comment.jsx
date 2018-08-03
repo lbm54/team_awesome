@@ -10,12 +10,14 @@ class Comment extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <CommentCreate />
-        <CommentList comments={this.props.comments} />
-      </div>
-    );
+    if (this.props.show) {
+      return (
+        <div>
+          <CommentList comments={this.props.comments} />
+          <CommentCreate />
+        </div>
+      );
+    } else return null;
   }
 }
 

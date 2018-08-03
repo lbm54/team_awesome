@@ -2,7 +2,7 @@ import * as baseService from './base';
 
 
 function postCharge(token) {
-    baseService.makeFetch('/api/donate', {
+    baseService.makeFetch('/api/stripe', {
         method: 'POST',
         body: JSON.stringify({ token }),
         headers: new Headers({

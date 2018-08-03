@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 class CommentCreate extends Component {
   constructor(props) {
@@ -8,17 +8,32 @@ class CommentCreate extends Component {
       comment: ""
     };
 
-    this.handleSubmit = (event) => {
-        event.preventDefault();
-    }
+    this.handleSubmit = event => {
+      event.preventDefault();
+    };
   }
 
   render() {
     return (
-      <div>
-        <textarea value={this.state.comment} onChange={(event) => this.setState({comment: event.target.value})} cols="20" rows="20" />
-        <button className="btn btn-primary" onClick={(event) =>  this.handleSubmit(event)} />
-      </div>
+      <Fragment>
+        <div className="row">
+          <textarea
+            placeholder="Add a comment"
+            className="form-control ml-2"
+            value={this.state.comment}
+            onChange={event => this.setState({ comment: event.target.value })}
+            cols="100"
+            rows="10"
+          />
+        </div>
+
+        <button
+          className="btn btn-primary"
+          onClick={event => this.handleSubmit(event)}
+        >
+          Add Comment
+        </button>
+      </Fragment>
     );
   }
 }

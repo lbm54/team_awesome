@@ -10,7 +10,7 @@ export default class Footer extends Component {
     return (
       <Fragment>
         {/* START FOOTER */}
-        <div className="navbar navbar-fixed-bottom text-white bg-dark pb-0 mb-0">
+        <div className="navbar navbar-fixed-bottom text-white bg-info pb-0 mb-0">
           {/* <!-- Footer Links --> */}
           <div className="container text-center text-md-left">
             {/* <!-- Footer links --> */}
@@ -42,7 +42,6 @@ export default class Footer extends Component {
                 </h6>
                 <p className="mb-0 pb-0 text-white">
                   <Link to="users/register" className="text-white">
-                    {" "}
                     Sign Up
                   </Link>
                 </p>
@@ -63,7 +62,7 @@ export default class Footer extends Component {
 
               {/* <!-- Grid column --> */}
               <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h6 className="text-uppercase mb-4 font-weight-boldr">
+                <h6 className="text-uppercase mb-4 font-weight-bold">
                   Contact
                 </h6>
                 <p className="mb-0 pb-0">Birmingham, Alabama 35216</p>
@@ -77,7 +76,7 @@ export default class Footer extends Component {
             {/* <!-- Grid row --> */}
             <div className="row mt-0 d-flex align-items-center">
               {/* <!--Copyright--> */}
-              <p className="text-center text-md-left">
+              <p className="text-center text-md-left font-weight-bold">
                 © 2018 Copyright: Team Awesome
               </p>
             </div>

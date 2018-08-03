@@ -33,6 +33,10 @@ class Table {
         return executeQuery(sql, values);
     }
 
+    select(sql) {
+        return executeQuery(sql);
+    }
+
     async insert(row) {
         let columns = Object.keys(row);
         let values = Object.values(row);

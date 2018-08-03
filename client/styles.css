@@ -1,8 +1,8 @@
-/* font-family: 'Roboto', sans-serif;
-font-family: 'PT Sans Narrow', sans-serif; */
+/* font-family: 'PT Sans Narrow', sans-serif; */
 /* commented out the font, ready to be used. */
 body {
   /* text-align: center; */
+  font-family: 'Roboto', sans-serif;
   padding: 0em;
   margin: 0;
   /* padding-bottom: 5rem;  */
@@ -18,8 +18,8 @@ body {
 }
 
 .eventCard {
-  min-width: 30rem;
-  width: 30rem;
+  min-width: 40rem;
+  max-width: 40rem;
 }
 
 .card-img-top {

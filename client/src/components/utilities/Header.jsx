@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { Button } from "react-bootstrap";
 import AuthButton from "../auth/authButton";
 import { Link } from "react-router-dom";
+import {getUserId} from "../../services/user";
 
 export default class Header extends Component {
   constructor(props) {
@@ -15,9 +15,11 @@ export default class Header extends Component {
   // change avatar to have user img
 
   render() {
+    let userId = getUserId();
+    let profileLink = `/users/profile/${userId}`;
     return (
       <Fragment>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-info">
           <a className="navbar-brand" href="#">
             <img src="/images/grouprLogoNoText.png" className="headerImg" />
           </a>
@@ -34,7 +36,7 @@ export default class Header extends Component {
           </button>
 
           <div
-            className="collapse navbar-collapse py-0"
+            className="collapse navbar-collapse py-0 text-muted"
             id="navbarSupportedContent"
           >
             <ul className="navbar-nav mr-auto">
@@ -54,7 +56,7 @@ export default class Header extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="users/profile">
+                <Link className="nav-link" to={profileLink}>
                   Profile
                 </Link>
               </li>
@@ -77,7 +79,7 @@ export default class Header extends Component {
                 placeholder="Search"
                 aria-label="Search"
               />
-              <button className="btn btn-light my-2 my-sm-0" type="submit">
+              <button className="btn btn-dark my-2 my-sm-0" type="submit">
                 Search
               </button>
             </form>
