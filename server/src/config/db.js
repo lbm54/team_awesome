@@ -1,11 +1,19 @@
 import mysql from 'mysql';
 
+// let pool = mysql.createPool({
+//     connectionLimit: 10,
+//     host: 'localhost',
+//     user: 'dbfunapp',
+//     password: 'blahblah',
+//     database: 'meetupprojectdb'
+// });
+
 let pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'dbfunapp',
-    password: 'blahblah',
-    database: 'meetupprojectdb'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
 async function executeQuery(sql, args = []) {
