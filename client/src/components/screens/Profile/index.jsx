@@ -85,50 +85,50 @@ class UserDetailScreen extends Component {
       } else events = <li className="list-group-item">None</li>;
       return (
         <Fragment>
-          <div className="container p-5">
-            <h1>Your Profile:</h1>
-            <div className="eventCard">
+          <div className="container p-5 userBioContainer">
+            <h1 className="welcomeUser">Welcome, {this.state.user.first_name}!</h1>
               <img
-                className="card-img-top rounded"
+                className="userImage rounded"
                 src={this.state.user.profile_picture_link}
                 alt="Card image cap"
               />
+            <div className="eventCard">
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
-                  <h6 className="headerIndent">Username:</h6>
+                  <h6 className="subheading">Username:</h6>
                   {this.state.user.username}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="headerIndent">Bio:</h6>
+                  <h6 className="subheading">Bio:</h6>
                   {this.state.user.bio}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="headerIndent">Name:</h6>
+                  <h6 className="subheading">Name:</h6>
                   {this.state.user.first_name} {this.state.user.middle_initial}{" "}
                   {this.state.user.last_name}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="headerIndent">Telephone:</h6>
+                  <h6 className="subheading">Telephone:</h6>
                   {this.state.user.telephone}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="headerIndent">Email:</h6>
+                  <h6 className="subheading">Email:</h6>
                   {this.state.user.email}
                 </li>
               </ul>
               <div className="card-body">
-                <Link to="/users/edit" className="btn btn-dark">
+                <Link to="/users/edit" className="btn clickable">
                   Edit Profile
                 </Link>
               </div>
             </div>
 
-            <h1>Your RSVPed Events:</h1>
+            <h3 className="eventListingHeader">You've RSVPed to:</h3>
             <div className="row">
               {events}
             </div>
 
-            <h1>Your Groups:</h1>
+            <h3 className="eventListingHeader">Your groups:</h3>
             <div className="row">
               {groups}
             </div>

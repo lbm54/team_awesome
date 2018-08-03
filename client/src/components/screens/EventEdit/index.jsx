@@ -156,9 +156,9 @@ class EditEventScreen extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container eventsDisplayCard">
         <form>
-          <h1>Create an Event</h1>
+          <h1 className="eventHeader">Create an Event</h1>
           <div className="form-group">
             <label htmlFor="name">Name:</label>
             <input
@@ -276,7 +276,7 @@ class EditEventScreen extends Component {
                 id="state"
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="zip">Zip:</label>
               <input
