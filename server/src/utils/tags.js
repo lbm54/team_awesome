@@ -28,11 +28,13 @@ let insertTags = async function(whichTableName, id, tags) {
 
 //whichTableName expects either "events" or "groups"
 let getTags = async function(whichTableName, id) {
-  let whichProcedure = "spGetEventsTags";
-  if (whichTableName === "groups") whichProcedure = "spGetGroupsTags";
+  let sql = `select tags.id, tags.name from tags join events_tags on events_tags.tag_id = tags.id join events on events.id = events_tags.event_id where events.id = ${id};`
+  if (whichTableName === "groups") {
+    sql = `select tags.id, tags.name from tags join groups_tags on groups_tags.tag_id = tags.id join groups on groups.id = groups_tags.group_id where groups_tags.group_id = ${id};`
+  }
 
-  let tagResultSet = await tagTable.callProcedure(whichProcedure, id);
-  return tagResultSet[0];
+  let tagResultSet = await tagTable.select(sql);
+  return tagResultSet;
 }
 
 let deleteJunctionTags = async function(whichTableName, id) {
