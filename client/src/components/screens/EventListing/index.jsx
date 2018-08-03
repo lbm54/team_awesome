@@ -103,7 +103,7 @@ class EventListingScreen extends Component {
     });
 
     return (
-      <div className="container mr-5 center-block">
+      <div className="container center-block">
         <h2>Upcoming Events</h2>
         <div className="row">
           <input
@@ -125,7 +125,7 @@ class EventListingScreen extends Component {
           >
             Search
           </button>
-          <Link to="/events/create" className="btn btn-info ml-2 mt-0">
+          <Link to="/events/create" className="btn clickable ml-2 mt-0">
             Create an Event
           </Link>
         </div>

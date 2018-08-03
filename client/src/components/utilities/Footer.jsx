@@ -10,7 +10,7 @@ export default class Footer extends Component {
     return (
       <Fragment>
         {/* START FOOTER */}
-        <div className="navbar navbar-fixed-bottom text-white bg-info pb-0 mb-0">
+        <div className="navbar footer navbar-fixed-bottom text-white pb-0 mb-0">
           {/* <!-- Footer Links --> */}
           <div className="container text-center text-md-left">
             {/* <!-- Footer links --> */}

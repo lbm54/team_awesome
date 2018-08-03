@@ -333,7 +333,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button className="btn btn-primary" onClick={event => this.handleSubmit(event)}>Submit</button>
+          <button className="btn clickable" onClick={event => this.handleSubmit(event)}>Submit</button>
         </form>
       </div>
     );

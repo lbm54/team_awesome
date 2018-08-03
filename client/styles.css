@@ -12,6 +12,33 @@ body {
   min-height: 71.2vh;
 }
 
+body {
+  background-color: #edf5e1;
+}
+
+.clickable {
+  background-color: #05386b;
+  color: white; 
+}
+
+.hasBeenClicked {
+  background-color: #5cdb95;
+  color: white;
+}
+
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 200px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.navbar {
+  background-color: #379683;
+}
+
 .featuredImage {
   width: 100%;
   height: 500px;
