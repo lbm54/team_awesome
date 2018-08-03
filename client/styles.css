@@ -16,6 +16,16 @@ body {
   background-color: #05386b;
   color: white; 
 }
+.userBioContainer{ 
+  position: relative;
+}
+
+.welcomeUser {
+  color: #05386b;
+  font-family: 'PT Sans Narrow', sans-serif;
+  position: absolute;
+
+}
 
 .hasBeenClicked {
   background-color: #5cdb95;
@@ -30,10 +40,22 @@ body {
   width: 100%;
   overflow: hidden;
   color: white;
+  
 }
 
 .navbar {
   background-color: #379683;
+  padding: 0.5rem 0rem 0.5rem 1rem;
+  margin-bottom: 2rem;
+}
+.eventsDisplayCard {
+  background-color: #05386b;
+  border: solid, black;
+
+}
+.eventHeader {
+  font-family: 'PT Sans Narrow', sans-serif;
+
 }
 
 .btn {
@@ -107,6 +129,10 @@ ul.ui-menu {
   border-radius: 50%;
 }
 
+.userImage {
+  
+}
+
 label {
   /* color: #6b7c93; */
   font-weight: 300;
@@ -121,7 +147,7 @@ button {
   height: 40px;
   line-height: 40px;
   padding: 0 14px;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); */
   color: #fff;
   border-radius: 4px;
   font-size: 15px;
@@ -129,7 +155,7 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.025em;
   background-color: #6772e5;
-  text-decoration: none;
+  /* text-decoration: none; */
   -webkit-transition: all 150ms ease;
   transition: all 150ms ease;
   margin-top: 10px;
@@ -142,25 +168,12 @@ button {
 form {
   margin: 2em 1em;
   padding: 2em;
-  /* background-color: lightgray; */
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
   border-radius: 4px;
 }
 
 .nav-link {
   font-size: 1.5rem;
   color: white !important;
-}
-
-.navbar {
-  padding: 0.5rem 0rem 0.5rem 1rem;
-  margin-bottom: 2rem;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
 }
 
 .form-inline {

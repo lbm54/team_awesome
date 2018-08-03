@@ -85,14 +85,14 @@ class UserDetailScreen extends Component {
       } else events = <li className="list-group-item">None</li>;
       return (
         <Fragment>
-          <div className="container p-5">
-            <h1>Your Profile:</h1>
-            <div className="eventCard">
+          <div className="container p-5 userBioContainer">
+            <h1 className="welcomeUser">Welcome, {this.state.user.first_name}!</h1>
               <img
-                className="card-img-top rounded"
+                className="userImage rounded"
                 src={this.state.user.profile_picture_link}
                 alt="Card image cap"
               />
+            <div className="eventCard">
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
                   <h6 className="headerIndent">Username:</h6>
@@ -117,18 +117,18 @@ class UserDetailScreen extends Component {
                 </li>
               </ul>
               <div className="card-body">
-                <Link to="/users/edit" className="btn btn-dark">
+                <Link to="/users/edit" className="btn clickable">
                   Edit Profile
                 </Link>
               </div>
             </div>
 
-            <h1>Your RSVPed Events:</h1>
+            <h3 className="">Your RSVPed Events:</h3>
             <div className="row">
               {events}
             </div>
 
-            <h1>Your Groups:</h1>
+            <h3 className="">Your Groups:</h3>
             <div className="row">
               {groups}
             </div>

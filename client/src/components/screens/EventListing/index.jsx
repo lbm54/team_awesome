@@ -91,7 +91,7 @@ class EventListingScreen extends Component {
             <p className="card-text">{event.blurb}</p>
             <div className="card-footer bg-light">
               <div className="row justify-content-between">
-                <Link to={link} className="btn btn-dark">
+                <Link to={link} className="btn clickable">
                   More Details
                 </Link>
                 <TagList selectedTags={event.tags} />
@@ -110,13 +110,14 @@ class EventListingScreen extends Component {
             className="form-control thinnerInput mx-3"
             id="myInput"
             type="text"
-            placeholder="Search..."
+            placeholder="See what's going on near you!"
             onChange={e => this.handleSearch(e.target.value)}
           />
           <SelectMenu
             source={["Event Name", "Location (City)", "Tags"]}
             className="form-control thinnerInput"
             id="searchType"
+            placeholder="Select the following"
             callback={this.handleSearchTypeCallback}
           />
           <button
@@ -125,13 +126,16 @@ class EventListingScreen extends Component {
           >
             Search
           </button>
+
           <Link to="/events/create" className="btn clickable ml-2 mt-0">
             Create an Event
           </Link>
         </div>
+
         <div className="row" id="eventsList">
           {eventslist}
         </div>
+
       </div>
     );
   }

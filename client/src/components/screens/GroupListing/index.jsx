@@ -108,7 +108,7 @@ class GroupListingScreen extends Component {
       <div className="container center-block">
         <h2>Groups</h2>
 
-        <div className="row">
+        <div className="row ml-3 mr-3">
 
           <input
             className="form-control thinnerInput mx-3"
@@ -140,7 +140,7 @@ class GroupListingScreen extends Component {
         <div className="row" id="groupsList">
           {groupslist}
         </div>
-        
+
       </div>
     );
   }
