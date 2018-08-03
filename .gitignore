@@ -4,5 +4,9 @@ server/lib
 **/*/ENV_VAR
 ENV_VAR
 **/env/development.js
+<<<<<<< HEAD
 development.js
 client/images
+=======
+development.js
+>>>>>>> 69203191f387f70313cc8b6049cb95484b975061

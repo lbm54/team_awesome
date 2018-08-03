@@ -276,7 +276,6 @@ class EditEventScreen extends Component {
                 id="state"
               />
             </div>
-
             <div className="form-group">
               <label htmlFor="zip">Zip:</label>
               <input

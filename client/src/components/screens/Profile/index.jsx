@@ -85,6 +85,7 @@ class UserDetailScreen extends Component {
       } else events = <li className="list-group-item">None</li>;
       return (
         <Fragment>
+<<<<<<< HEAD
           <div className="container p-5 userBioContainer">
             <h1 className="welcomeUser">Welcome, {this.state.user.first_name}!</h1>
               <img
@@ -104,31 +105,72 @@ class UserDetailScreen extends Component {
                 </li>
                 <li className="list-group-item">
                   <h6 className="subheading">Name:</h6>
+=======
+          <div className="container p-5">
+            <h1>Your Profile:</h1>
+            <div className="eventCard">
+              <img
+                className="card-img-top rounded"
+                src={this.state.user.profile_picture_link}
+                alt="Card image cap"
+              />
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Username:</h6>
+                  {this.state.user.username}
+                </li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Bio:</h6>
+                  {this.state.user.bio}
+                </li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Name:</h6>
+>>>>>>> 69203191f387f70313cc8b6049cb95484b975061
                   {this.state.user.first_name} {this.state.user.middle_initial}{" "}
                   {this.state.user.last_name}
                 </li>
                 <li className="list-group-item">
+<<<<<<< HEAD
                   <h6 className="subheading">Telephone:</h6>
                   {this.state.user.telephone}
                 </li>
                 <li className="list-group-item">
                   <h6 className="subheading">Email:</h6>
+=======
+                  <h6 className="headerIndent">Telephone:</h6>
+                  {this.state.user.telephone}
+                </li>
+                <li className="list-group-item">
+                  <h6 className="headerIndent">Email:</h6>
+>>>>>>> 69203191f387f70313cc8b6049cb95484b975061
                   {this.state.user.email}
                 </li>
               </ul>
               <div className="card-body">
+<<<<<<< HEAD
                 <Link to="/users/edit" className="btn clickable">
+=======
+                <Link to="/users/edit" className="btn btn-dark">
+>>>>>>> 69203191f387f70313cc8b6049cb95484b975061
                   Edit Profile
                 </Link>
               </div>
             </div>
 
+<<<<<<< HEAD
             <h3 className="eventListingHeader">You've RSVPed to:</h3>
+=======
+            <h1>Your RSVPed Events:</h1>
+>>>>>>> 69203191f387f70313cc8b6049cb95484b975061
             <div className="row">
               {events}
             </div>
 
+<<<<<<< HEAD
             <h3 className="eventListingHeader">Your groups:</h3>
+=======
+            <h1>Your Groups:</h1>
+>>>>>>> 69203191f387f70313cc8b6049cb95484b975061
             <div className="row">
               {groups}
             </div>
