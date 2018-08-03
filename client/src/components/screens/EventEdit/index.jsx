@@ -144,6 +144,9 @@ class EditEventScreen extends Component {
       this.setState({name: event.name});
       this.setState({blurb: event.blurb});
       this.setState({details: event.details});
+      // this.setState({thumbnail_image_link: event.thumbnail_image_link});
+      
+
       //etc etc
 
     } catch (err) {

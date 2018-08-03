@@ -89,7 +89,7 @@ class UserDetailScreen extends Component {
             <h1>Your Profile:</h1>
             <div className="eventCard">
               <img
-                className="card-img-top"
+                className="card-img-top rounded"
                 src={this.state.user.profile_picture_link}
                 alt="Card image cap"
               />
@@ -117,7 +117,7 @@ class UserDetailScreen extends Component {
                 </li>
               </ul>
               <div className="card-body">
-                <Link to="/users/edit" className="btn btn-primary">
+                <Link to="/users/edit" className="btn btn-dark">
                   Edit Profile
                 </Link>
               </div>

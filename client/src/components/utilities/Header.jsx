@@ -17,7 +17,7 @@ export default class Header extends Component {
   render() {
     return (
       <Fragment>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-info">
           <a className="navbar-brand" href="#">
             <img src="/images/grouprLogoNoText.png" className="headerImg" />
           </a>
@@ -34,7 +34,7 @@ export default class Header extends Component {
           </button>
 
           <div
-            className="collapse navbar-collapse py-0"
+            className="collapse navbar-collapse py-0 text-muted"
             id="navbarSupportedContent"
           >
             <ul className="navbar-nav mr-auto">
@@ -77,7 +77,7 @@ export default class Header extends Component {
                 placeholder="Search"
                 aria-label="Search"
               />
-              <button className="btn btn-light my-2 my-sm-0" type="submit">
+              <button className="btn btn-dark my-2 my-sm-0" type="submit">
                 Search
               </button>
             </form>
