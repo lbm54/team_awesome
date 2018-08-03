@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import PrivateRoute from "./auth/privateRoute";
 import Logout from "./auth/logout";
 import AuthButton from "./auth/authButton";
+import Message from './message';
 
 //importing the screens
 import EventCreateScreen from "./screens/EventCreate";
@@ -21,8 +22,8 @@ import ProfileScreen from "./screens/Profile";
 import RegisterScreen from "./screens/Register";
 import Header from "./utilities/Header";
 import Footer from "./utilities/Footer";
-import stripeCharge from "./utilities/StripeCharge";
 import {isLoggedIn} from '../services/user';
+import Stripe from './stripe';
 
 class Navigation extends Component {
   render() {
@@ -30,6 +31,7 @@ class Navigation extends Component {
       <Router>
         <Fragment>
           <Header />
+          {/* <Message /> */}
           <Switch>
             <Route exact path="/" component={EventListingScreen} />
             <Route exact path="/events" component={EventListingScreen} />
@@ -43,10 +45,10 @@ class Navigation extends Component {
             <Route path="/groups/detail/:id" component={GroupDetailScreen} />
             <Route path="/groups" component={GroupListingScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
-            <Route path="/users/profile/edit/:id" component={UserEditScreen} />
-            <Route path="/users/profile" component={ProfileScreen} />
+            {/* <Route path="/users/profile/edit/:id" component={UserEditScreen} /> */}
+            <Route path="/users/profile/:id" component={ProfileScreen} />
             <Route path="/users/register" component={RegisterScreen} />
-            <Route path="/cardservices" component={stripeCharge} />
+            <Route path="/stripe" component={Stripe} />
             <Route path="/logout" component={Logout} />
           </Switch>
           <Footer isLoggedIn={isLoggedIn()} />

@@ -2,7 +2,7 @@ import { Router } from "express";
 import Table from "../table";
 import { insertLocation, getLocationId, getLocation } from "../utils/locations";
 import { insertTags, getTags, updateTags } from "../utils/tags";
-import { getComments } from '../utils/comments';
+import { getComments } from "../utils/comments";
 
 let router = Router();
 let groupTable = new Table("Groups");
@@ -40,7 +40,7 @@ router.get("/", async (req, res) => {
  * {id, name}
  * for each new tag, don't pass in an id
  * if you pass in an id, I'm asusming it's an existing tag
- * however, you may want to have the user edit the tag right then, 
+ * however, you may want to have the user edit the tag right then,
  * so if you pass in a tag name along with a tag id, I'll go ahead and update the name
  */
 router.post("/", async (req, res) => {
@@ -85,6 +85,35 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/search", async (req, res) => {
+  try {
+    let searchInput = req.body.searchInput;
+    let searchType = req.body.searchType;
+    let query, groups;
+    if (searchType === "name") {
+      query = { name: searchInput };
+      groups = await groupTable.find(query);
+    } else if (searchType === "city") {
+      let sql = `select groups.* from groups join locations on groups.location_id = locations.id where locations.city like "${searchInput}"`;
+      groups = await groupTable.select(sql);
+    } else {
+      let sql = `select groups.* from groups_tags join groups on groups_tags.group_id = groups.id join tags on groups_tags.tag_id = tags.id where tags.name like "${searchInput}"`;
+      groups = await groupTable.select(sql);
+    }
+    for (var i = 0; i < groups.length; i++) {
+      let tags = await getTags("groups", groups[i].id);
+      let comments = await getComments("group_id", groups[i].id);
+      groups[i]["location"] = await getLocation(groups[i].location_id);
+      groups[i]["tags"] = tags;
+      groups[i]["comments"] = comments;
+    }
+    res.json(groups);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
 /**
  * get one group
  */
@@ -108,7 +137,6 @@ router.get("/:id", async (req, res) => {
  */
 router.put("/:id", async (req, res) => {
   try {
-    
     //if you pass in tags here, I will drop all tags on the events_tags junction table and just
     //add the ones passed in rather than figure out what's changed
     //if you don't want me to do that, then just don't pass in tags[] to this put method

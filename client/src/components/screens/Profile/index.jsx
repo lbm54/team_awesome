@@ -1,77 +1,84 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from "react";
+import * as usersService from "../../../services/users";
+import { Link } from "react-router-dom";
 
-class UserDetail extends Component {
-    constructor(props) {
-        super(props);
-        this.userId = props.match.params.id;
-        this.eventId = props.match.params.id;
+class UserDetailScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.userId = props.match.params.id;
 
-        this.state = {
-            user: [],
-            events: []
-        };
+    this.state = {
+      user: []
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      let user = await usersService.one(this.userId);
+      if (!user.profile_picture_image)
+        user.profile_picture_image = `/images/default_user_image.png`;
+      this.setState({ user });
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    async componentDidMount() {
-        try {
-            let response = await fetch(`/api/users/${this.userId}`);
-            let user = await response.json();
-
-            if (!user.profile_picture_link)
-                user.profile_picture_link = `/images/default_user_image.jpg`;
-
-            this.setState({ user });
-            
-            let eventRes = await fetch(`/api/events/${this.eventId}`); 
-            // do I call event ID?
-            let event = await eventRes.json();
-            this.setState({ events });
-            
-
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    
-    render() {
-        return (
-            <Fragment>
-
-                {/* //username display */}
-
-                <div className="">
-                    <h2> {this.state.userID} </h2>
-                </div>
-                {/* //user bio display */}
-
-                <div className="">
-                    <h3> {this.state.userbio} </h3>
-                </div>
-                {/* //user avatar display */}
-
-                <div className="">
-                    <img src={this.state.user.profile_picture_link} />
-                </div>
-
-                {/* //RSVP'd to these meetups display */}
-                {/* //meetups displayed as cards */}
-                <div className="">
-                    <h4> Your Events </h4>
-                    <div> 
-                    <div class="card text-center" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{this.state.event.title}</h5>
-                    <h6 class="card-subtitle">{this.state.event.host}</h6>
-                    <p class="card-text"> {this.state.event.description}</p>
-                    <Link to="/events/:id">
-                        <button class="btn btn-primary">Details</button>
-                    </Link>
-                </div>
+  render() {
+    if (this.state.user) {
+      let groups, events;
+      if (this.state.user.groups) {
+        groups = this.state.user.groups.map(group => {
+          return <li>{group.name}</li>;
+        });
+      } else groups = <li>None</li>;
+      if (this.state.user.events) {
+        events = this.state.user.events.map(event => {
+          return <li>{event.name}</li>;
+        });
+      } else events = <li>None</li>;
+      return (
+        <Fragment>
+          <div className="container p-5">
+            <h1>Your Profile:</h1>
+            <div className="card">
+              <img
+                className="card-img-top"
+                src={this.state.user.profile_picture_image}
+                alt="Card image cap"
+              />
+              <div className="card-body">
+                <h5 className="card-title">{this.state.user.username}</h5>
+                <p className="card-text">{this.state.user.bio}</p>
+              </div>
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  {this.state.user.first_name} {this.state.user.middle_initial}{" "}
+                  {this.state.user.last_name}
+                </li>
+                <li className="list-group-item">{this.state.user.telephone}</li>
+                <li className="list-group-item">{this.state.user.email}</li>
+              </ul>
+              <div className="card-body">
+                <Link to="/users/edit" className="btn btn-primary">
+                  Edit Profile
+                </Link>
+              </div>
             </div>
-                    </div>
-                        </div>
-            </Fragment>
-        );
 
-    }
+            <h1>Your RSVPed Events:</h1>
+            <div className="card">
+              <ul className="list-group list-group-flush">{groups}</ul>
+            </div>
+
+            <h1>Your Groups:</h1>
+            <div className="card">
+              <ul className="list-group list-group-flush">{events}</ul>
+            </div>
+          </div>
+        </Fragment>
+      );
+    } else return <div>Loading...</div>;
+  }
 }
+
+export default UserDetailScreen;

@@ -1,9 +1,15 @@
 import * as baseService from './base';
 
 let loggedIn = false;
+let user;
 
 function isLoggedIn() {
     return loggedIn;
+}
+
+function getUserId() {
+    if (user) return user.id;
+    else return "-1";
 }
 
 async function checkLogin() {
@@ -12,7 +18,7 @@ async function checkLogin() {
     } else {
         baseService.populateAuthToken();
         try {
-            let user = await me();
+            user = await me();
             loggedIn = true;
             return true;
         } catch (e) {
@@ -48,4 +54,4 @@ function me() {
     return baseService.get('/api/users/me');
 }
 
-export { isLoggedIn, checkLogin, login, logout };
+export { isLoggedIn, checkLogin, login, logout, getUserId };

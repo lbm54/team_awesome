@@ -93,11 +93,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/search/name", async (req, res) => {
+router.post("/search", async (req, res) => {
   try {
     let searchInput = req.body.searchInput;
-    let query = {[searchType]: searchInput};
-    let events = await eventTable.find(query);
+    let searchType = req.body.searchType;
+    let query, events;
+    if (searchType === "name") {
+      query = {"name" : searchInput};
+      events = await eventTable.find(query);
+    } else if (searchType === "city") {
+      let sql = `select events.* from events join locations on events.location_id = locations.id where locations.city like "${searchInput}"`;
+      events = await eventTable.select(sql);
+    } else {
+      let sql = `select events.* from events_tags join events on events_tags.event_id = events.id join tags on events_tags.tag_id = tags.id where tags.name like "${searchInput}"`;
+      events = await eventTable.select(sql);
+    }
     for (var i = 0; i < events.length; i++) {
       let tags = await getTags("events", events[i].id);
       let comments = await getComments("event_id", events[i].id);
@@ -112,6 +122,24 @@ router.post("/search/name", async (req, res) => {
   }
 });
 
+router.post("/search/city", async (req, res) => {
+  try {
+    let searchInput = req.body.searchInput;
+    let query = {"city": searchInput};
+    let events = await eventTable.find(query);
+    for (var i = 0; i < events.length; i++) {
+      let tags = await getTags("events", events[i].id);
+      let comments = await getComments("event_id", events[i].id);
+      events[i]["location"] = await getLocation(events[i].location_id);
+      events[i]["tags"] = tags;
+      events[i]["comments"] = comments;
+    }
+    res.json(events);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
 /**
  * update one event
  */

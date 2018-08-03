@@ -18,8 +18,8 @@ body {
 }
 
 .eventCard {
-  min-width: 30rem;
-  width: 30rem;
+  min-width: 40rem;
+  max-width: 40rem;
 }
 
 .card-img-top {
