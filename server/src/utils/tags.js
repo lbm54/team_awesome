@@ -34,7 +34,7 @@ let getTags = async function(whichTableName, id) {
   } 
 
   let tagResultSet = await tagTable.select(sql);
-  return tagResultSet[0];
+  return tagResultSet;
 }
 
 let deleteJunctionTags = async function(whichTableName, id) {
