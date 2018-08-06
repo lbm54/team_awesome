@@ -63,7 +63,12 @@ body {
   font-family: 'PT Sans Narrow', sans-serif;
   
 }
-
+.headingSpan {
+  background-color: #379683;
+  border-radius: 5px;
+  color: white;
+  padding: 10px;
+}
 .subheading {
   text-transform: uppercase;
   color:darkgrey;
@@ -73,9 +78,12 @@ body {
 }
 
 .welcomeUser {
-  color: #05386b;
+  background-color: #05386b;
+  color: white;
+  border-radius: 5px;
   font-family: 'PT Sans Narrow', sans-serif;
   position: absolute;
+  margin-top:-50px;
   
 }
 
@@ -83,6 +91,7 @@ body {
 
 .userBioContainer{ 
   position: relative;
+  background-color: #edf5e1;
 }
 
 .eventHeader {
@@ -90,10 +99,15 @@ body {
   
 }
 
+.userImageContainer {
+  position: absolute;
+  margin-left: 20px;
+}
+
 /* Footer, Header */
 
 .footer {
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
   height: 200px;
