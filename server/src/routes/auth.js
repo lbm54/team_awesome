@@ -22,10 +22,24 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-router.get('/google/callback',
-            passport.authenticate('google', {
-                    successRedirect : '/',
-                    failureRedirect : '/login'
-            }));
+router.get("/google/callback", (req, res, next) => {
+  passport.authenticate(
+    "google",
+    {
+      successRedirect: "/login/google",
+      failureRedirect: "/"
+    },
+    (err, token, info) => {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(500);
+      } else if (!token) {
+        return res.status(401).json(info);
+      } else {
+        return res.status(201).redirect(`/login/google/${token.token}`);
+      }
+    }
+  )(req, res, next);
+});
 
 export default router;

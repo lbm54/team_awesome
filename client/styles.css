@@ -6,11 +6,12 @@ body {
   padding: 0em;
   margin: 0;
   background-color: #edf5e1;
-  /* padding-bottom: 5rem;  */
+  padding-bottom: 200px; 
 }
 
 .fullScreen {
   min-height: 71.2vh;
+  padding-bottom: 200px;
 }
 
 /* Buttons */

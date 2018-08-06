@@ -3,10 +3,13 @@ import { Strategy as LocalStrategy } from "passport-local";
 import Table from "../table";
 import { encode, decode } from "../utils/tokens";
 import { Strategy as BearerStrategy } from "passport-http-bearer";
-let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+let GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+import { generateHash } from "../utils/security";
 
-const GOOGLE_CLIENT_ID = "429384879280-ntm4h0qfmd4k9n58n8ogjpinmr3jgoap.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID =
+  "429384879280-ntm4h0qfmd4k9n58n8ogjpinmr3jgoap.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = "ewvomrfZrJ1kEOCMLIrqqDHX";
+const GOOGLE_CALLBACK_URL = "http://localhost:3000/api/auth/google/callback";
 
 let usersTable = new Table("users");
 let tokensTable = new Table("Tokens");
@@ -36,6 +39,14 @@ async function configurePassport(app) {
     })
   );
 
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
+
   // Use the GoogleStrategy within Passport.
   //   Strategies in Passport require a `verify` function, which accept
   //   credentials (in this case, an accessToken, refreshToken, and Google
@@ -45,19 +56,37 @@ async function configurePassport(app) {
       {
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/api/auth/google/callback"
+        callbackURL: GOOGLE_CALLBACK_URL
       },
-      function(accessToken, refreshToken, profile, done) {
-        console.log('access token');
-        console.log(accessToken);
-        console.log('refresh token');
-        console.log(refreshToken);
-        console.log('profile');
-        console.log(profile);
-        console.log(done);
-        // User.findOrCreate({ googleId: profile.id }, function(err, user) {
-        //   return done(err, user);
-        // });
+      async function(accessToken, refreshToken, profile, done) {
+        let email = profile.emails[0].value;
+        if (accessToken && email) {
+          let user;
+          try {
+            user = await usersTable.find({ email });
+            if (user && user[0]) {
+              user = user[0];
+            } else {
+              let hash = await generateHash(accessToken);
+              let newUser = {
+                last_name: profile.name.familyName,
+                first_name: profile.name.givenName,
+                email,
+                hash,
+                username: profile.displayName
+              };
+              user = await usersTable.insert(newUser);
+              console.log('created user');
+              console.log(user);
+            }
+            return done(null, {
+              token: encode((await tokensTable.insert({ userid: user.id })).id)
+            });
+          } catch (err) {
+            console.log(err);
+            return done(null, false, { message: "Invalid login" });
+          }
+        }
       }
     )
   );

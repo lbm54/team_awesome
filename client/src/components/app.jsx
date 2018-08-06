@@ -24,6 +24,7 @@ import Header from "./utilities/Header";
 import Footer from "./utilities/Footer";
 import {isLoggedIn} from '../services/user';
 import Stripe from './stripe';
+import Google from './screens/Login/google';
 
 class Navigation extends Component {
   render() {
@@ -35,7 +36,8 @@ class Navigation extends Component {
           <Switch>
             <Route exact path="/" component={EventListingScreen} />
             <Route exact path="/events" component={EventListingScreen} />
-            <Route path="/login" component={LoginScreen} />
+            <Route exact path="/login" component={LoginScreen} />
+            <Route path="/login/google/:token" component={Google} />
             <Route path="/events/detail/:id" component={EventDetailScreen} />
             <PrivateRoute path="/events/edit/:id" component={EventEditScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />

@@ -22,7 +22,6 @@ let getLocationId = async function(name) {
 let getLocation = async function(id) {
     try {
         let result = await locationTable.getOne(id);
-        console.log(result);
         return result;
     } catch (err) {
         throw "This location doesn't exist in the db";
