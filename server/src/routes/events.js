@@ -38,7 +38,6 @@ router.get("/", async (req, res) => {
  */
 router.post("/", async (req, res) => {
   try {
-    console.log(req.body);
     //for the event's location
     let location_id;
     if (req.body.location_id) location_id = req.body.location_id;

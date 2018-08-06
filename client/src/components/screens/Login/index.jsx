@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import * as userService from "../../../services/user";
 import { Redirect } from "react-router-dom";
 import IndeterminateProgress from "../../utilities/indeterminateProgress";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
@@ -65,7 +65,7 @@ class Login extends Component {
 
     return (
       <div className="container">
-      <h2>Login</h2>
+        <h2>Login</h2>
         <form onSubmit={e => this.login(e)}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -91,8 +91,16 @@ class Login extends Component {
             <p>{this.state.feedbackMessage}</p>
           ) : null}
           <input type="submit" value="Login" className="btn clickable" />
-          <Link to="/users/register" className="btn hasBeenClicked ml-3">Register</Link>
+          <Link to="/users/register" className="btn hasBeenClicked ml-3">
+            Register
+          </Link>
         </form>
+        <a href="/api/auth/google">
+          <img
+            src="images/google_signin_buttons/web/2x/btn_google_signin_light_normal_web@2x.png"
+            className="googleSignInButton"
+          />
+        </a>
       </div>
     );
   }

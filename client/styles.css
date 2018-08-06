@@ -24,6 +24,11 @@ body {
   color: white;
 }
 
+.googleSignInButton {
+  width: 250px;
+  height: 65px;
+}
+
 /* .button:hover {
   cursor: pointer;
   transform: translateY(-1px);
