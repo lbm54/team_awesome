@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import PrivateRoute from "./auth/privateRoute";
 import Logout from "./auth/logout";
 import AuthButton from "./auth/authButton";
-import Message from './message';
 
 //importing the screens
 import EventCreateScreen from "./screens/EventCreate";
@@ -22,8 +21,10 @@ import ProfileScreen from "./screens/Profile";
 import RegisterScreen from "./screens/Register";
 import Header from "./utilities/Header";
 import Footer from "./utilities/Footer";
-import {isLoggedIn} from '../services/user';
-import Stripe from './stripe';
+import { isLoggedIn } from "../services/user";
+import Stripe from "./stripe";
+import Google from "./screens/Login/google";
+import {NotificationContainer} from 'react-notifications';
 
 class Navigation extends Component {
   render() {
@@ -31,11 +32,12 @@ class Navigation extends Component {
       <Router>
         <Fragment>
           <Header />
-          {/* <Message /> */}
+          <NotificationContainer />
           <Switch>
             <Route exact path="/" component={EventListingScreen} />
             <Route exact path="/events" component={EventListingScreen} />
-            <Route path="/login" component={LoginScreen} />
+            <Route exact path="/login" component={LoginScreen} />
+            <Route path="/login/google/:token" component={Google} />
             <Route path="/events/detail/:id" component={EventDetailScreen} />
             <PrivateRoute path="/events/edit/:id" component={EventEditScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />

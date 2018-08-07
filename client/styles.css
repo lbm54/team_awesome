@@ -6,11 +6,12 @@ body {
   padding: 0em;
   margin: 0;
   background-color: #edf5e1;
-  /* padding-bottom: 5rem;  */
+  padding-bottom: 200px; 
 }
 
 .fullScreen {
   min-height: 71.2vh;
+  padding-bottom: 200px;
 }
 
 /* Buttons */
@@ -22,6 +23,11 @@ body {
 .hasBeenClicked {
   background-color: #5cdb95;
   color: white;
+}
+
+.googleSignInButton {
+  width: 250px;
+  height: 65px;
 }
 
 /* .button:hover {
@@ -58,7 +64,12 @@ body {
   font-family: 'PT Sans Narrow', sans-serif;
   
 }
-
+.headingSpan {
+  background-color: #379683;
+  border-radius: 5px;
+  color: white;
+  padding: 10px;
+}
 .subheading {
   text-transform: uppercase;
   color:darkgrey;
@@ -68,9 +79,12 @@ body {
 }
 
 .welcomeUser {
-  color: #05386b;
+  background-color: #05386b;
+  color: white;
+  border-radius: 5px;
   font-family: 'PT Sans Narrow', sans-serif;
   position: absolute;
+  margin-top:-50px;
   
 }
 
@@ -78,6 +92,7 @@ body {
 
 .userBioContainer{ 
   position: relative;
+  background-color: #edf5e1;
 }
 
 .eventHeader {
@@ -85,10 +100,15 @@ body {
   
 }
 
+.userImageContainer {
+  position: absolute;
+  margin-left: 20px;
+}
+
 /* Footer, Header */
 
 .footer {
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
   height: 200px;
@@ -164,6 +184,13 @@ body {
 .googleMap {
   width: 1000px;
   height: 1000px;
+}
+
+.googleLists {
+  max-height: 1000px;
+  margin-bottom: 10px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 ul.ui-menu {

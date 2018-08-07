@@ -87,32 +87,34 @@ class UserDetailScreen extends Component {
         <Fragment>
           <div className="container p-5 userBioContainer">
             <h1 className="welcomeUser">Welcome, {this.state.user.first_name}!</h1>
+            <div className="userImageContainer">
               <img
                 className="userImage rounded"
                 src={this.state.user.profile_picture_link}
                 alt="Card image cap"
               />
+              </div>
             <div className="eventCard">
               <ul className="list-group list-group-flush">
                 <li className="list-group-item">
-                  <h6 className="subheading">Username:</h6>
+                  <h5 className="subheading"><span className="headingSpan">Username:</span></h5>
                   {this.state.user.username}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="subheading">Bio:</h6>
+                  <h5 className="subheading"><span className="headingSpan">Bio:</span></h5>
                   {this.state.user.bio}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="subheading">Name:</h6>
+                  <h5 className="subheading"><span className="headingSpan">Name:</span></h5>
                   {this.state.user.first_name} {this.state.user.middle_initial}{" "}
                   {this.state.user.last_name}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="subheading">Telephone:</h6>
+                  <h5 className="subheading"><span className="headingSpan">Telephone:</span></h5>
                   {this.state.user.telephone}
                 </li>
                 <li className="list-group-item">
-                  <h6 className="subheading">Email:</h6>
+                  <h5 className="subheading"><span className="headingSpan">Email:</span></h5>
                   {this.state.user.email}
                 </li>
               </ul>
