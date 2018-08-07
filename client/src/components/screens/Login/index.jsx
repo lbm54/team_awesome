@@ -97,7 +97,7 @@ class Login extends Component {
         </form>
         <a href="/api/auth/google">
           <img
-            src="images/google_signin_buttons/web/2x/btn_google_signin_light_normal_web@2x.png"
+            src="/images/google_signin_buttons/web/2x/btn_google_signin_light_normal_web@2x.png"
             className="googleSignInButton"
           />
         </a>
