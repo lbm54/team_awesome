@@ -54,28 +54,28 @@ class GroupDetailScreen extends Component {
   render() {
     if (this.state.group.name) {
       return (
-        <div className="container p-5">
-          <h1 className="display-4">{this.state.group.name}</h1>
+        <div className="container p-5 eventsListingContainer">
+          <h1 className="display-4 createContainer">{this.state.group.name}</h1>
           <img
             className="display-4 pb-2 featuredImage"
             src={this.state.group.thumbnail_image_link}
           />
-          <h3>Time:</h3>
+          <h3 className="subheading"><span className="headingSpan">Time:</span></h3>
           <p className="lead">
             <strong>From:</strong> {this.state.group.regular_event_start_time}{" "}
             <strong>until</strong> {this.state.group.regular_event_end_time}
           </p>
-          <h3>Location:</h3>
+          <h3 className="subheading"><span className="headingSpan">Location:</span></h3>
           <p className="lead">
             {this.state.group.location.address_line_one}{" "}
             {this.state.group.location.city}, {this.state.group.location.state}{" "}
             {this.state.group.location.zip}
           </p>
           <TagList selectedTags={this.state.group.tags} />
-          <h3 className="mt-3">Details:</h3>
+          <h3 className="mt-3 subheading"><span className="headingSpan">Details:</span></h3>
           <p>{this.state.group.details}</p>
           <button
-            className="btn btn-secondary"
+            className="btn hasBeenClicked"
             onClick={group => this.handleShowComments(group)}
           >
             Show Comments
@@ -87,9 +87,9 @@ class GroupDetailScreen extends Component {
             whatId={this.state.group.id}
           />
           <div className="row mt-5">
-            <button className="btn btn-info mr-3" onClick={(event) => this.handleJoinGroup(event)}>Join This Group!</button>
+            <button className="btn clickable mr-3" onClick={(event) => this.handleJoinGroup(event)}>Join This Group!</button>
             <Link to="/groups">
-              <button className="btn btn-primary">Go back</button>
+              <button className="btn hasBeenClicked">Go back</button>
             </Link>
           </div>
         </div>

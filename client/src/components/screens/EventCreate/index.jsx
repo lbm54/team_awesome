@@ -159,11 +159,11 @@ class EventCreateScreen extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container center-block createContainer">
         <form>
           <h1>Create an Event</h1>
           <div className="form-group">
-            <label htmlFor="name">Name:</label>
+            <label htmlFor="name" className="subheading">Name:</label>
             <input
               value={this.state.name}
               onChange={event => this.handleName(event.target.value)}
@@ -173,7 +173,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="blurb">Blurb:</label>
+            <label htmlFor="blurb" className="subheading">Blurb:</label>
             <input
               value={this.state.blurb}
               onChange={event => this.handleBlurb(event.target.value)}
@@ -183,7 +183,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="details">Details:</label>
+            <label htmlFor="details" className="subheading">Details:</label>
             <textarea
               value={this.state.details}
               cols="30"
@@ -195,7 +195,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="startTime">Start Time: </label>
+            <label htmlFor="startTime" className="subheading">Start Time: </label>
             <DateTimePicker
               className="form-control"
               onChange={this.handleStartTime}
@@ -204,7 +204,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="endTime">End Time: </label>
+            <label htmlFor="endTime" className="subheading">End Time: </label>
             <DateTimePicker
               className="form-control"
               onChange={this.handleEndTime}
@@ -213,8 +213,8 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label className="form-check-label mr-5" htmlFor="coverChargeCheck">
-              Cover Charge?:{" "}
+            <label className="form-check-label mr-5 subheading" htmlFor="coverChargeCheck">
+              Does this event have a cover charge?:{" "}
             </label>
             <input
               value={this.state.hasCoverCharge}
@@ -230,7 +230,7 @@ class EventCreateScreen extends Component {
             style={{ display: "none" }}
             id="coverChargeAmountField"
           >
-            <label htmlFor="cover_charge_amount">Cover Charge Amount:</label>
+            <label htmlFor="cover_charge_amount" className="subheading">Cover Charge Amount:</label>
             <input
               value={this.state.cover_charge_amount}
               onChange={event =>
@@ -243,7 +243,7 @@ class EventCreateScreen extends Component {
 
           {/*************** new location div ***************************/}
           <div className="form-group">
-            <label htmlFor="name">Location Name:</label>
+            <label htmlFor="name" className="subheading">Location Name:</label>
             <input
               value={this.state.location_name}
               onChange={event => this.handleLocationName(event.target.value)}
@@ -253,7 +253,7 @@ class EventCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="addressLineOne">Address Line One:</label>
+            <label htmlFor="addressLineOne" className="subheading">Address Line One:</label>
             <input
               value={this.state.address_line_one}
               onChange={event => this.handleAddressOne(event.target.value)}
@@ -262,7 +262,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="addressLineTwo">Address Line Two:</label>
+            <label htmlFor="addressLineTwo" className="subheading">Address Line Two:</label>
             <input
               value={this.state.address_line_two}
               onChange={event => this.handleAddressTwo(event.target.value)}
@@ -271,7 +271,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="city">City:</label>
+            <label htmlFor="city" className="subheading">City:</label>
             <input
               value={this.state.city}
               onChange={event => this.handleCity(event.target.value)}
@@ -280,7 +280,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="state" className="mr-2">
+            <label htmlFor="state" className="mr-2 subheading">
               State:
             </label>
             <SelectMenu
@@ -292,7 +292,7 @@ class EventCreateScreen extends Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="zip">Zip:</label>
+            <label htmlFor="zip" className="subheading">Zip:</label>
             <input
               value={this.state.zip}
               onChange={event => this.handleZip(event.target.value)}
@@ -310,7 +310,7 @@ class EventCreateScreen extends Component {
 
           {/************** autocomplete tags ***************/}
           <div className="form-group">
-            <label htmlFor="locationName" className="mr-2">
+            <label htmlFor="locationName" className="mr-2 subheading">
               Choose your tags:{" "}
             </label>
             <AutoComplete

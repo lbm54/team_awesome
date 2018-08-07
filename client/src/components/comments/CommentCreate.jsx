@@ -48,7 +48,7 @@ class CommentCreate extends Component {
         </div>
 
         <button
-          className="btn btn-primary"
+          className="btn clickable mt-1"
           onClick={event => this.handleSubmit(event)}
         >
           Add Comment

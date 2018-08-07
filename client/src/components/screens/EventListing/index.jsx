@@ -102,7 +102,7 @@ class EventListingScreen extends Component {
     });
 
     return (
-      <div className="container center-block">
+      <div className="container center-block eventsListingContainer">
         <div className="eventListingHeader">
         <h2 className="ml-3">Upcoming Events</h2>
         </div>
@@ -133,7 +133,7 @@ class EventListingScreen extends Component {
           </Link>
         </div>
 
-        <div className="row" id="eventsList">
+        <div className="row justify-content-center" id="eventsList">
           {eventslist}
         </div>
 

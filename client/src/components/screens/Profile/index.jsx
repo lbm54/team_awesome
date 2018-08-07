@@ -96,26 +96,26 @@ class UserDetailScreen extends Component {
               </div>
             <div className="eventCard">
               <ul className="list-group list-group-flush">
-                <li className="list-group-item">
+                <li className="list-group-item userAbout">
                   <h5 className="subheading"><span className="headingSpan">Username:</span></h5>
-                  {this.state.user.username}
+                  <p className="stateUser">{this.state.user.username}</p>
                 </li>
-                <li className="list-group-item">
+                <li className="list-group-item userAbout">
                   <h5 className="subheading"><span className="headingSpan">Bio:</span></h5>
-                  {this.state.user.bio}
+                  <p className="stateUser">{this.state.user.bio}</p>
                 </li>
-                <li className="list-group-item">
+                <li className="list-group-item userAbout">
                   <h5 className="subheading"><span className="headingSpan">Name:</span></h5>
-                  {this.state.user.first_name} {this.state.user.middle_initial}{" "}
-                  {this.state.user.last_name}
+                  <p className="stateUser">{this.state.user.first_name} {this.state.user.middle_initial}{" "}
+                  {this.state.user.last_name}</p>
                 </li>
-                <li className="list-group-item">
+                <li className="list-group-item userAbout">
                   <h5 className="subheading"><span className="headingSpan">Telephone:</span></h5>
-                  {this.state.user.telephone}
+                  <p className="stateUser">{this.state.user.telephone}</p>
                 </li>
-                <li className="list-group-item">
+                <li className="list-group-item userAbout">
                   <h5 className="subheading"><span className="headingSpan">Email:</span></h5>
-                  {this.state.user.email}
+                  <p className="stateUser">{this.state.user.email}</p>
                 </li>
               </ul>
               <div className="card-body">

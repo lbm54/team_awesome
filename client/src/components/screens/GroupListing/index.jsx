@@ -104,8 +104,8 @@ class GroupListingScreen extends Component {
     });
 
     return (
-      <div className="container center-block">
-        <h2>Groups</h2>
+      <div className="container center-block eventsListingContainer">
+        <h2 className="eventListingHeader">Groups</h2>
 
         <div className="row ml-3 mr-3">
 
@@ -113,7 +113,7 @@ class GroupListingScreen extends Component {
             className="form-control thinnerInput mx-3"
             id="myInput"
             type="text"
-            placeholder="Search..."
+            placeholder="See what's going on near you!"
             onChange={e => this.handleSearch(e.target.value)}
           />
 
@@ -136,7 +136,7 @@ class GroupListingScreen extends Component {
           </Link>
         </div>
 
-        <div className="row" id="groupsList">
+        <div className="row eventsList justify-content-center" id="groupsList">
           {groupslist}
         </div>
 
