@@ -1,9 +1,9 @@
 import Table from '../table';
 let locationTable = new Table('Locations');
 
-let insertLocation = async function(address_line_one, address_line_two, city, state, zip, name) {
+let insertLocation = async function(name, address_line_one, address_line_two, city, state, zip, lat, lng) {
     try {
-        let insertObject = {address_line_one, address_line_two, city, state, zip, name};
+        let insertObject = {name, address_line_one, address_line_two, city, state, zip, lat, lng};
         return (await locationTable.insert(insertObject)).id;
     } catch (err) {
         throw err;

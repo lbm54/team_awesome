@@ -2,7 +2,7 @@ import { Router } from "express";
 import Table from "../table";
 import { insertLocation, getLocationId, getLocation } from "../utils/locations";
 import { insertTags, getTags, updateTags } from "../utils/tags";
-import { getComments } from '../utils/comments';
+import { getComments } from "../utils/comments";
 
 let router = Router();
 let eventTable = new Table("Events");
@@ -39,17 +39,16 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     //for the event's location
-    let location_id;
-    if (req.body.location_id) location_id = req.body.location_id;
-    else {
-      location_id = await insertLocation(
-        req.body.address_line_one,
-        req.body.address_line_two,
-        req.body.city,
-        req.body.state,
-        req.body.zip
-      );
-    }
+    let location_id = await insertLocation(
+      req.body.location_name,
+      req.body.address_line_one,
+      req.body.address_line_two,
+      req.body.city,
+      req.body.state,
+      req.body.zip,
+      req.body.lat,
+      req.body.lng
+    );
 
     //inserting the event into the db
     let insertObject = {
@@ -99,7 +98,7 @@ router.post("/search", async (req, res) => {
     let searchType = req.body.searchType;
     let query, events;
     if (searchType === "name") {
-      query = {"name" : searchInput};
+      query = { name: searchInput };
       events = await eventTable.find(query);
     } else if (searchType === "city") {
       let sql = `select events.* from events join locations on events.location_id = locations.id where locations.city like "${searchInput}"`;
@@ -125,7 +124,7 @@ router.post("/search", async (req, res) => {
 router.post("/search/city", async (req, res) => {
   try {
     let searchInput = req.body.searchInput;
-    let query = {"city": searchInput};
+    let query = { city: searchInput };
     let events = await eventTable.find(query);
     for (var i = 0; i < events.length; i++) {
       let tags = await getTags("events", events[i].id);

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import SelectMenu from "../../selectmenu";
 import TagList from "../../taglist";
-import Message from "../../message";
 import * as groupsService from "../../../services/groups";
 
 class GroupListingScreen extends Component {

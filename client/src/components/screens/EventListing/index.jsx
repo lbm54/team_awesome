@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import SelectMenu from "../../selectmenu";
 import TagList from "../../taglist";
-import Message from "../../message";
 import * as eventsService from "../../../services/events";
 
 class EventListingScreen extends Component {

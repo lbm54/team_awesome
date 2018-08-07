@@ -5,24 +5,25 @@ import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
 import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
+import { giveMePosition } from "../../../services/maps";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
 class EventCreateScreen extends Component {
   constructor(props) {
     super(props);
     this.props = props;
     this.state = {
       start_time: "",
-      showNewDiv: "none",
       end_time: "",
-      location_id: "",
       address_line_one: "",
       address_line_two: "",
+      location_name: "",
       city: "",
       state: "",
       zip: "",
       name: "",
       thumbnail_image_link: "",
       tags: [],
-      locations: [],
       selectedTags: [],
       blurb: "",
       details: "",
@@ -32,7 +33,7 @@ class EventCreateScreen extends Component {
 
     this.handleStartTime = this.handleStartTime.bind(this);
     this.handleEndTime = this.handleEndTime.bind(this);
-    this.handleLocationId = this.handleLocationId.bind(this);
+    this.handleLocationName = this.handleLocationName.bind(this);
     this.handleAddressOne = this.handleAddressOne.bind(this);
     this.handleAddressTwo = this.handleAddressTwo.bind(this);
     this.handleCity = this.handleCity.bind(this);
@@ -52,15 +53,15 @@ class EventCreateScreen extends Component {
   }
 
   handleCoverChargeAmount(value) {
-    this.setState({cover_charge_amount: value})
+    this.setState({ cover_charge_amount: value });
   }
 
   handleEndTime(value) {
     this.setState({ end_time: value });
   }
 
-  handleLocationId(value) {
-    this.setState({ location_id: value.id });
+  handleLocationName(value) {
+    this.setState({ location_name: value });
   }
 
   handleAddressOne(value) {
@@ -109,8 +110,9 @@ class EventCreateScreen extends Component {
     $("#coverChargeAmountField").toggle();
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
+    let position = await giveMePosition(this.state.address_line_one, this.state.city, this.state.state, this.state.zip);
     let object = {
       start_time: this.state.start_time,
       end_time: this.state.end_time,
@@ -119,15 +121,16 @@ class EventCreateScreen extends Component {
       blurb: this.state.blurb,
       tags: this.state.selectedTags,
       thumbnail_image_link: this.state.thumbnail_image_link,
-      has_cover_charge: this.state.has_cover_charge
-    };
-    if (this.state.location_id) {
-      object["location_id"] = this.state.location_id;
-    } else {
-      object["address_line_one"] = this.state.address_line_one;
-      object["address_line_two"] = this.state.address_line_two;
-      object["city"] = this.state.city;
-      object["zip"] = this.state.zip;
+      has_cover_charge: this.state.has_cover_charge,
+      cover_charge_amount: this.state.cover_charge_amount,
+      address_line_one: this.state.address_line_one,
+      address_line_two: this.state.address_line_two,
+      state: this.state.state,
+      city : this.state.city,
+      zip : this.state.zip,
+      location_name: this.state.location_name,
+      lat: position.lat,
+      lng: position.lng
     }
     try {
       fetch("/api/events", {
@@ -135,7 +138,8 @@ class EventCreateScreen extends Component {
         body: JSON.stringify(object),
         headers: new Headers({ "Content-Type": "application/json" })
       });
-      this.props.history.push('/events');
+      this.props.history.push("/events");
+      NotificationManager.success('Event Created');
     } catch (err) {
       console.log(err);
     }
@@ -143,11 +147,6 @@ class EventCreateScreen extends Component {
 
   componentDidMount() {
     try {
-      fetch("/api/locations")
-        .then(response => response.json())
-        .then(locations => {
-          this.setState({ locations });
-        });
       fetch("/api/tags")
         .then(response => response.json())
         .then(tags => {
@@ -160,7 +159,7 @@ class EventCreateScreen extends Component {
 
   render() {
     return (
-      <div className="container mr-5 center-block">
+      <div className="container">
         <form>
           <h1>Create an Event</h1>
           <div className="form-group">
@@ -226,92 +225,80 @@ class EventCreateScreen extends Component {
             />
           </div>
 
-          <div className="form-group" style={{"display" : "none"}} id="coverChargeAmountField">
+          <div
+            className="form-group"
+            style={{ display: "none" }}
+            id="coverChargeAmountField"
+          >
             <label htmlFor="cover_charge_amount">Cover Charge Amount:</label>
             <input
               value={this.state.cover_charge_amount}
-              onChange={event => this.handleCoverChargeAmount(event.target.value)}
+              onChange={event =>
+                this.handleCoverChargeAmount(event.target.value)
+              }
               className="form-control"
               name="cover_charge_amount"
             />
           </div>
 
-          <div className="row">
-            <div className="col">
-              <div className="form-group">
-                <label htmlFor="locationName" className="mr-2">
-                  Choose a location:
-                </label>
-                <AutoComplete
-                  callback={this.handleLocationId}
-                  id="locationsSelect"
-                  source={this.state.locations}
-                />
-              </div>
-            </div>
-            <div className="col mt-0">
-              <button
-                className="btn btn-primary"
-                onClick={e => {
-                  e.preventDefault();
-                  this.setState({ showNewDiv: "block" });
-                }}
-              >
-                New Location
-              </button>
-            </div>
+          {/*************** new location div ***************************/}
+          <div className="form-group">
+            <label htmlFor="name">Location Name:</label>
+            <input
+              value={this.state.location_name}
+              onChange={event => this.handleLocationName(event.target.value)}
+              className="form-control"
+              name="name"
+            />
           </div>
 
-          {/*************** new location div ***************************/}
-          <div style={{ display: this.state.showNewDiv }}>
-            <div className="form-group">
-              <label htmlFor="addressLineOne">Address Line One:</label>
-              <input
-                value={this.state.address_line_one}
-                onChange={event => this.handleAddressOne(event.target.value)}
-                className="form-control"
-                name="addressLineOne"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="addressLineTwo">Address Line Two:</label>
-              <input
-                value={this.state.address_line_two}
-                onChange={event => this.handleAddressTwo(event.target.value)}
-                className="form-control"
-                name="addressLineTwo"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="city">City:</label>
-              <input
-                value={this.state.city}
-                onChange={event => this.handleCity(event.target.value)}
-                className="form-control"
-                name="city"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="state" className="mr-2">
-                State:
-              </label>
-              <SelectMenu
-                value={this.state.state}
-                source={states.getStates()}
-                callback={event => this.handleState(event.target.value)}
-                className="form-control"
-                id="state"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="zip">Zip:</label>
-              <input
-                value={this.state.zip}
-                onChange={event => this.handleZip(event.target.value)}
-                className="form-control"
-                name="zip"
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="addressLineOne">Address Line One:</label>
+            <input
+              value={this.state.address_line_one}
+              onChange={event => this.handleAddressOne(event.target.value)}
+              className="form-control"
+              name="addressLineOne"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="addressLineTwo">Address Line Two:</label>
+            <input
+              value={this.state.address_line_two}
+              onChange={event => this.handleAddressTwo(event.target.value)}
+              className="form-control"
+              name="addressLineTwo"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input
+              value={this.state.city}
+              onChange={event => this.handleCity(event.target.value)}
+              className="form-control"
+              name="city"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state" className="mr-2">
+              State:
+            </label>
+            <SelectMenu
+              value={this.state.state}
+              source={states.getStates()}
+              callback={value => this.handleState(value)}
+              className="form-control"
+              id="state"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="zip">Zip:</label>
+            <input
+              value={this.state.zip}
+              onChange={event => this.handleZip(event.target.value)}
+              className="form-control"
+              name="zip"
+            />
           </div>
 
           {/************** file upload ***************/}
@@ -333,7 +320,12 @@ class EventCreateScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button className="btn clickable" onClick={event => this.handleSubmit(event)}>Submit</button>
+          <button
+            className="btn clickable mt-2"
+            onClick={event => this.handleSubmit(event)}
+          >
+            Submit
+          </button>
         </form>
       </div>
     );

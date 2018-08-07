@@ -186,6 +186,13 @@ body {
   height: 1000px;
 }
 
+.googleLists {
+  max-height: 1000px;
+  margin-bottom: 10px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
 ul.ui-menu {
   max-height: 120px;
 }
