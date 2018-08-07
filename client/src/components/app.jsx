@@ -39,18 +39,18 @@ class Navigation extends Component {
             <Route exact path="/login" component={LoginScreen} />
             <Route path="/login/google/:token" component={Google} />
             <Route path="/events/detail/:id" component={EventDetailScreen} />
-            <PrivateRoute path="/events/edit/:id" component={EventEditScreen} />
+            <PrivateRoute path="/events/edit/:eventId" component={EventEditScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
             <PrivateRoute path="/groups/create" component={GroupCreateScreen} />
             <PrivateRoute path="/events/create" component={EventCreateScreen} />
-            <PrivateRoute path="/groups/edit/:id" component={GroupEditScreen} />
+            <PrivateRoute path="/groups/edit/:groupId" component={GroupEditScreen} />
             <Route path="/groups/detail/:id" component={GroupDetailScreen} />
             <Route path="/groups" component={GroupListingScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
             <PrivateRoute path="/users/profileEdit/:userId" component={ProfileEditScreen} />
             <PrivateRoute exact path="/users/profile" component={ProfileScreen} />
             <Route path="/users/register" component={RegisterScreen} />
-            <Route path="/stripe" component={Stripe} />
+            <Route path="/stripe/:eventId" component={Stripe} />
             <Route path="/logout" component={Logout} />
           </Switch>
           <Footer isLoggedIn={isLoggedIn()} />

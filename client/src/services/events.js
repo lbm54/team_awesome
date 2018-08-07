@@ -30,4 +30,10 @@ function formatEvent(event) {
   return event;
 }
 
-export { all, one, insert, update, destroy, formatEvent };
+function formatTime(time) {
+  time = time.replace("T", " ");
+  time = time.substr(0, 19);
+  return time;
+}
+
+export { all, one, insert, update, destroy, formatEvent,formatTime };

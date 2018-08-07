@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Table from "../table";
-import { insertLocation, getLocationId, getLocation } from "../utils/locations";
+import { insertLocation, getLocationId, getLocation, updateLocation } from "../utils/locations";
 import { insertTags, getTags, updateTags } from "../utils/tags";
 import { getComments } from "../utils/comments";
 
@@ -59,7 +59,8 @@ router.post("/", async (req, res) => {
       details: req.body.details,
       has_cover_charge: req.body.has_cover_charge,
       thumbnail_image_link: req.body.thumbnail_image_link,
-      cover_charge_amount: req.body.cover_charge_amount
+      cover_charge_amount: req.body.cover_charge_amount,
+      host_user_id: req.body.host_user_id
     };
     let id = (await eventTable.insert(insertObject)).id;
 
@@ -146,12 +147,16 @@ router.put("/:id", async (req, res) => {
     //if you pass in tags here, I will drop all tags on the events_tags junction table and just
     //add the ones passed in rather than figure out what's changed
     //if you don't want me to do that, then just don't pass in tags[] to this put method
+    console.log(req.body);
     if (req.body.tags) {
       let tags = req.body.tags;
       await updateTags("events", tags, req.params.id);
       delete req.body.tags;
     }
-
+    if (req.body.location) {
+      updateLocation(req.body.location);
+      delete req.body.location;
+    }
     // not concerned about getting a value back, just waiting on update to finish
     await eventTable.update(req.params.id, req.body);
     res.sendStatus(200);

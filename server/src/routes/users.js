@@ -170,7 +170,6 @@ router.get("/:id", async (req, res) => {
  */
 router.put("/:id", async (req, res) => {
   try {
-    console.log(req.body);
     // not concerned about getting a value back, just waiting on update to finish
     if (req.body.location) {
       updateLocation(req.body.location);

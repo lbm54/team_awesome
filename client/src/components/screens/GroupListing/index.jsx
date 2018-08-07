@@ -68,7 +68,7 @@ class GroupListingScreen extends Component {
     let groupslist = this.state.groups.map((group, index) => {
       let link = `/groups/detail/${group.id}`;
       return (
-        <div className="col card p-3 m-3 eventCard" key={index}>
+        <div className="col card p-3 m-3 eventListCard" key={index}>
           <div className="card-header bg-white">
             <img
               className="card-img-top"
@@ -77,24 +77,26 @@ class GroupListingScreen extends Component {
             />
           </div>
           <div className="card-body">
-            <h3 className="card-title">{group.name}</h3>
-            <h5 className="card-subtitle mb-2">Regular Meeting Time</h5>
-            <h5 className="card-subtitle mb-2">
-              From: {group.regular_event_start_time} until{" "}
-              {group.regular_event_end_time}
-            </h5>
-            <h5>Regular Meeting Location:</h5>
+            <h1 className="card-title">{group.name}</h1>
+            <hr />
+            <h4 className="card-subtitle mb-2">Regular Meeting Time From:</h4>
+            <label>{group.regular_event_start_time}</label>
+            <h4 className="card-subtitle mb-2">Until:</h4>{" "}
+            <label>{group.regular_event_end_time}</label>
+            <h4>Regular Meeting Location:</h4>
             <label>
               {group.location.address_line_one} {group.location.city},{" "}
               {group.location.state} {group.location.zip}
             </label>
-            <h5>Description:</h5>
+            <h4>Description:</h4>
             <p className="card-text">{group.blurb}</p>
             <div className="card-footer bg-white">
-              <div className="row justify-content-between">
+              <div className="row">
                 <Link to={link} className="btn btn-primary">
                   More Details
                 </Link>
+              </div>
+              <div className="row mt-3">
                 <TagList selectedTags={group.tags} />
               </div>
             </div>
@@ -104,22 +106,22 @@ class GroupListingScreen extends Component {
     });
 
     return (
-      <div className="container center-block">
-        <h2>Groups</h2>
+      <div className="container center-block eventsListingContainer">
+        <h2 className="eventListingHeader">Groups</h2>
 
         <div className="row ml-3 mr-3">
-
           <input
             className="form-control thinnerInput mx-3"
             id="myInput"
             type="text"
-            placeholder="Search..."
+            placeholder="See what's going on near you!"
             onChange={e => this.handleSearch(e.target.value)}
           />
           <SelectMenu
             source={["Group Name", "Location (City)", "Tags"]}
             className="form-control thinnerInput"
             id="searchType"
+            placeholder="(Filter)"
             callback={this.handleSearchTypeCallback}
           />
 
@@ -135,10 +137,9 @@ class GroupListingScreen extends Component {
           </Link>
         </div>
 
-        <div className="row" id="groupsList">
+        <div className="row eventsList justify-content-start ml-3" id="groupsList">
           {groupslist}
         </div>
-
       </div>
     );
   }

@@ -5,15 +5,17 @@ import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
 import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
-class EditEventScreen extends Component {
+import { giveMePosition } from "../../../services/maps";
+import { NotificationManager } from "react-notifications";
+import * as eventsService from "../../../services/events";
+
+class EventCreateScreen extends Component {
   constructor(props) {
     super(props);
     this.props = props;
     this.state = {
       start_time: "",
-      showNewDiv: "none",
       end_time: "",
-      location_id: "",
       address_line_one: "",
       address_line_two: "",
       city: "",
@@ -22,15 +24,15 @@ class EditEventScreen extends Component {
       name: "",
       thumbnail_image_link: "",
       tags: [],
-      locations: [],
       selectedTags: [],
       blurb: "",
-      details: ""
+      details: "",
+      has_cover_charge: 0,
+      cover_charge_amount: ""
     };
 
     this.handleStartTime = this.handleStartTime.bind(this);
     this.handleEndTime = this.handleEndTime.bind(this);
-    this.handleLocationId = this.handleLocationId.bind(this);
     this.handleAddressOne = this.handleAddressOne.bind(this);
     this.handleAddressTwo = this.handleAddressTwo.bind(this);
     this.handleCity = this.handleCity.bind(this);
@@ -41,18 +43,20 @@ class EditEventScreen extends Component {
     this.handleTags = this.handleTags.bind(this);
     this.handleBlurb = this.handleBlurb.bind(this);
     this.handleDetails = this.handleDetails.bind(this);
+    this.handleHasCoverCharge = this.handleHasCoverCharge.bind(this);
+    this.handleCoverChargeAmount = this.handleCoverChargeAmount.bind(this);
   }
 
   handleStartTime(value) {
     this.setState({ start_time: value });
   }
 
-  handleEndTime(value) {
-    this.setState({ end_time: value });
+  handleCoverChargeAmount(value) {
+    this.setState({ cover_charge_amount: value });
   }
 
-  handleLocationId(value) {
-    this.setState({ location_id: value.id });
+  handleEndTime(value) {
+    this.setState({ end_time: value });
   }
 
   handleAddressOne(value) {
@@ -89,15 +93,36 @@ class EditEventScreen extends Component {
 
   handleThumbnailImageLink(value) {
     this.setState({ thumbnail_image_link: value });
-    console.log(value);
   }
 
   handleTags(value) {
     this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
   }
 
-  handleSubmit(event) {
+  handleHasCoverCharge(value) {
+    let val = this.state.has_cover_charge;
+    this.setState({ has_cover_charge: !(val || val) });
+    $("#coverChargeAmountField").toggle();
+  }
+
+  async handleSubmit(event) {
     event.preventDefault();
+    let position = await giveMePosition(
+      this.state.address_line_one,
+      this.state.city,
+      this.state.state,
+      this.state.zip
+    );
+    let location = {
+      address_line_one: this.state.address_line_one,
+      address_line_two: this.state.address_line_two,
+      state: this.state.state,
+      city: this.state.city,
+      zip: this.state.zip,
+      lat: position.lat,
+      lng: position.lng
+    }
+    console.log(location);
     let object = {
       start_time: this.state.start_time,
       end_time: this.state.end_time,
@@ -105,50 +130,54 @@ class EditEventScreen extends Component {
       details: this.state.details,
       blurb: this.state.blurb,
       tags: this.state.selectedTags,
-      thumbnail_image_link: this.state.thumbnail_image_link
+      thumbnail_image_link: this.state.thumbnail_image_link,
+      has_cover_charge: this.state.has_cover_charge,
+      cover_charge_amount: this.state.cover_charge_amount,
+      location
     };
-    if (this.state.location_id) {
-      object["location_id"] = this.state.location_id;
-    } else {
-      object["address_line_one"] = this.state.address_line_one;
-      object["address_line_two"] = this.state.address_line_two;
-      object["city"] = this.state.city;
-      object["zip"] = this.state.zip;
+    try {
+      fetch(`/api/events/${this.eventId}`, {
+        method: "PUT",
+        body: JSON.stringify(object),
+        headers: new Headers({ "Content-Type": "application/json" })
+      });
+      this.props.history.push("/events");
+      NotificationManager.success("Event Edited");
+    } catch (err) {
+      NotificationManager.error("Event Not Edited");
+      console.log(err);
     }
-    fetch("/api/events/" + this.props.match.params.id, {
-      method: "PUT",
-      body: JSON.stringify(object),
-      headers: new Headers({ "Content-Type": "application/json" })
-    });
   }
 
   async componentDidMount() {
     try {
-      fetch("/api/locations")
-        .then(response => response.json())
-        .then(locations => {
-          this.setState({ locations });
-        });
       fetch("/api/tags")
         .then(response => response.json())
         .then(tags => {
           this.setState({ tags });
         });
-      let eventId = this.props.match.params.id;
-      let response = await fetch(`/api/events/${eventId}`);
-      let event = await response.json();
 
-      // this.setState({start_time: event.start_time});
-      // this.setState({end_time: event.end_time});
-      // this.setState({tags: event.tags});
-      this.setState({name: event.name});
-      this.setState({blurb: event.blurb});
-      this.setState({details: event.details});
-      // this.setState({thumbnail_image_link: event.thumbnail_image_link});
-      
-
-      //etc etc
-
+      this.eventId = this.props.match.params.eventId;
+      let event = await eventsService.one(this.eventId);
+      if (event.has_cover_charge) {
+        $("#coverChargeCheckbox").prop('checked', true);
+      }
+      this.setState({
+        start_time: eventsService.formatTime(event.start_time),
+        end_time: eventsService.formatTime(event.end_time),
+        address_line_one: event.location.address_line_one,
+        address_line_two: event.location.address_line_two,
+        city: event.location.city,
+        state: event.location.state,
+        zip: event.location.zip,
+        name: event.name,
+        thumbnail_image_link: event.thumbnail_image_link,
+        selectedTags: event.tags,
+        blurb: event.blurb,
+        details: event.details,
+        has_cover_charge: event.has_cover_charge === 1 ? true : false,
+        cover_charge_amount: event.cover_charge_amount
+      });
     } catch (err) {
       console.log(err);
     }
@@ -156,11 +185,13 @@ class EditEventScreen extends Component {
 
   render() {
     return (
-      <div className="container eventsDisplayCard">
+      <div className="container">
         <form>
-          <h1 className="eventHeader">Create an Event</h1>
+          <h1>Create an Event</h1>
           <div className="form-group">
-            <label htmlFor="name">Name:</label>
+            <label htmlFor="name" className="subheading">
+              Name:
+            </label>
             <input
               value={this.state.name}
               onChange={event => this.handleName(event.target.value)}
@@ -170,7 +201,9 @@ class EditEventScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Blurb:</label>
+            <label htmlFor="blurb" className="subheading">
+              Blurb:
+            </label>
             <input
               value={this.state.blurb}
               onChange={event => this.handleBlurb(event.target.value)}
@@ -180,7 +213,9 @@ class EditEventScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Details:</label>
+            <label htmlFor="details" className="subheading">
+              Details:
+            </label>
             <textarea
               value={this.state.details}
               cols="30"
@@ -192,111 +227,160 @@ class EditEventScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="startTime">Start Time: </label>
+            <label htmlFor="startTime" className="subheading">
+              Start Time:{" "}
+            </label>
             <DateTimePicker
               className="form-control"
+              value={this.state.start_time}
               onChange={this.handleStartTime}
               name="startTime"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="endTime">End Time: </label>
+            <label htmlFor="endTime" className="subheading">
+              End Time:{" "}
+            </label>
             <DateTimePicker
               className="form-control"
+              value={this.state.end_time}
               onChange={this.handleEndTime}
               name="endTime"
             />
           </div>
 
-          <div className="row">
-            <div className="col">
-              <div className="form-group">
-                <label htmlFor="locationName" className="mr-2">
-                  Choose a location:
-                </label>
-                <AutoComplete
-                  callback={this.handleLocationId}
-                  id="locationsSelect"
-                  source={this.state.locations}
-                />
-              </div>
-            </div>
-            <div className="col mt-0">
-              <button
-                className="btn clickable"
-                onClick={e => {
-                  e.preventDefault();
-                  this.setState({ showNewDiv: "block" });
-                }}
-              >
-                New Location
-              </button>
-            </div>
+          <div className="form-group">
+            <label
+              className="form-check-label mr-5 subheading"
+              htmlFor="coverChargeCheck"
+            >
+              Cover charge?:{" "}
+            </label>
+            <input
+              value={this.state.has_cover_charge}
+              onChange={event => this.handleHasCoverCharge(event.target.value)}
+              className="form-check-input"
+              name="coverChargeCheck"
+              type="checkbox"
+              id="coverChargeCheckbox"
+            />
+          </div>
+
+          <div
+            className="form-group"
+            style={{ display: "none" }}
+            id="coverChargeAmountField"
+          >
+            <label htmlFor="cover_charge_amount" className="subheading">
+              Cover Charge Amount:
+            </label>
+            <input
+              value={this.state.cover_charge_amount}
+              onChange={event =>
+                this.handleCoverChargeAmount(event.target.value)
+              }
+              className="form-control"
+              name="cover_charge_amount"
+            />
           </div>
 
           {/*************** new location div ***************************/}
-          <div style={{ display: this.state.showNewDiv }}>
-            <div className="form-group">
-              <label htmlFor="addressLineOne">Address Line One:</label>
-              <input
-                value={this.state.address_line_one}
-                onChange={event => this.handleAddressOne(event.target.value)}
-                className="form-control"
-                name="addressLineOne"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="addressLineTwo">Address Line Two:</label>
-              <input
-                value={this.state.address_line_two}
-                onChange={event => this.handleAddressTwo(event.target.value)}
-                className="form-control"
-                name="addressLineTwo"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="city">City:</label>
-              <input
-                value={this.state.city}
-                onChange={event => this.handleCity(event.target.value)}
-                className="form-control"
-                name="city"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="state" className="mr-2">
-                State:
-              </label>
-              <SelectMenu
-                value={this.state.state}
-                source={states.getStates()}
-                callback={event => this.handleState(event.target.value)}
-                className="form-control"
-                id="state"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="zip">Zip:</label>
-              <input
-                value={this.state.zip}
-                onChange={event => this.handleZip(event.target.value)}
-                className="form-control"
-                name="zip"
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="addressLineOne" className="subheading">
+              Address Line One:
+            </label>
+            <input
+              value={this.state.address_line_one}
+              onChange={event => this.handleAddressOne(event.target.value)}
+              className="form-control"
+              name="addressLineOne"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="addressLineTwo" className="subheading">
+              Address Line Two:
+            </label>
+            <input
+              value={this.state.address_line_two}
+              onChange={event => this.handleAddressTwo(event.target.value)}
+              className="form-control"
+              name="addressLineTwo"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city" className="subheading">
+              City:
+            </label>
+            <input
+              value={this.state.city}
+              onChange={event => this.handleCity(event.target.value)}
+              className="form-control"
+              name="city"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state" className="mr-2 subheading">
+              State:
+            </label>
+            <SelectMenu
+              value={this.state.state}
+              source={states.getStates()}
+              callback={value => this.handleState(value)}
+              className="form-control"
+              id="stateEvent"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="zip" className="subheading">
+              Zip:
+            </label>
+            <input
+              value={this.state.zip}
+              onChange={event => this.handleZip(event.target.value)}
+              className="form-control"
+              name="zip"
+            />
           </div>
 
           {/************** file upload ***************/}
-          <h5>Upload event image</h5>
-          <FileUpload
-            label="Upload Event Thumbnail"
-            callback={this.handleThumbnailImageLink}
-          />
+          <div className="form-group">
+            <label htmlFor="thumbnailImageLink">
+              Your thumbnail image link:
+            </label>
+            <input
+              value={this.state.thumbnail_image_link}
+              disabled
+              onChange={event =>
+                this.handleThumbnailImageLink(event.target.value)
+              }
+              className="form-control"
+              name="thumbnailImageLink"
+            />
+          </div>
+          <div className="form-group">
+            <button
+              className="btn btn-info"
+              onClick={e => {
+                e.preventDefault();
+                $("#thumbnailImageDiv").toggle();
+              }}
+            >
+              Change Thumbnail Image
+            </button>
+          </div>
+
+          <div id="thumbnailImageDiv" style={{ display: "none" }}>
+            <h5>Upload Group image</h5>
+            <FileUpload
+              label="Upload Group Thumbnail"
+              callback={this.handleThumbnailImageLink}
+            />
+          </div>
 
           {/************** autocomplete tags ***************/}
           <div className="form-group">
-            <label htmlFor="locationName" className="mr-2">
+            <label htmlFor="locationName" className="mr-2 subheading">
               Choose your tags:{" "}
             </label>
             <AutoComplete
@@ -306,11 +390,16 @@ class EditEventScreen extends Component {
             />
           </div>
           <TagList selectedTags={this.state.selectedTags} />
-          <button onClick={event => this.handleSubmit(event)}>Submit</button>
+          <button
+            className="btn clickable mt-2"
+            onClick={event => this.handleSubmit(event)}
+          >
+            Submit
+          </button>
         </form>
       </div>
     );
   }
 }
 
-export default EditEventScreen;
+export default EventCreateScreen;

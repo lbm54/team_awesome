@@ -29,7 +29,7 @@ class SelectMenu extends Component {
     ));
     return (
       <select className={this.props.className} id={this.props.id}>
-        <option />
+        <option>{this.props.placeholder}</option>
         {options}
       </select>
     );

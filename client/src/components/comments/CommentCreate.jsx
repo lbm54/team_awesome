@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import * as commentsService from "../../services/comments";
-import {me} from "../../services/user";
+import { me } from "../../services/user";
+import { NotificationManager } from "react-notifications";
 
 class CommentCreate extends Component {
   constructor(props) {
@@ -16,18 +17,25 @@ class CommentCreate extends Component {
       let key = "group_id";
       if (props.what === "events") {
         key = "event_id";
-      } 
+      }
       let user = await me();
       let user_id = user.id;
       let object = {
         comment: this.state.comment,
         [key]: this.props.whatId,
         user_id: user_id
-      }
+      };
       try {
-        let comment = await commentsService.insert(object);
-        window.location.href = `/${this.props.what}/detail/${this.props.whatId}`;
-      } catch(err) {
+        let commentRaw = await fetch("/api/comments", {
+          method: "POST",
+          body: JSON.stringify(object),
+          headers: new Headers({ "Content-Type": "application/json" })
+        });
+        let comment = await commentRaw.json();
+        NotificationManager.success("Added Comment");
+        window.location.href = "../";
+      } catch (err) {
+        NotificationManager.error("Failed to Add Comment");
         console.log(err);
       }
     };
@@ -48,7 +56,7 @@ class CommentCreate extends Component {
         </div>
 
         <button
-          className="btn btn-primary"
+          className="btn clickable mt-1"
           onClick={event => this.handleSubmit(event)}
         >
           Add Comment

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Table from "../table";
-import { insertLocation, getLocationId, getLocation } from "../utils/locations";
+import { insertLocation, getLocation, updateLocation } from "../utils/locations";
 import { insertTags, getTags, updateTags } from "../utils/tags";
 import { getComments } from "../utils/comments";
 
@@ -147,7 +147,10 @@ router.put("/:id", async (req, res) => {
       await updateTags("groups", tags, req.params.id);
       delete req.body.tags;
     }
-
+    if (req.body.location) {
+      updateLocation(req.body.location);
+      delete req.body.location;
+    }
     // not concerned about getting a value back, just waiting on update to finish
     await groupTable.update(req.params.id, req.body);
 

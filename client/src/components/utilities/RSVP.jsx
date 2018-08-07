@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { sendRSVP } from "../../services/RSVP";
+import { sendRSVP, addToEvent } from "../../services/RSVP";
 import RSVPModal from "./rsvpmodal";
 import {me} from '../../services/user';
 
@@ -22,6 +22,7 @@ export default class RSVP extends Component {
         let user = await me();
         if (user) {
           await sendRSVP(user.username, user.email, `${user.username} RSVPed to this event`);
+          await addToEvent(user.id, this.props.event.id);
           this.setState({ rsvped: true });
         }
       } catch (err) {
@@ -48,7 +49,7 @@ export default class RSVP extends Component {
           >
             RSVP to this event!
           </button>
-          <RSVPModal show={this.state.showModal} />
+          <RSVPModal show={this.state.showModal} eventId={this.props.event.id} />
         </Fragment>
       );
   }

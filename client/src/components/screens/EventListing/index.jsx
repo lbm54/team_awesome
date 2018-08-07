@@ -47,8 +47,6 @@ class EventListingScreen extends Component {
       });
       this.setState({ events: events });
     };
-
-    
   }
 
   async componentDidMount() {
@@ -68,7 +66,7 @@ class EventListingScreen extends Component {
     let eventslist = this.state.events.map((event, index) => {
       let link = `/events/detail/${event.id}`;
       return (
-        <div className="col card p-3 m-3 eventCard" key={index}>
+        <div className="col card p-3 m-3 eventListCard" key={index}>
           <div className="card-header">
             <img
               className="card-img-top"
@@ -78,9 +76,10 @@ class EventListingScreen extends Component {
           </div>
           <div className="card-body">
             <h3 className="card-title">{event.name}</h3>
-            <h5 className="card-subtitle mb-2">
-              From: {event.start_time} until {event.end_time}
-            </h5>
+            <h5 className="card-subtitle mb-2">From:</h5>{" "}
+            <label>{event.start_time}</label>
+            <h5 className="card-subtitle mb-2">Until:</h5>{" "}
+            <label>{event.end_time}</label>
             <h5>Location:</h5>
             <label>
               {event.location.address_line_one} {event.location.city},{" "}
@@ -89,10 +88,12 @@ class EventListingScreen extends Component {
             <h5>Description:</h5>
             <p className="card-text">{event.blurb}</p>
             <div className="card-footer bg-light">
-              <div className="row justify-content-between">
+              <div className="row">
                 <Link to={link} className="btn clickable">
                   More Details
                 </Link>
+              </div>
+              <div className="row mt-3">
                 <TagList selectedTags={event.tags} />
               </div>
             </div>
@@ -102,10 +103,11 @@ class EventListingScreen extends Component {
     });
 
     return (
-      <div className="container center-block">
+      <div className="container center-block eventsListingContainer">
         <div className="eventListingHeader">
-        <h2 className="ml-3">Upcoming Events</h2>
+          <h1 className="ml-3">Upcoming Events</h1>
         </div>
+        <hr />
         <div className="row">
           <input
             className="form-control thinnerInput mx-3"
@@ -118,7 +120,7 @@ class EventListingScreen extends Component {
             source={["Event Name", "Location (City)", "Tags"]}
             className="form-control thinnerInput"
             id="searchType"
-            placeholder="Select the following"
+            placeholder="(Filter)"
             callback={this.handleSearchTypeCallback}
           />
           <button
@@ -133,10 +135,9 @@ class EventListingScreen extends Component {
           </Link>
         </div>
 
-        <div className="row" id="eventsList">
+        <div className="row justify-content-start ml-3" id="eventsList">
           {eventslist}
         </div>
-
       </div>
     );
   }

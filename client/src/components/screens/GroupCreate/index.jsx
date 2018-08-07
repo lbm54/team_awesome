@@ -163,11 +163,11 @@ class GroupCreateScreen extends Component {
 
   render() {
     return (
-      <div className="container center-block">
+      <div className="container">
         <form>
-          <h1>Create a Group</h1>
+          <h1 className="eventListingHeader">Create a Group</h1>
           <div className="form-group">
-            <label htmlFor="name">Name:</label>
+            <label htmlFor="name" className="subheading">Name:</label>
             <input
               value={this.state.name}
               type="text"
@@ -178,7 +178,7 @@ class GroupCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Blurb:</label>
+            <label htmlFor="name" className="subheading">Blurb:</label>
             <input
               value={this.state.blurb}
               type="text"
@@ -189,11 +189,12 @@ class GroupCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Details:</label>
+            <label htmlFor="name" className="subheading">Details:</label>
             <textarea
               value={this.state.details}
               cols="30"
               rows="10"
+              resize="none"
               onChange={event => this.handleDetails(event.target.value)}
               className="form-control"
               name="details"
@@ -201,7 +202,7 @@ class GroupCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="startTime">Regular Event Start Time: </label>
+            <label htmlFor="startTime" className="subheading">Regular Event Start Time: </label>
             <input
               value={this.state.regular_event_start_time}
               type="text"
@@ -215,7 +216,7 @@ class GroupCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="endTime">Regular Event End Time: </label>
+            <label htmlFor="endTime" className="subheading">Regular Event End Time: </label>
             <input
               value={this.state.regular_event_end_time}
               type="text"
@@ -229,7 +230,7 @@ class GroupCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="state" className="mr-2">
+            <label htmlFor="state" className="mr-2 subheading">
               Regular Event Day of Week:
             </label>
             <SelectMenu
@@ -323,7 +324,7 @@ class GroupCreateScreen extends Component {
           </div>
           <TagList selectedTags={this.state.selectedTags} />
           <button
-            className="btn btn-primary mt-2"
+            className="btn clickable"
             onClick={event => this.handleSubmit(event)}
           >
             Submit

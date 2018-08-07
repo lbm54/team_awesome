@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { injectStripe } from "react-stripe-elements";
 import { postCharge } from "../services/stripeService";
 import CardSection from "./cardSection";
+import RSVP from "../components/utilities/RSVP";
+import {me} from '../services/user';
+import { NotificationManager } from "react-notifications";
+import {sendRSVP, addToEvent} from '../services/RSVP';
 
 class CheckoutForm extends Component {
   constructor(props) {
@@ -19,11 +23,33 @@ class CheckoutForm extends Component {
       let token = await this.props.stripe.createToken({
         name: this.state.customerName
       });
-      await postCharge({ id: token.token.id, amount: 10 }); //10 is hard coded but you will need an input form
-      console.log(this.props);
-      window.location.href = '/events';
+      await postCharge({ id: token.token.id, amount: parseInt(this.props.event.cover_charge_amount) }); //10 is hard coded but you will need an input form
+      NotificationManager.success("Successfully Paid");
+      $("#rsvp").toggle();
     } catch (e) {
+      NotificationManager.error("Failed to Pay");
       console.log(e);
+    }
+  }
+
+  async handleRSVP(e) {
+    e.preventDefault();
+
+    try {
+      let user = await me();
+      if (user) {
+        await sendRSVP(
+          user.username,
+          user.email,
+          `${user.username} RSVPed to this event`
+        );
+        await addToEvent(user.id, this.props.event.id);
+        NotificationManager.success("Successfully RSVPd");
+        window.location = "/events";
+      }
+    } catch (err) {
+      NotificationManager.error("Failed to RSVP");
+      console.log(err);
     }
   }
 
@@ -45,9 +71,10 @@ class CheckoutForm extends Component {
               id="name"
             />
             <CardSection />
-            <h4>Amount is: $10</h4>
+            <h4>Amount is: {this.props.event.cover_charge_amount}</h4>
             <button className="btn btn-primary">SUBMIT</button>
           </div>
+          <button style={{display: "none"}} id="rsvp" className="btn btn-info" onClick={(e) => this.handleRSVP(e)}>RSVP</button>
         </form>
       </div>
     );

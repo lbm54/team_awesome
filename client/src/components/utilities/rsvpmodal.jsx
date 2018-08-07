@@ -24,6 +24,7 @@ export default class RSVPModal extends React.Component {
   }
 
   render() {
+    let stripeLink = `/stripe/${this.props.eventId}`
     return (
       <Modal show={this.state.show} animation={false} onHide={this.handleClose}>
         <Modal.Body>
@@ -31,7 +32,7 @@ export default class RSVPModal extends React.Component {
           <p>Would you like to go ahead and pay now?</p>
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/stripe">
+          <Link to={stripeLink}>
             <Button bsStyle="info">Pay</Button>
           </Link>
           <Button onClick={this.handleClose}>Close</Button>

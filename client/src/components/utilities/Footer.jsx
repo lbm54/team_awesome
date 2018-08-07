@@ -17,7 +17,7 @@ export default class Footer extends Component {
             <div className="row text-center text-md-left">
               {/* <!-- Grid column --> */}
               <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h6 className="subheading mb-4">Groupr</h6>
+                <h6 className="subheading">Groupr</h6>
                 <p>
                   The final project of Team: Awesome Team. We hope you enjoyed
                   this demo. Signed: Lee, Kimani, and Warryn.
@@ -37,7 +37,7 @@ export default class Footer extends Component {
 
               {/* <!-- Grid column --> */}
               <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-                <h6 className="subheading mb-4">
+                <h6 className="subheading">
                   Useful links
                 </h6>
                 <p className="mb-0 pb-0">
@@ -62,25 +62,17 @@ export default class Footer extends Component {
 
               {/* <!-- Grid column --> */}
               <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h6 className="subheading mb-4">
+                <h6 className="subheading">
                   Contact
                 </h6>
                 <p className="mb-0 pb-0">Birmingham, Alabama 35216</p>
                 <p className="mb-0 pb-0">teamawesome@gmail.com</p>
                 <p className="mb-0 pb-0">205-888-8888</p>
+                <p className="mb-0 pb-0"> © 2018 Copyright: Team Awesome</p>
               </div>
               {/* <!-- Grid column --> */}
             </div>
             {/* <!-- Footer links --> */}
-
-            {/* <!-- Grid row --> */}
-            <div className="row mt-0 d-flex">
-              {/* <!--Copyright--> */}
-              <p className="copyright subheading">
-                © 2018 Copyright: Team Awesome
-              </p>
-            </div>
-            {/* <!-- Grid row --> */}
           </div>
           {/* <!-- Footer Links --> */}
         </div>

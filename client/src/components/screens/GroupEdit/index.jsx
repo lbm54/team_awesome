@@ -3,362 +3,392 @@ import DateTimePicker from "../../datetimepicker";
 import AutoComplete from "../../autocomplete";
 import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
-import states from '../../../services/states';
-import SelectMenu from '../../selectmenu';
+import states from "../../../services/states";
+import SelectMenu from "../../selectmenu";
+import { giveMePosition } from "../../../services/maps";
+import { NotificationManager } from "react-notifications";
+import { me } from "../../../services/user";
+import * as groupsService from "../../../services/groups";
 
 class GroupCreateScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            regular_event_start_time: "",
-            regular_event_end_time: "",
-            regular_event_day_of_week: "",
-            name: "",
-            host_user_id: "",
-            location_id: "",
-            address_line_one: "",
-            address_line_two: "",
-            city: "",
-            state: "",
-            zip: "",
-            thumbnail_image_link: "",
-            tags: [],
-            selectedTags: [],
-            blurb: "",
-            details: "",
-            showNewDiv: "none",
-            selectedTags: [],
-            locations: [],
+  constructor(props) {
+    super(props);
+    this.state = {
+      regular_event_start_time: "",
+      regular_event_end_time: "",
+      regular_event_day_of_week: "",
+      name: "",
+      host_user_id: "",
+      address_line_one: "",
+      address_line_two: "",
+      city: "",
+      state: "",
+      zip: "",
+      thumbnail_image_link: "",
+      blurb: "",
+      details: "",
+      selectedTags: [],
+      tags: []
+    };
 
-        };
+    this.handleRegularEventStartTime = this.handleRegularEventStartTime.bind(
+      this
+    );
+    this.handleRegularEventEndTime = this.handleRegularEventEndTime.bind(this);
+    this.handleRegularEventDayOfWeek = this.handleRegularEventDayOfWeek.bind(
+      this
+    );
+    this.handleAddressOne = this.handleAddressOne.bind(this);
+    this.handleAddressTwo = this.handleAddressTwo.bind(this);
+    this.handleCity = this.handleCity.bind(this);
+    this.handleState = this.handleState.bind(this);
+    this.handleZip = this.handleZip.bind(this);
+    this.handleName = this.handleName.bind(this);
+    this.handleThumbnailImageLink = this.handleThumbnailImageLink.bind(this);
+    this.handleTags = this.handleTags.bind(this);
+    this.handleBlurb = this.handleBlurb.bind(this);
+    this.handleDetails = this.handleDetails.bind(this);
+  }
 
-        this.handleRegularEventStartTime = this.handleRegularEventStartTime.bind(this);
-        this.handleRegularEventEndTime = this.handleRegularEventEndTime.bind(this);
-        this.handleRegularEventDayOfWeek = this.handleRegularEventDayOfWeek.bind(this);
-        this.handleLocationId = this.handleLocationId.bind(this);
-        this.handleAddressOne = this.handleAddressOne.bind(this);
-        this.handleAddressTwo = this.handleAddressTwo.bind(this);
-        this.handleCity = this.handleCity.bind(this);
-        this.handleState = this.handleState.bind(this);
-        this.handleZip = this.handleZip.bind(this);
-        this.handleName = this.handleName.bind(this);
-        this.handleThumbnailImageLink = this.handleThumbnailImageLink.bind(this);
-        this.handleTags = this.handleTags.bind(this);
-        this.handleBlurb = this.handleBlurb.bind(this);
-        this.handleDetails = this.handleDetails.bind(this);
+  handleRegularEventStartTime(value) {
+    this.setState({ regular_event_start_time: value });
+  }
+
+  handleRegularEventEndTime(value) {
+    this.setState({ regular_event_end_time: value });
+  }
+
+  handleRegularEventDayOfWeek(value) {
+    this.setState({ regular_event_day_of_week: value });
+  }
+
+  handleAddressOne(value) {
+    this.setState({ address_line_one: value });
+  }
+
+  handleAddressTwo(value) {
+    this.setState({ address_line_two: value });
+  }
+
+  handleCity(value) {
+    this.setState({ city: value });
+  }
+
+  handleState(value) {
+    this.setState({ state: value });
+  }
+
+  handleZip(value) {
+    this.setState({ zip: value });
+  }
+
+  handleName(value) {
+    this.setState({ name: value });
+  }
+
+  handleBlurb(value) {
+    this.setState({ blurb: value });
+  }
+
+  handleDetails(value) {
+    this.setState({ details: value });
+  }
+
+  handleThumbnailImageLink(value) {
+    this.setState({ thumbnail_image_link: value });
+    console.log(value);
+  }
+
+  handleTags(value) {
+    this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
+  }
+
+  async handleSubmit(event) {
+    event.preventDefault();
+    try {
+      let user = await me();
+      let position = await giveMePosition(
+        this.state.address_line_one,
+        this.state.city,
+        this.state.state,
+        this.state.zip
+      );
+      let location = {
+        address_line_one: this.state.address_line_one,
+        address_line_two: this.state.address_line_two,
+        city: this.state.city,
+        state: this.state.state,
+        zip: this.state.zip,
+        lat: position.lat,
+        lng: position.lng
+      };
+      let object = {
+        regular_event_start_time: this.state.regular_event_start_time,
+        regular_event_end_time: this.state.regular_event_end_time,
+        regular_event_day_of_week: this.state.regular_event_day_of_week,
+        name: this.state.name,
+        details: this.state.details,
+        blurb: this.state.blurb,
+        tags: this.state.selectedTags,
+        thumbnail_image_link: this.state.thumbnail_image_link,
+        location,
+        host_user_id: user.id
+      };
+
+      await fetch(`/api/groups/${this.groupId}`, {
+        method: "PUT",
+        body: JSON.stringify(object),
+        headers: new Headers({ "Content-Type": "application/json" })
+      });
+      this.props.history.push("/groups");
+      NotificationManager.success("Group Edited");
+    } catch (err) {
+      console.log(err);
+      NotificationManager.error("Group not edited");
     }
+  }
 
-    handleRegularEventStartTime(value) {
-        this.setState({ regular_event_start_time: value });
-    }
-
-    handleRegularEventEndTime(value) {
-        this.setState({ regular_event_end_time: value });
-    }
-
-    handleRegularEventDayOfWeek(value) {
-        console.log(value);
-        this.setState({ regular_event_day_of_week: value });
-    }
-
-    handleLocationId(value) {
-        this.setState({ location_id: value.id });
-    }
-
-    handleAddressOne(value) {
-        this.setState({ address_line_one: value });
-    }
-
-    handleAddressTwo(value) {
-        this.setState({ address_line_two: value });
-    }
-
-    handleCity(value) {
-        this.setState({ city: value });
-    }
-
-    handleState(value) {
-        console.log('called?');
-        this.setState({ state: value });
-        console.log(value);
-    }
-
-    handleZip(value) {
-        this.setState({ zip: value });
-    }
-
-    handleName(value) {
-        this.setState({ name: value });
-    }
-
-    handleBlurb(value) {
-        this.setState({ blurb: value });
-    }
-
-    handleDetails(value) {
-        this.setState({ details: value });
-    }
-
-    handleThumbnailImageLink(value) {
-        this.setState({ thumbnail_image_link: value });
-        console.log(value);
-    }
-
-    handleTags(value) {
-        this.setState({ selectedTags: this.state.selectedTags.concat([value]) });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        let object = {
-            regular_event_start_time: this.state.regular_event_start_time,
-            regular_event_end_time: this.state.regular_event_end_time,
-            regular_event_day_of_week: this.state.regular_event_day_of_week,
-            name: this.state.name,
-            details: this.state.details,
-            blurb: this.state.blurb,
-            tags: this.state.selectedTags,
-            thumbnail_image_link: this.state.thumbnail_image_link
-        };
-        if (this.state.location_id) {
-            object["location_id"] = this.state.location_id;
-        } else {
-            object["address_line_one"] = this.state.address_line_one;
-            object["address_line_two"] = this.state.address_line_two;
-            object["city"] = this.state.city;
-            object["zip"] = this.state.zip;
-        }
-        fetch("/api/Groups", {
-            method: "PUT",
-            body: JSON.stringify(object),
-            headers: new Headers({ "Content-Type": "application/json" })
+  async componentDidMount() {
+    try {
+      fetch("/api/tags")
+        .then(response => response.json())
+        .then(tags => {
+          this.setState({ tags });
         });
+
+      this.groupId = this.props.match.params.groupId;
+      let group = await groupsService.one(this.groupId);
+      this.setState({
+        regular_event_start_time: group.regular_event_start_time,
+        regular_event_end_time: group.regular_event_end_time,
+        regular_event_day_of_week: group.regular_event_day_of_week,
+        name: group.name,
+        host_user_id: group.host_user_id,
+        address_line_one: group.location.address_line_one,
+        address_line_two: group.location.address_line_two,
+        city: group.location.city,
+        state: group.location.state,
+        zip: group.location.zip,
+        thumbnail_image_link: group.thumbnail_image_link,
+        selectedTags: group.tags,
+        blurb: group.blurb,
+        details: group.details
+      });
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    async componentDidMount() {
-        try {
-            fetch("/api/locations")
-                .then(response => response.json())
-                .then(locations => {
-                    this.setState({ locations });
-                });
-            fetch("/api/tags")
-                .then(response => response.json())
-                .then(tags => {
-                    this.setState({ tags });
-                });
+  render() {
+    return (
+      <div className="container">
+        <form>
+          <h1 className="eventListingHeader">Edit Group</h1>
+          <div className="form-group">
+            <label htmlFor="name" className="subheading">
+              Name:
+            </label>
+            <input
+              value={this.state.name}
+              type="text"
+              onChange={event => this.handleName(event.target.value)}
+              className="form-control"
+              name="name"
+            />
+          </div>
 
-            let groupId = this.props.match.params.id;
-            let response = await fetch(`/api/Groups/${groupId}`);
-            let group = await response.json();
+          <div className="form-group">
+            <label htmlFor="name" className="subheading">
+              Blurb:
+            </label>
+            <input
+              value={this.state.blurb}
+              type="text"
+              onChange={event => this.handleBlurb(event.target.value)}
+              className="form-control"
+              name="blurb"
+            />
+          </div>
 
+          <div className="form-group">
+            <label htmlFor="name" className="subheading">
+              Details:
+            </label>
+            <textarea
+              value={this.state.details}
+              cols="30"
+              rows="10"
+              resize="none"
+              onChange={event => this.handleDetails(event.target.value)}
+              className="form-control"
+              name="details"
+            />
+          </div>
 
-            // this.setState({start_time: event.start_time});
-            // this.setState({end_time: event.end_time});
-            // this.setState({tags: event.tags});
-            this.setState({ regular_event_start_time: group.regular_event_start_time });
-            this.setState({ regular_event_end_time: group.regular_event_end_time });
-            this.setState({ regular_event_day_of_week: group.regular_event_day_of_week });
-            this.setState({ name: group.name });
-            this.setState({ host_user_id: group.host_user_id });
-            this.setState({ location_id: group.location_id });
+          <div className="form-group">
+            <label htmlFor="startTime" className="subheading">
+              Regular Event Start Time:{" "}
+            </label>
+            <input
+              value={this.state.regular_event_start_time}
+              type="text"
+              placeholder="e.g., 7:00"
+              onChange={event =>
+                this.handleRegularEventStartTime(event.target.value)
+              }
+              className="form-control"
+              name="startTime"
+            />
+          </div>
 
-            this.setState({ address_line_one: group.address_line_one });
-            this.setState({ address_line_two: group.address_line_two });
-            this.setState({ city: group.city });
-            this.setState({ state: group.state });
-            this.setState({ zip: group.zip });
+          <div className="form-group">
+            <label htmlFor="endTime" className="subheading">
+              Regular Event End Time:{" "}
+            </label>
+            <input
+              value={this.state.regular_event_end_time}
+              type="text"
+              placeholder="e.g., 8:00"
+              onChange={event =>
+                this.handleRegularEventEndTime(event.target.value)
+              }
+              className="form-control"
+              name="endTime"
+            />
+          </div>
 
-            this.setState({ thumbnail_image_link: group.thumbnail_image_link });
-            this.setState({ tags: group.tags });
-            this.setState({ selectedTags: group.selectedTags });
-            this.setState({ blurb: group.blurb });
-            this.setState({ details: group.details });
-            this.setState({ blurb: group.blurb });
-            this.setState({ locations: group.locations });
+          <div className="form-group">
+            <label htmlFor="state" className="mr-2 subheading">
+              Regular Event Day of Week:
+            </label>
+            <SelectMenu
+              value={this.state.regular_event_day_of_week}
+              source={[
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ]}
+              callback={this.handleRegularEventDayOfWeek}
+              className="form-control"
+              id="state"
+            />
+          </div>
 
-        } catch (err) {
-            console.log(err);
-        }
-    }
+          {/*************** new location div ***************************/}
+          <div className="form-group">
+            <label htmlFor="addressLineOne">Address Line One:</label>
+            <input
+              value={this.state.address_line_one}
+              type="text"
+              onChange={event => this.handleAddressOne(event.target.value)}
+              className="form-control"
+              name="addressLineOne"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="addressLineTwo">Address Line Two:</label>
+            <input
+              value={this.state.address_line_two}
+              type="text"
+              onChange={event => this.handleAddressTwo(event.target.value)}
+              className="form-control"
+              name="addressLineTwo"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input
+              value={this.state.city}
+              type="text"
+              onChange={event => this.handleCity(event.target.value)}
+              className="form-control"
+              name="city"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state" className="mr-2">
+              State:
+            </label>
+            <SelectMenu
+              value={this.state.state}
+              source={states.getStates()}
+              callback={value => this.handleState(value)}
+              className="form-control"
+              id="stateGroup"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="zip">Zip:</label>
+            <input
+              value={this.state.zip}
+              type="number"
+              onChange={event => this.handleZip(event.target.value)}
+              className="form-control"
+              name="zip"
+            />
+          </div>
 
-    render() {
-        return (
-            <div className="container">
-                <form>
-                    <h1>Create a Group</h1>
-                    <div className="form-group">
-                        <label htmlFor="name">Name:</label>
-                        <input
-                            value={this.state.name}
-                            type="text"
-                            onChange={event => this.handleName(event.target.value)}
-                            className="form-control"
-                            name="name"
-                        />
-                    </div>
+          {/************** file upload ***************/}
+          <div className="form-group">
+            <label htmlFor="thumbnailImageLink">
+              Your thumbnail image link:
+            </label>
+            <input
+              value={this.state.thumbnail_image_link}
+              disabled
+              onChange={event =>
+                this.handleThumbnailImageLink(event.target.value)
+              }
+              className="form-control"
+              name="thumbnailImageLink"
+            />
+          </div>
+          <div className="form-group">
+            <button
+              className="btn btn-info"
+              onClick={e => {
+                e.preventDefault();
+                $("#thumbnailImageDiv").toggle();
+              }}
+            >
+              Change Thumbnail Image
+            </button>
+          </div>
 
-                    <div className="form-group">
-                        <label htmlFor="name">Blurb:</label>
-                        <input
-                            value={this.state.blurb}
-                            type="text"
-                            onChange={event => this.handleBlurb(event.target.value)}
-                            className="form-control"
-                            name="blurb"
-                        />
-                    </div>
+          <div id="thumbnailImageDiv" style={{display: "none"}}>
+            <h5>Upload Group image</h5>
+            <FileUpload
+              label="Upload Group Thumbnail"
+              callback={this.handleThumbnailImageLink}
+            />
+          </div>
 
-                    <div className="form-group">
-                        <label htmlFor="name">Details:</label>
-                        <textarea
-                            value={this.state.details}
-                            cols="30"
-                            rows="10"
-                            onChange={event => this.handleDetails(event.target.value)}
-                            className="form-control"
-                            name="details"
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="startTime">Regular Event Start Time: </label>
-                        <input
-                            value={this.state.regular_event_start_time}
-                            type="text"
-                            placeholder="e.g., 7:00"
-                            onChange={event => this.handleRegularEventStartTime(event.target.value)}
-                            className="form-control"
-                            name="startTime"
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="endTime">Regular Event End Time: </label>
-                        <input
-                            value={this.state.regular_event_end_time}
-                            type="text"
-                            placeholder="e.g., 8:00"
-                            onChange={event => this.handleRegularEventEndTime(event.target.value)}
-                            className="form-control"
-                            name="endTime"
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="state" className="mr-2">Regular Event Day of Week:</label>
-                        <SelectMenu
-                            value={this.state.regular_event_day_of_week}
-                            source={["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
-                            callback={this.handleRegularEventDayOfWeek}
-                            className="form-control"
-                            id="state"
-                        />
-                    </div>
-
-                    <div className="row">
-                        <div className="col">
-                            <div className="form-group">
-                                <label htmlFor="locationName" className="mr-2">
-                                    Choose a location:
-                </label>
-                                <AutoComplete
-                                    callback={this.handleLocationId}
-                                    id="locationsSelect"
-                                    source={this.state.locations}
-                                />
-                            </div>
-                        </div>
-                        <div className="col mt-0">
-                            <button
-                                className="btn btn-primary"
-                                onClick={e => {
-                                    e.preventDefault();
-                                    this.setState({ showNewDiv: "block" });
-                                }}
-                            >
-                                New Location
-              </button>
-                        </div>
-                    </div>
-
-                    {/*************** new location div ***************************/}
-                    <div style={{ display: this.state.showNewDiv }}>
-                        <div className="form-group">
-                            <label htmlFor="addressLineOne">Address Line One:</label>
-                            <input
-                                value={this.state.address_line_one}
-                                type="text"
-                                onChange={event => this.handleAddressOne(event.target.value)}
-                                className="form-control"
-                                name="addressLineOne"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="addressLineTwo">Address Line Two:</label>
-                            <input
-                                value={this.state.address_line_two}
-                                type="text"
-                                onChange={event => this.handleAddressTwo(event.target.value)}
-                                className="form-control"
-                                name="addressLineTwo"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="city">City:</label>
-                            <input
-                                value={this.state.city}
-                                type="text"
-                                onChange={event => this.handleCity(event.target.value)}
-                                className="form-control"
-                                name="city"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="state" className="mr-2">State:</label>
-                            <SelectMenu
-                                value={this.state.state}
-                                source={states.getStates()}
-                                callback={this.handleState}
-                                className="form-control"
-                                id="state"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="zip">Zip:</label>
-                            <input
-                                value={this.state.zip}
-                                type="number"
-                                onChange={event => this.handleZip(event.target.value)}
-                                className="form-control"
-                                name="zip"
-                            />
-                        </div>
-                    </div>
-
-                    {/************** file upload ***************/}
-                    <h5>Upload Group image</h5>
-                    <FileUpload label="Upload Group Thumbnail" callback={this.handleThumbnailImageLink} />
-
-                    {/************** autocomplete tags ***************/}
-                    <div className="form-group">
-                        <label htmlFor="locationName" className="mr-2">
-                            Choose your tags:{" "}
-                        </label>
-                        <AutoComplete
-                            callback={this.handleTags}
-                            source={this.state.tags}
-                            id="tagsSelect"
-                        />
-                    </div>
-                    <TagList selectedTags={this.state.selectedTags} />
-                    <button onClick={event => this.handleSubmit(event)}>
-                        Submit
+          {/************** autocomplete tags ***************/}
+          <div className="form-group">
+            <label htmlFor="locationName" className="mr-2">
+              Choose your tags:{" "}
+            </label>
+            <AutoComplete
+              callback={this.handleTags}
+              source={this.state.tags}
+              id="tagsSelect"
+            />
+          </div>
+          <TagList selectedTags={this.state.selectedTags} />
+          <button
+            className="btn clickable"
+            onClick={event => this.handleSubmit(event)}
+          >
+            Submit
           </button>
-                </form>
-            </div>
-        );
-    }
+        </form>
+      </div>
+    );
+  }
 }
 
 export default GroupCreateScreen;

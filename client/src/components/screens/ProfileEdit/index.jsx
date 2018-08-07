@@ -4,6 +4,7 @@ import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
 import { NotificationManager } from "react-notifications";
 import FileUpload from "../../fileupload";
+import {Link} from 'react-router-dom';
 
 class UsersEditScreen extends Component {
   constructor(props) {
@@ -318,7 +319,12 @@ class UsersEditScreen extends Component {
               />
             </div>
           </div>
-
+          <Link
+            className="btn btn-warning mt-2 mr-3"
+            to="/users/profile"
+          >
+            Back
+          </Link>
           <button
             className="btn btn-primary mt-2"
             onClick={event => this.handleSubmit(event)}
