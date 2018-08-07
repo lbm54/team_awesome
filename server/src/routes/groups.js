@@ -54,7 +54,9 @@ router.post("/", async (req, res) => {
         req.body.address_line_two,
         req.body.city,
         req.body.state,
-        req.body.zip
+        req.body.zip,
+        req.body.lat,
+        req.body.lng
       );
     }
 

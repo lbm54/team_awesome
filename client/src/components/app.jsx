@@ -15,7 +15,7 @@ import GroupCreateScreen from "./screens/GroupCreate";
 import GroupDetailScreen from "./screens/GroupDetail";
 import GroupListingScreen from "./screens/GroupListing";
 import GroupEditScreen from "./screens/GroupEdit";
-import UserEditScreen from "./screens/UsersEdit";
+import ProfileEditScreen from "./screens/ProfileEdit";
 import LoginScreen from "./screens/Login";
 import ProfileScreen from "./screens/Profile";
 import RegisterScreen from "./screens/Register";
@@ -47,8 +47,8 @@ class Navigation extends Component {
             <Route path="/groups/detail/:id" component={GroupDetailScreen} />
             <Route path="/groups" component={GroupListingScreen} />
             <Route path="/googleMapsView" component={GoogleMapsViewScreen} />
-            {/* <Route path="/users/profile/edit/:id" component={UserEditScreen} /> */}
-            <PrivateRoute path="/users/profile" component={ProfileScreen} />
+            <PrivateRoute path="/users/profileEdit/:userId" component={ProfileEditScreen} />
+            <PrivateRoute exact path="/users/profile" component={ProfileScreen} />
             <Route path="/users/register" component={RegisterScreen} />
             <Route path="/stripe" component={Stripe} />
             <Route path="/logout" component={Logout} />

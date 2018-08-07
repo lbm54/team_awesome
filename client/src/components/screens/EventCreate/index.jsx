@@ -6,7 +6,7 @@ import TagList from "../../taglist";
 import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
 import { giveMePosition } from "../../../services/maps";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 
 class EventCreateScreen extends Component {
   constructor(props) {
@@ -17,7 +17,6 @@ class EventCreateScreen extends Component {
       end_time: "",
       address_line_one: "",
       address_line_two: "",
-      location_name: "",
       city: "",
       state: "",
       zip: "",
@@ -33,7 +32,6 @@ class EventCreateScreen extends Component {
 
     this.handleStartTime = this.handleStartTime.bind(this);
     this.handleEndTime = this.handleEndTime.bind(this);
-    this.handleLocationName = this.handleLocationName.bind(this);
     this.handleAddressOne = this.handleAddressOne.bind(this);
     this.handleAddressTwo = this.handleAddressTwo.bind(this);
     this.handleCity = this.handleCity.bind(this);
@@ -58,10 +56,6 @@ class EventCreateScreen extends Component {
 
   handleEndTime(value) {
     this.setState({ end_time: value });
-  }
-
-  handleLocationName(value) {
-    this.setState({ location_name: value });
   }
 
   handleAddressOne(value) {
@@ -128,7 +122,6 @@ class EventCreateScreen extends Component {
       state: this.state.state,
       city : this.state.city,
       zip : this.state.zip,
-      location_name: this.state.location_name,
       lat: position.lat,
       lng: position.lng
     }
@@ -141,6 +134,7 @@ class EventCreateScreen extends Component {
       this.props.history.push("/events");
       NotificationManager.success('Event Created');
     } catch (err) {
+      NotificationManager.error('Event Not Created');
       console.log(err);
     }
   }
@@ -159,7 +153,7 @@ class EventCreateScreen extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container center-block">
         <form>
           <h1>Create an Event</h1>
           <div className="form-group">
@@ -243,16 +237,6 @@ class EventCreateScreen extends Component {
 
           {/*************** new location div ***************************/}
           <div className="form-group">
-            <label htmlFor="name">Location Name:</label>
-            <input
-              value={this.state.location_name}
-              onChange={event => this.handleLocationName(event.target.value)}
-              className="form-control"
-              name="name"
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="addressLineOne">Address Line One:</label>
             <input
               value={this.state.address_line_one}
@@ -288,7 +272,7 @@ class EventCreateScreen extends Component {
               source={states.getStates()}
               callback={value => this.handleState(value)}
               className="form-control"
-              id="state"
+              id="stateEvent"
             />
           </div>
           <div className="form-group">

@@ -40,7 +40,6 @@ router.post("/", async (req, res) => {
   try {
     //for the event's location
     let location_id = await insertLocation(
-      req.body.location_name,
       req.body.address_line_one,
       req.body.address_line_two,
       req.body.city,

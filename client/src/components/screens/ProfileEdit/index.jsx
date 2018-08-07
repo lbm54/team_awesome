@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import FileUpload from "../../fileupload";
+import React, { Component, Fragment } from "react";
+import * as usersService from "../../../services/users";
 import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
 import { NotificationManager } from "react-notifications";
+import FileUpload from "../../fileupload";
 
-class RegisterScreen extends Component {
+class UsersEditScreen extends Component {
   constructor(props) {
     super(props);
-    this.props = props;
+
     this.state = {
       email: "",
       username: "",
-      password: "",
       address_line_one: "",
       address_line_two: "",
       city: "",
@@ -27,7 +27,6 @@ class RegisterScreen extends Component {
 
     this.handleEmail = this.handleEmail.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
     this.handleAddressLineOne = this.handleAddressLineOne.bind(this);
     this.handleAddressLineTwo = this.handleAddressLineTwo.bind(this);
     this.handleCity = this.handleCity.bind(this);
@@ -40,16 +39,37 @@ class RegisterScreen extends Component {
     this.handleTelephone = this.handleTelephone.bind(this);
     this.handleBio = this.handleBio.bind(this);
   }
+
+  async componentDidMount() {
+    try {
+      this.userId = this.props.match.params.userId;
+      let user = await usersService.one(this.userId);
+      this.setState({
+        email: user.email,
+        username: user.username,
+        address_line_one: user.location.address_line_one,
+        address_line_two: user.location.address_line_two,
+        city: user.location.city,
+        state: user.location.state,
+        zip: user.location.zip,
+        first_name: user.first_name,
+        middle_initial: user.middle_initial,
+        last_name: user.last_name,
+        profile_picture_link: user.profile_picture_link,
+        telephone: user.telephone,
+        bio: user.bio
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   handleEmail(value) {
     this.setState({ email: value });
   }
 
   handleUsername(value) {
     this.setState({ username: value });
-  }
-
-  handlePassword(value) {
-    this.setState({ password: value });
   }
 
   handleFirstName(value) {
@@ -98,33 +118,35 @@ class RegisterScreen extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    let location = {
+      address_line_one: this.state.address_line_one,
+      address_line_two: this.state.address_line_two,
+      city: this.state.city,
+      state: this.state.state,
+      zip: this.state.zip
+    }
     let object = {
       username: this.state.username,
-      password: this.state.password,
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      middle_innitial: this.state.middle_initial,
+      middle_initial: this.state.middle_initial,
       email: this.state.email,
       bio: this.state.bio,
       telephone: this.state.telephone,
       profile_picture_link: this.state.profile_picture_link,
-      address_line_one : this.state.address_line_one,
-      address_line_two : this.state.address_line_two,
-      city : this.state.city,
-      state: this.state.state,
-      zip : this.state.zip
+      location: location
     };
 
     try {
-      fetch("/api/users", {
-        method: "POST",
+      fetch(`/api/users/${this.userId}`, {
+        method: "PUT",
         body: JSON.stringify(object),
         headers: new Headers({ "Content-Type": "application/json" })
       });
-      NotificationManager.success("User Created!  Now login");
-      this.props.history.push('/login');
+      NotificationManager.success("User Edited!");
+      this.props.history.push(`/users/profile`);
     } catch (err) {
-      NotificationManager.error("User Not Created");
+      NotificationManager.error("User Not Edited");
       console.log(err);
     }
   }
@@ -141,17 +163,6 @@ class RegisterScreen extends Component {
               onChange={event => this.handleUsername(event.target.value)}
               className="form-control"
               name="username"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="name">Password:</label>
-            <input
-              value={this.state.password}
-              onChange={event => this.handlePassword(event.target.value)}
-              className="form-control"
-              name="password"
-              type="password"
             />
           </div>
 
@@ -205,7 +216,7 @@ class RegisterScreen extends Component {
               source={states.getStates()}
               callback={value => this.handleState(value)}
               className="form-control"
-              id="stateUser"
+              id="stateUserEdit"
             />
           </div>
 
@@ -269,14 +280,49 @@ class RegisterScreen extends Component {
             />
           </div>
 
-          {/************** file upload ***************/}
-          <h5>Upload your profile image</h5>
-          <FileUpload
-            label="Upload Event Thumbnail"
-            callback={this.handleProfilePictureLink}
-          />
+          <div className="form-group">
+            <label htmlFor="profilePictureLink">
+              Your profile picture link:
+            </label>
+            <input
+              value={this.state.profile_picture_link}
+              disabled
+              onChange={event =>
+                this.handleProfilePictureLink(event.target.value)
+              }
+              className="form-control"
+              name="profilePictureLink"
+            />
+          </div>
+          <div className="form-group">
+            <button
+              className="btn btn-info"
+              onClick={e => {
+                e.preventDefault();
+                $("#profileImageDiv").toggle();
+              }}
+            >
+              Change Profile Image
+            </button>
 
-          <button className="btn btn-primary mt-2" onClick={event => this.handleSubmit(event)}>
+            <div
+              id="profileImageDiv"
+              style={{ display: "none" }}
+              className="mt-3"
+            >
+              <h5>Upload your profile image</h5>
+              <FileUpload
+                label="Upload Event Thumbnail"
+                callback={this.handleProfilePictureLink}
+                placeholder={this.profile_picture_link}
+              />
+            </div>
+          </div>
+
+          <button
+            className="btn btn-primary mt-2"
+            onClick={event => this.handleSubmit(event)}
+          >
             Submit
           </button>
         </form>
@@ -285,4 +331,4 @@ class RegisterScreen extends Component {
   }
 }
 
-export default RegisterScreen;
+export default UsersEditScreen;

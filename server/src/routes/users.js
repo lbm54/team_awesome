@@ -2,7 +2,7 @@ import { Router } from "express";
 import { tokenMiddleware, isLoggedIn } from "../middleware/auth.mw";
 import { generateHash } from "../utils/security";
 import Table from "../table";
-import { insertLocation, getLocationId } from "../utils/locations";
+import { insertLocation, getLocation, updateLocation } from "../utils/locations";
 
 let router = Router();
 let userTable = new Table("Users");
@@ -40,19 +40,13 @@ router.get("/", async (req, res) => {
  */
 router.post("/", async (req, res) => {
   try {
-    let address_location_id;
-    if (req.body.location_id) {
-      address_location_id = await getLocationId(req.body.location_name);
-    } else {
-      address_location_id = await insertLocation(
-        req.body.address_line_one,
-        req.body.address_line_two,
-        req.body.city,
-        req.body.state,
-        req.body.zip,
-        req.body.new_location_name
-      );
-    }
+    let address_location_id = await insertLocation(
+      req.body.address_line_one,
+      req.body.address_line_two,
+      req.body.city,
+      req.body.state,
+      req.body.zip
+    );
 
     let hash = await generateHash(req.body.password);
     let insertObject = {
@@ -153,12 +147,17 @@ router.post("/removeFromEvent", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     let founduser = await userTable.getOne(req.params.id);
-    let groupsUsersSql = `select g.* from groups g join groups_users gu on g.id = gu.group_id join users u on u.id = gu.user_id where u.id = ${founduser.id}`;
+    let groupsUsersSql = `select g.* from groups g join groups_users gu on g.id = gu.group_id join users u on u.id = gu.user_id where u.id = ${
+      founduser.id
+    }`;
     let groupsUsers = await userTable.select(groupsUsersSql);
     founduser["groups"] = groupsUsers;
-    let eventsUsersSql = `select e.* from events e join events_users eu on e.id = eu.event_id join users u on u.id = eu.user_id where u.id = ${founduser.id}`;
+    let eventsUsersSql = `select e.* from events e join events_users eu on e.id = eu.event_id join users u on u.id = eu.user_id where u.id = ${
+      founduser.id
+    }`;
     let eventsUsers = await userTable.select(eventsUsersSql);
     founduser["events"] = eventsUsers;
+    founduser["location"] = await getLocation(founduser.address_location_id);
     res.json(founduser);
   } catch (err) {
     console.log(err);
@@ -171,7 +170,12 @@ router.get("/:id", async (req, res) => {
  */
 router.put("/:id", async (req, res) => {
   try {
+    console.log(req.body);
     // not concerned about getting a value back, just waiting on update to finish
+    if (req.body.location) {
+      updateLocation(req.body.location);
+      delete req.body.location;
+    }
     await userTable.update(req.params.id, req.body);
     res.sendStatus(200);
   } catch (err) {

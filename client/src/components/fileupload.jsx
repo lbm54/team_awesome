@@ -3,6 +3,7 @@ import React, { Component, Fragment } from "react";
 class FileUpload extends Component {
   constructor(props) {
     super(props);
+    this.props = props;
     this.state = {
       successMessage: "",
       errorMessage: "",
@@ -33,7 +34,7 @@ class FileUpload extends Component {
   render() {
     let response = [
       <div className="form-group" key="response">
-        <input ref={ref => (this.fileInput = ref)} type="file" name="file" />
+        <input ref={ref => (this.fileInput = ref)} type="file" name="file" placeholder={this.props.placeholder} />
         <button
           className="btn btn-info"
           onClick={event => this.submitImage(event)}

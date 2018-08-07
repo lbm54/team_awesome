@@ -1,9 +1,9 @@
 import Table from '../table';
 let locationTable = new Table('Locations');
 
-let insertLocation = async function(name, address_line_one, address_line_two, city, state, zip, lat, lng) {
+let insertLocation = async function(address_line_one, address_line_two, city, state, zip, lat, lng) {
     try {
-        let insertObject = {name, address_line_one, address_line_two, city, state, zip, lat, lng};
+        let insertObject = {address_line_one, address_line_two, city, state, zip, lat, lng};
         return (await locationTable.insert(insertObject)).id;
     } catch (err) {
         throw err;
@@ -28,4 +28,13 @@ let getLocation = async function(id) {
     }
 }
 
-export { insertLocation, getLocationId, getLocation };
+let updateLocation = async function(location) {
+    try {
+        let result = await locationTable.update(location)
+        return result;
+    } catch (err) {
+        throw "This location doesn't exist in the db";
+    }
+}
+
+export { insertLocation, getLocationId, getLocation, updateLocation };

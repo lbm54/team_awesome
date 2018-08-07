@@ -5,6 +5,9 @@ import FileUpload from "../../fileupload";
 import TagList from "../../taglist";
 import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
+import { giveMePosition } from "../../../services/maps";
+import { NotificationManager } from "react-notifications";
+import { me } from "../../../services/user";
 
 class GroupCreateScreen extends Component {
   constructor(props) {
@@ -15,11 +18,10 @@ class GroupCreateScreen extends Component {
       regular_event_day_of_week: "",
       name: "",
       host_user_id: "",
-      location_id: "",
       address_line_one: "",
       address_line_two: "",
       city: "",
-      state: "AL",
+      state: "",
       zip: "",
       name: "",
       thumbnail_image_link: "",
@@ -27,9 +29,7 @@ class GroupCreateScreen extends Component {
       selectedTags: [],
       blurb: "",
       details: "",
-      showNewDiv: "none",
       selectedTags: [],
-      locations: [],
       tags: []
     };
 
@@ -40,7 +40,6 @@ class GroupCreateScreen extends Component {
     this.handleRegularEventDayOfWeek = this.handleRegularEventDayOfWeek.bind(
       this
     );
-    this.handleLocationId = this.handleLocationId.bind(this);
     this.handleAddressOne = this.handleAddressOne.bind(this);
     this.handleAddressTwo = this.handleAddressTwo.bind(this);
     this.handleCity = this.handleCity.bind(this);
@@ -62,12 +61,7 @@ class GroupCreateScreen extends Component {
   }
 
   handleRegularEventDayOfWeek(value) {
-    console.log(value);
     this.setState({ regular_event_day_of_week: value });
-  }
-
-  handleLocationId(value) {
-    this.setState({ location_id: value.id });
   }
 
   handleAddressOne(value) {
@@ -83,7 +77,6 @@ class GroupCreateScreen extends Component {
   }
 
   handleState(value) {
-    console.log(value);
     this.setState({ state: value });
   }
 
@@ -114,43 +107,50 @@ class GroupCreateScreen extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    let object = {
-      regular_event_start_time: this.state.regular_event_start_time,
-      regular_event_end_time: this.state.regular_event_end_time,
-      regular_event_day_of_week: this.state.regular_event_day_of_week,
-      name: this.state.name,
-      details: this.state.details,
-      blurb: this.state.blurb,
-      tags: this.state.selectedTags,
-      thumbnail_image_link: this.state.thumbnail_image_link
-    };
-    if (this.state.location_id) {
-      object["location_id"] = this.state.location_id;
-    } else {
-      object["address_line_one"] = this.state.address_line_one;
-      object["address_line_two"] = this.state.address_line_two;
-      object["city"] = this.state.city;
-      object["zip"] = this.state.zip;
-    }
     try {
+      let user = await me();
+      let position = await giveMePosition(
+        this.state.address_line_one,
+        this.state.city,
+        this.state.state,
+        this.state.zip
+      );
+      let object = {
+        regular_event_start_time: this.state.regular_event_start_time,
+        regular_event_end_time: this.state.regular_event_end_time,
+        regular_event_day_of_week: this.state.regular_event_day_of_week,
+        name: this.state.name,
+        details: this.state.details,
+        blurb: this.state.blurb,
+        tags: this.state.selectedTags,
+        thumbnail_image_link: this.state.thumbnail_image_link,
+        address_line_one: this.state.address_line_one,
+        address_line_two: this.state.address_line_two,
+        city: this.state.city,
+        state: this.state.state,
+        zip: this.state.zip,
+        lat: position.lat,
+        lng: position.lng,
+        host_user_id: user.id
+      };
+
+      console.log(object);
+
       await fetch("/api/groups", {
         method: "POST",
         body: JSON.stringify(object),
         headers: new Headers({ "Content-Type": "application/json" })
       });
       this.props.history.push("/groups");
+      NotificationManager.success("Group Created");
     } catch (err) {
       console.log(err);
+      NotificationManager.error("Group not created");
     }
   }
 
   componentDidMount() {
     try {
-      fetch("/api/locations")
-        .then(response => response.json())
-        .then(locations => {
-          this.setState({ locations });
-        });
       fetch("/api/tags")
         .then(response => response.json())
         .then(tags => {
@@ -163,7 +163,7 @@ class GroupCreateScreen extends Component {
 
   render() {
     return (
-      <div className="container mr-5 center-block">
+      <div className="container center-block">
         <form>
           <h1>Create a Group</h1>
           <div className="form-group">
@@ -249,86 +249,58 @@ class GroupCreateScreen extends Component {
             />
           </div>
 
-          <div className="row">
-            <div className="col">
-              <div className="form-group">
-                <label htmlFor="locationName" className="mr-2">
-                  Choose a location:
-                </label>
-                <AutoComplete
-                  callback={this.handleLocationId}
-                  id="locationsSelect"
-                  source={this.state.locations}
-                />
-              </div>
-            </div>
-            <div className="col mt-0">
-              <button
-                className="btn btn-primary"
-                onClick={e => {
-                  e.preventDefault();
-                  this.setState({ showNewDiv: "block" });
-                }}
-              >
-                New Location
-              </button>
-            </div>
-          </div>
-
           {/*************** new location div ***************************/}
-          <div style={{ display: this.state.showNewDiv }}>
-            <div className="form-group">
-              <label htmlFor="addressLineOne">Address Line One:</label>
-              <input
-                value={this.state.address_line_one}
-                type="text"
-                onChange={event => this.handleAddressOne(event.target.value)}
-                className="form-control"
-                name="addressLineOne"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="addressLineTwo">Address Line Two:</label>
-              <input
-                value={this.state.address_line_two}
-                type="text"
-                onChange={event => this.handleAddressTwo(event.target.value)}
-                className="form-control"
-                name="addressLineTwo"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="city">City:</label>
-              <input
-                value={this.state.city}
-                type="text"
-                onChange={event => this.handleCity(event.target.value)}
-                className="form-control"
-                name="city"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="state" className="mr-2">
-                State:
-              </label>
-              <SelectMenu
-                value={this.state.state}
-                source={states.getStates()}
-                callback={value => this.handleState(value)}
-                className="form-control"
-                id="state"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="zip">Zip:</label>
-              <input
-                value={this.state.zip}
-                type="number"
-                onChange={event => this.handleZip(event.target.value)}
-                className="form-control"
-                name="zip"
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="addressLineOne">Address Line One:</label>
+            <input
+              value={this.state.address_line_one}
+              type="text"
+              onChange={event => this.handleAddressOne(event.target.value)}
+              className="form-control"
+              name="addressLineOne"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="addressLineTwo">Address Line Two:</label>
+            <input
+              value={this.state.address_line_two}
+              type="text"
+              onChange={event => this.handleAddressTwo(event.target.value)}
+              className="form-control"
+              name="addressLineTwo"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input
+              value={this.state.city}
+              type="text"
+              onChange={event => this.handleCity(event.target.value)}
+              className="form-control"
+              name="city"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="state" className="mr-2">
+              State:
+            </label>
+            <SelectMenu
+              value={this.state.state}
+              source={states.getStates()}
+              callback={value => this.handleState(value)}
+              className="form-control"
+              id="stateGroup"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="zip">Zip:</label>
+            <input
+              value={this.state.zip}
+              type="number"
+              onChange={event => this.handleZip(event.target.value)}
+              className="form-control"
+              name="zip"
+            />
           </div>
 
           {/************** file upload ***************/}
@@ -351,7 +323,7 @@ class GroupCreateScreen extends Component {
           </div>
           <TagList selectedTags={this.state.selectedTags} />
           <button
-            className="btn btn-primary"
+            className="btn btn-primary mt-2"
             onClick={event => this.handleSubmit(event)}
           >
             Submit

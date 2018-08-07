@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import * as groupsService from "../../../services/groups";
+import * as eventsService from "../../../services/events";
 
 class GoogleMapsView extends Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class GoogleMapsView extends Component {
     };
 
     this.setupMap = element => {
+      if (this.state.map) return;
       if (!window.google) {
         setTimeout(() => {}, 5000);
       }
@@ -23,7 +26,11 @@ class GoogleMapsView extends Component {
     };
 
     this.handleListClick = (what, index) => {
-      this.state.map.setCenter(this.state[what][index].position);
+      let position = {
+        lat: parseFloat(this.state[what][index].location.lat),
+        lng: parseFloat(this.state[what][index].location.lng)
+      }
+      this.state.map.setCenter(position);
     };
 
     this.addMarkers = what => {
@@ -33,23 +40,13 @@ class GoogleMapsView extends Component {
         let name = object.name ? object.name : "Untitled";
         let blurb = object.blurb ? object.blurb : "No description";
         let contentString = `<div><h2>Name: ${name}</h2><h4>Description:</h4><p>${blurb}</p></div>`;
-        if (
-          location &&
-          location.address_line_one &&
-          location.city &&
-          location.state &&
-          location.zip
-        ) {
-          object.position = {};
-          if (object.location.lat && object.location.lng) {
-            object.position["lat"] = object.location.lat;
-            object.position["lng"] = object.location.lng;
-          }
-          var infowindow = new google.maps.InfoWindow({
+        if (location.lat && location.lng) {
+          let position = { lat: parseFloat(location.lat), lng: parseFloat(location.lng) };
+          let infowindow = new google.maps.InfoWindow({
             content: contentString
           });
-          var marker = new google.maps.Marker({
-            position: object.position,
+          let marker = new google.maps.Marker({
+            position,
             map: this.state.map,
             icon:
               what === "events"
@@ -64,11 +61,9 @@ class GoogleMapsView extends Component {
     };
 
     this.componentDidMount = async () => {
-      let groupsRaw = await fetch("/api/groups");
-      let groups = await groupsRaw.json();
+      let groups = await groupsService.all();
       this.setState({ groups });
-      let eventsRaw = await fetch("/api/events");
-      let events = await eventsRaw.json();
+      let events = await eventsService.all();
       this.setState({ events });
       this.addMarkers("groups");
       this.addMarkers("events");
@@ -83,7 +78,7 @@ class GoogleMapsView extends Component {
           id={event.id}
           className="list-group-item list-group-item-action"
           onClick={e => {
-            this.handleListClick("groups", index);
+            this.handleListClick("events", index);
           }}
         >
           {event.name}
@@ -95,9 +90,9 @@ class GoogleMapsView extends Component {
         <li
           key={index}
           id={group.id}
-          className="list-group-item list-group-item-action googleLists"
-          onClick={e => {
-            this.handleListClick("events", index);
+          className="list-group-item list-group-item-action"
+          onClick={(e) => {
+            this.handleListClick("groups", index);
           }}
         >
           {group.name}

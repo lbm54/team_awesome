@@ -13,16 +13,23 @@ class SelectMenu extends Component {
         select: option => {
           props.callback(option.target.value);
         }
-          
-      })
+      });
+    };
+
+    this.componentDidUpdate = (prevProps, prevState) => {
+      if (prevProps.value !== this.props.value) {
+        $(`#${this.props.id}-button .ui-selectmenu-text`).html(this.props.value);
+      }
     };
   }
 
   render() {
-    let options = this.props.source.map((option, index) => <option key={index}>{option}</option>);
+    let options = this.props.source.map((option, index) => (
+      <option key={index}>{option}</option>
+    ));
     return (
       <select className={this.props.className} id={this.props.id}>
-      <option />
+        <option />
         {options}
       </select>
     );
