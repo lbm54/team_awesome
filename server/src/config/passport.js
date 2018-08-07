@@ -9,7 +9,7 @@ import { generateHash } from "../utils/security";
 const GOOGLE_CLIENT_ID =
   "429384879280-ntm4h0qfmd4k9n58n8ogjpinmr3jgoap.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = "ewvomrfZrJ1kEOCMLIrqqDHX";
-const GOOGLE_CALLBACK_URL = "http://localhost:3000/api/auth/google/callback";
+const GOOGLE_CALLBACK_URL = "https://teamawesomeapp.herokuapp.com/api/auth/google/callback";
 
 let usersTable = new Table("users");
 let tokensTable = new Table("Tokens");
