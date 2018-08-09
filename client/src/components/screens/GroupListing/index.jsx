@@ -69,7 +69,7 @@ class GroupListingScreen extends Component {
       let link = `/groups/detail/${group.id}`;
       return (
         <div className="col card p-3 m-3 eventCard" key={index}>
-          <div className="card-header bg-white">
+          <div className="card-header">
             <img
               className="card-img-top"
               src={group.thumbnail_image_link}
@@ -92,7 +92,7 @@ class GroupListingScreen extends Component {
             <p className="card-text">{group.blurb}</p>
             <div className="card-footer bg-white">
               <div className="row justify-content-between">
-                <Link to={link} className="btn btn-primary">
+                <Link to={link} className="btn clickable">
                   More Details
                 </Link>
                 <TagList selectedTags={group.tags} />

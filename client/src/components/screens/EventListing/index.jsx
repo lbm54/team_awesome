@@ -133,7 +133,7 @@ class EventListingScreen extends Component {
           </Link>
         </div>
 
-        <div className="row justify-content-center" id="eventsList">
+        <div className="row eventsListingContainer" id="eventsList">
           {eventslist}
         </div>
 
