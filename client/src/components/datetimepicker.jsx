@@ -18,7 +18,7 @@ class DateTimePicker extends Component {
 
   render() {
     return (
-        <input ref={this.makeDateTimePicker} value={this.props.value} className={this.props.className} type="text" name={this.props.name} />
+        <input ref={this.makeDateTimePicker} autocomplete="off" value={this.props.value} className={this.props.className} type="text" name={this.props.name} />
     );
   }
 }

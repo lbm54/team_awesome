@@ -178,7 +178,7 @@ class GroupCreateScreen extends Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name" className="subheading">Blurb:</label>
+            <label htmlFor="name" className="subheading">At a Glance:</label>
             <input
               value={this.state.blurb}
               type="text"

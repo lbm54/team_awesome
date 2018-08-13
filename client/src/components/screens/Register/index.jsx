@@ -103,7 +103,7 @@ class RegisterScreen extends Component {
       password: this.state.password,
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      middle_innitial: this.state.middle_initial,
+      middle_initial: this.state.middle_initial,
       email: this.state.email,
       bio: this.state.bio,
       telephone: this.state.telephone,
@@ -122,7 +122,9 @@ class RegisterScreen extends Component {
         headers: new Headers({ "Content-Type": "application/json" })
       });
       NotificationManager.success("User Created!  Now login");
-      this.props.history.push('/login');
+      setTimeout(() => {
+        this.props.history.push('/login');
+      }, 1000);
     } catch (err) {
       NotificationManager.error("User Not Created");
       console.log(err);
@@ -261,7 +263,7 @@ class RegisterScreen extends Component {
 
           <div className="form-group">
             <label htmlFor="bio">Tell us about yourself:</label>
-            <input
+            <textarea
               value={this.state.bio}
               onChange={event => this.handleBio(event.target.value)}
               className="form-control"

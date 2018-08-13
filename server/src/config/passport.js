@@ -10,6 +10,8 @@ const GOOGLE_CLIENT_ID =
   "429384879280-ntm4h0qfmd4k9n58n8ogjpinmr3jgoap.apps.googleusercontent.com";
 const GOOGLE_CLIENT_SECRET = "ewvomrfZrJ1kEOCMLIrqqDHX";
 const GOOGLE_CALLBACK_URL = "https://teamawesomeapp.herokuapp.com/api/auth/google/callback";
+// const GOOGLE_CALLBACK_URL = "http://localhost:3000/api/auth/google/callback";
+
 
 let usersTable = new Table("users");
 let tokensTable = new Table("Tokens");
@@ -64,24 +66,27 @@ async function configurePassport(app) {
           let user;
           try {
             user = await usersTable.find({ email });
+
+            //found the user already and setting token
             if (user && user[0]) {
               user = user[0];
+              return done(null, {
+                token: encode((await tokensTable.insert({ userid: user.id })).id)
+              });
             } else {
-              let hash = await generateHash(accessToken);
-              let newUser = {
-                last_name: profile.name.familyName,
-                first_name: profile.name.givenName,
-                email,
-                hash,
-                username: profile.displayName
-              };
-              user = await usersTable.insert(newUser);
-              console.log('created user');
-              console.log(user);
+              //need to send the user to the register page
+              return done(null);
+
+              // let hash = await generateHash(accessToken);
+              // let newUser = {
+              //   last_name: profile.name.familyName,
+              //   first_name: profile.name.givenName,
+              //   email,
+              //   hash,
+              //   username: profile.displayName
+              // };
+              // user = await usersTable.insert(newUser);
             }
-            return done(null, {
-              token: encode((await tokensTable.insert({ userid: user.id })).id)
-            });
           } catch (err) {
             console.log(err);
             return done(null, false, { message: "Invalid login" });

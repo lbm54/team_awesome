@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import {googleLogin} from '../../../services/user';
+import { NotificationManager } from "react-notifications";
 
 class Google extends Component {
   constructor(props) {
@@ -12,7 +13,12 @@ class Google extends Component {
   componentDidMount() {
     let token = this.props.match.params.token; 
     googleLogin(token);
-    this.props.history.push('/');
+    if (token !== "-1") {
+      this.props.history.push('/');
+    } else {
+      NotificationManager.success("Looks like you tried to login through Google without having registered first.  Please register now.");
+      this.props.history.push('/users/register');
+    }
   }
 
   

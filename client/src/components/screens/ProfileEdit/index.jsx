@@ -4,7 +4,7 @@ import states from "../../../services/states";
 import SelectMenu from "../../selectmenu";
 import { NotificationManager } from "react-notifications";
 import FileUpload from "../../fileupload";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 class UsersEditScreen extends Component {
   constructor(props) {
@@ -13,11 +13,14 @@ class UsersEditScreen extends Component {
     this.state = {
       email: "",
       username: "",
-      address_line_one: "",
-      address_line_two: "",
-      city: "",
-      state: "",
-      zip: "",
+      location: {
+        id: "",
+        address_line_one: "",
+        address_line_two: "",
+        city: "",
+        state: "",
+        zip: ""
+      },
       first_name: "",
       middle_initial: "",
       last_name: "",
@@ -46,19 +49,28 @@ class UsersEditScreen extends Component {
       this.userId = this.props.match.params.userId;
       let user = await usersService.one(this.userId);
       this.setState({
-        email: user.email,
-        username: user.username,
-        address_line_one: user.location.address_line_one,
-        address_line_two: user.location.address_line_two,
-        city: user.location.city,
-        state: user.location.state,
-        zip: user.location.zip,
-        first_name: user.first_name,
-        middle_initial: user.middle_initial,
-        last_name: user.last_name,
-        profile_picture_link: user.profile_picture_link,
-        telephone: user.telephone,
-        bio: user.bio
+        email: user.email ? user.email : "",
+        username: user.username ? user.username : "",
+        location: {
+          id: user.location.id,
+          address_line_one: user.location.address_line_one
+            ? user.location.address_line_one
+            : "",
+          address_line_two: user.location.address_line_two
+            ? user.location.address_line_two
+            : "",
+          city: user.location.city ? user.location.city : "",
+          state: user.location.state ? user.location.state : "",
+          zip: user.location.zip ? user.location.zip : ""
+        },
+        first_name: user.first_name ? user.first_name : "",
+        middle_initial: user.middle_initial ? user.middle_initial : "",
+        last_name: user.last_name ? user.last_name : "",
+        profile_picture_link: user.profile_picture_link
+          ? user.profile_picture_link
+          : "",
+        telephone: user.telephone ? user.telephone : "",
+        bio: user.bio ? user.bio : ""
       });
     } catch (e) {
       console.log(e);
@@ -94,15 +106,21 @@ class UsersEditScreen extends Component {
   }
 
   handleAddressLineOne(value) {
-    this.setState({ address_line_one: value });
+    let location = this.state.location;
+    location.address_line_one = value;
+    this.setState({ location });
   }
 
   handleAddressLineTwo(value) {
-    this.setState({ address_line_two: value });
+    let location = this.state.location;
+    location.address_line_two = value;
+    this.setState({location});
   }
 
   handleCity(value) {
-    this.setState({ city: value });
+    let location = this.state.location;
+    location.city = value;
+    this.setState({location});
   }
 
   handleBio(value) {
@@ -110,38 +128,24 @@ class UsersEditScreen extends Component {
   }
 
   handleState(value) {
-    this.setState({ state: value });
+    let location = this.state.location;
+    location.state = value;
+    this.setState({location});
   }
 
   handleZip(value) {
-    this.setState({ zip: value });
+    let location = this.state.location;
+    location.zip = value;
+    this.setState({location});
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let location = {
-      address_line_one: this.state.address_line_one,
-      address_line_two: this.state.address_line_two,
-      city: this.state.city,
-      state: this.state.state,
-      zip: this.state.zip
-    }
-    let object = {
-      username: this.state.username,
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      middle_initial: this.state.middle_initial,
-      email: this.state.email,
-      bio: this.state.bio,
-      telephone: this.state.telephone,
-      profile_picture_link: this.state.profile_picture_link,
-      location: location
-    };
 
     try {
       fetch(`/api/users/${this.userId}`, {
         method: "PUT",
-        body: JSON.stringify(object),
+        body: JSON.stringify(this.state),
         headers: new Headers({ "Content-Type": "application/json" })
       });
       NotificationManager.success("User Edited!");
@@ -156,7 +160,7 @@ class UsersEditScreen extends Component {
     return (
       <div className="container">
         <form>
-          <h1>Start an account</h1>
+          <h1>Edit Profile</h1>
           <div className="form-group">
             <label htmlFor="name">Username:</label>
             <input
@@ -181,7 +185,7 @@ class UsersEditScreen extends Component {
           <div>
             <label htmlFor="addressLineOne">Address Line One:</label>
             <input
-              value={this.state.address_line_one}
+              value={this.state.location.address_line_one}
               onChange={event => this.handleAddressLineOne(event.target.value)}
               className="form-control"
               name="addressLineOne"
@@ -191,7 +195,7 @@ class UsersEditScreen extends Component {
           <div className="form-group">
             <label htmlFor="addressLineTwo">Address Line Two:</label>
             <input
-              value={this.state.address_line_two}
+              value={this.state.location.address_line_two}
               onChange={event => this.handleAddressLineTwo(event.target.value)}
               className="form-control"
               name="addressLineTwo"
@@ -201,7 +205,7 @@ class UsersEditScreen extends Component {
           <div className="form-group">
             <label htmlFor="city">City:</label>
             <input
-              value={this.state.city}
+              value={this.state.location.city}
               onChange={event => this.handleCity(event.target.value)}
               className="form-control"
               name="city"
@@ -213,7 +217,7 @@ class UsersEditScreen extends Component {
               State:
             </label>
             <SelectMenu
-              value={this.state.state}
+              value={this.state.location.state}
               source={states.getStates()}
               callback={value => this.handleState(value)}
               className="form-control"
@@ -224,7 +228,7 @@ class UsersEditScreen extends Component {
           <div className="form-group">
             <label htmlFor="zip">Zip:</label>
             <input
-              value={this.state.zip}
+              value={this.state.location.zip}
               onChange={event => this.handleZip(event.target.value)}
               className="form-control"
               name="zip"
@@ -273,7 +277,7 @@ class UsersEditScreen extends Component {
 
           <div className="form-group">
             <label htmlFor="bio">Tell us about yourself:</label>
-            <input
+            <textarea
               value={this.state.bio}
               onChange={event => this.handleBio(event.target.value)}
               className="form-control"
@@ -319,10 +323,7 @@ class UsersEditScreen extends Component {
               />
             </div>
           </div>
-          <Link
-            className="btn btn-warning mt-2 mr-3"
-            to="/users/profile"
-          >
+          <Link className="btn btn-warning mt-2 mr-3" to="/users/profile">
             Back
           </Link>
           <button

@@ -98,11 +98,12 @@ class UserDetailScreen extends Component {
       } else {
         events = <h6 className="ml-5">None</h6>;
       }
+      let name = (this.state.user.first_name) ? `${this.state.user.first_name} ${this.state.user.middle_initial} ${this.state.last_name}` : "None";
       return (
         <Fragment>
           <div className="container p-5 userBioContainer">
             <h1 className="welcomeUser p-2">
-              Welcome, {this.state.user.first_name}!
+              Welcome, {(this.state.user.first_name) ? this.state.user.first_name : "user"}!
             </h1>
             <div className="userImageContainer">
               <img
@@ -117,34 +118,33 @@ class UserDetailScreen extends Component {
                   <h5 className="subheading">
                     <span className="headingSpan">Username:</span>
                   </h5>
-                  <p className="stateUser">{this.state.user.username}</p>
+                  <p className="stateUser">{(this.state.user.username) ? this.state.user.username : "None"}</p>
                 </li>
                 <li className="list-group-item userAbout">
                   <h5 className="subheading">
                     <span className="headingSpan">Bio:</span>
                   </h5>
-                  <p className="stateUser">{this.state.user.bio}</p>
+                  <p className="stateUser">{(this.state.user.bio) ? this.state.user.bio: "None"}</p>
                 </li>
                 <li className="list-group-item userAbout">
                   <h5 className="subheading">
                     <span className="headingSpan">Name:</span>
                   </h5>
                   <p className="stateUser">
-                    {this.state.user.first_name}{" "}
-                    {this.state.user.middle_initial} {this.state.user.last_name}
+                    {name}
                   </p>
                 </li>
                 <li className="list-group-item userAbout">
                   <h5 className="subheading">
-                    <span className="headingSpan">Telephone:</span>
+                    <span className="headingSpan">Phone:</span>
                   </h5>
-                  <p className="stateUser">{this.state.user.telephone}</p>
+                  <p className="stateUser">{(this.state.user.telephone) ? this.state.user.telephone : "None"}</p>
                 </li>
                 <li className="list-group-item userAbout">
                   <h5 className="subheading">
                     <span className="headingSpan">Email:</span>
                   </h5>
-                  <p className="stateUser">{this.state.user.email}</p>
+                  <p className="stateUser">{(this.state.user.email) ? this.state.user.email : "None"}</p>
                 </li>
               </ul>
               <div className="card-body">

@@ -16,11 +16,13 @@ class EventCreateScreen extends Component {
     this.state = {
       start_time: "",
       end_time: "",
-      address_line_one: "",
-      address_line_two: "",
-      city: "",
-      state: "",
-      zip: "",
+      location: {
+        address_line_one: "",
+        address_line_two: "",
+        city: "",
+        state: "",
+        zip: ""
+      },
       name: "",
       thumbnail_image_link: "",
       tags: [],
@@ -28,7 +30,8 @@ class EventCreateScreen extends Component {
       blurb: "",
       details: "",
       has_cover_charge: 0,
-      cover_charge_amount: ""
+      cover_charge_amount: "",
+      hosted_by: ""
     };
 
     this.handleStartTime = this.handleStartTime.bind(this);
@@ -42,6 +45,7 @@ class EventCreateScreen extends Component {
     this.handleThumbnailImageLink = this.handleThumbnailImageLink.bind(this);
     this.handleTags = this.handleTags.bind(this);
     this.handleBlurb = this.handleBlurb.bind(this);
+    this.handleHostedBy = this.handleHostedBy.bind(this);
     this.handleDetails = this.handleDetails.bind(this);
     this.handleHasCoverCharge = this.handleHasCoverCharge.bind(this);
     this.handleCoverChargeAmount = this.handleCoverChargeAmount.bind(this);
@@ -49,6 +53,10 @@ class EventCreateScreen extends Component {
 
   handleStartTime(value) {
     this.setState({ start_time: value });
+  }
+
+  handleHostedBy(value) {
+    this.setState({ hosted_by: value });
   }
 
   handleCoverChargeAmount(value) {
@@ -121,8 +129,8 @@ class EventCreateScreen extends Component {
       zip: this.state.zip,
       lat: position.lat,
       lng: position.lng
-    }
-    console.log(location);
+    };
+
     let object = {
       start_time: this.state.start_time,
       end_time: this.state.end_time,
@@ -133,8 +141,10 @@ class EventCreateScreen extends Component {
       thumbnail_image_link: this.state.thumbnail_image_link,
       has_cover_charge: this.state.has_cover_charge,
       cover_charge_amount: this.state.cover_charge_amount,
-      location
+      location,
+      hosted_by: this.state.hosted_by
     };
+
     try {
       fetch(`/api/events/${this.eventId}`, {
         method: "PUT",
@@ -160,7 +170,7 @@ class EventCreateScreen extends Component {
       this.eventId = this.props.match.params.eventId;
       let event = await eventsService.one(this.eventId);
       if (event.has_cover_charge) {
-        $("#coverChargeCheckbox").prop('checked', true);
+        $("#coverChargeCheckbox").prop("checked", true);
       }
       this.setState({
         start_time: eventsService.formatTime(event.start_time),
@@ -176,8 +186,11 @@ class EventCreateScreen extends Component {
         blurb: event.blurb,
         details: event.details,
         has_cover_charge: event.has_cover_charge === 1 ? true : false,
-        cover_charge_amount: event.cover_charge_amount
+        cover_charge_amount: event.cover_charge_amount,
+        hosted_by: event.hosted_by
       });
+
+      if (this.state.has_cover_charge) $("#coverChargeAmountField").toggle();
     } catch (err) {
       console.log(err);
     }
@@ -187,7 +200,7 @@ class EventCreateScreen extends Component {
     return (
       <div className="container">
         <form>
-          <h1>Create an Event</h1>
+          <h1>Edit This Event</h1>
           <div className="form-group">
             <label htmlFor="name" className="subheading">
               Name:
@@ -199,10 +212,20 @@ class EventCreateScreen extends Component {
               name="name"
             />
           </div>
-
+          <div className="form-group">
+            <label htmlFor="hostedBy" className="subheading">
+              Hosted by:
+            </label>
+            <input
+              value={this.state.hosted_by}
+              onChange={event => this.handleHostedBy(event.target.value)}
+              className="form-control"
+              name="hostedBy"
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="blurb" className="subheading">
-              Blurb:
+              At a Glance:
             </label>
             <input
               value={this.state.blurb}

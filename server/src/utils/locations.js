@@ -30,7 +30,8 @@ let getLocation = async function(id) {
 
 let updateLocation = async function(location) {
     try {
-        let result = await locationTable.update(location)
+        console.log(location);
+        let result = await locationTable.update(location.id, location)
         return result;
     } catch (err) {
         throw "This location doesn't exist in the db";

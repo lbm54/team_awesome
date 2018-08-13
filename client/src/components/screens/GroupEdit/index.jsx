@@ -199,7 +199,7 @@ class GroupCreateScreen extends Component {
 
           <div className="form-group">
             <label htmlFor="name" className="subheading">
-              Blurb:
+              At a Glance:
             </label>
             <input
               value={this.state.blurb}

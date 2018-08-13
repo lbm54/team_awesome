@@ -77,7 +77,12 @@ class EventDetailScreen extends Component {
           className="display-4 pb-2 featuredImage"
           src={this.state.event.thumbnail_image_link}
         />
-
+        <h3 className="subheading">
+          <span className="headingSpan">Host:</span>
+        </h3>
+        <p className="lead">
+          {this.state.event.hosted_by}
+        </p>
         <h3 className="subheading">
           <span className="headingSpan">Time:</span>
         </h3>

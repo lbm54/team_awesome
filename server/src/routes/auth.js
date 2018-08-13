@@ -27,14 +27,14 @@ router.get("/google/callback", (req, res, next) => {
     "google",
     {
       successRedirect: "/login/google",
-      failureRedirect: "/"
+      failureRedirect: "/users/register"
     },
     (err, token, info) => {
       if (err) {
         console.log(err);
         return res.sendStatus(500);
       } else if (!token) {
-        return res.status(401).json(info);
+        return res.status(201).redirect(`/login/google/-1`);
       } else {
         return res.status(201).redirect(`/login/google/${token.token}`);
       }

@@ -26,6 +26,7 @@ class EventCreateScreen extends Component {
       tags: [],
       selectedTags: [],
       blurb: "",
+      hosted_by: "",
       details: "",
       has_cover_charge: 0,
       cover_charge_amount: ""
@@ -42,6 +43,7 @@ class EventCreateScreen extends Component {
     this.handleThumbnailImageLink = this.handleThumbnailImageLink.bind(this);
     this.handleTags = this.handleTags.bind(this);
     this.handleBlurb = this.handleBlurb.bind(this);
+    this.handleHostedBy = this.handleHostedBy.bind(this);
     this.handleDetails = this.handleDetails.bind(this);
     this.handleHasCoverCharge = this.handleHasCoverCharge.bind(this);
     this.handleCoverChargeAmount = this.handleCoverChargeAmount.bind(this);
@@ -53,6 +55,10 @@ class EventCreateScreen extends Component {
 
   handleCoverChargeAmount(value) {
     this.setState({ cover_charge_amount: value });
+  }
+
+  handleHostedBy(value) {
+    this.setState({ hosted_by: value });
   }
 
   handleEndTime(value) {
@@ -132,7 +138,8 @@ class EventCreateScreen extends Component {
         zip: this.state.zip,
         lat: position.lat,
         lng: position.lng,
-        host_user_id: user.id
+        host_user_id: user.id,
+        hosted_by: this.state.hosted_by
       };
       fetch("/api/events", {
         method: "POST",
@@ -175,10 +182,20 @@ class EventCreateScreen extends Component {
               name="name"
             />
           </div>
-
+          <div className="form-group">
+            <label htmlFor="hostedBy" className="subheading">
+              Hosted by:
+            </label>
+            <input
+              value={this.state.hosted_by}
+              onChange={event => this.handleHostedBy(event.target.value)}
+              className="form-control"
+              name="hostedBy"
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="blurb" className="subheading">
-              Blurb:
+              At a Glance:
             </label>
             <input
               value={this.state.blurb}
