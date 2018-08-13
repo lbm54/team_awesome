@@ -36,7 +36,7 @@ class FileUpload extends Component {
       <div className="form-group" key="response">
         <input ref={ref => (this.fileInput = ref)} type="file" name="file" placeholder={this.props.placeholder} />
         <button
-          className="btn btn-info"
+          className="btn clickable"
           onClick={event => this.submitImage(event)}
         >
           Upload

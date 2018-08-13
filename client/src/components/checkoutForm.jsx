@@ -72,7 +72,7 @@ class CheckoutForm extends Component {
             />
             <CardSection />
             <h4>Amount is: {this.props.event.cover_charge_amount}</h4>
-            <button className="btn btn-primary">SUBMIT</button>
+            <button className="btn clickable">SUBMIT</button>
           </div>
           <button style={{display: "none"}} id="rsvp" className="btn btn-info" onClick={(e) => this.handleRSVP(e)}>RSVP</button>
         </form>
