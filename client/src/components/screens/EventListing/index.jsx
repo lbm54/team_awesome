@@ -137,7 +137,7 @@ class EventListingScreen extends Component {
           </Link>
         </div>
 
-        <div className="row justify-content-start ml-3" id="eventsList">
+        <div className="row eventsListingContainer" id="eventsList">
           {eventslist}
         </div>
       </div>
